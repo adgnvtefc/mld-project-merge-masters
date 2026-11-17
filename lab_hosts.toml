@@ -1,0 +1,15 @@
+# EC2 hosts, shared by the team. ./lab finds each one's current IP from instance_id with the AWS CLI.
+# instance_id: EC2 console > Instances. python: the interpreter on that instance that has torch 2.10.0.
+# Each owner gets a checkout at ~/mld/<owner> on any host, so a shared instance needs no extra entry.
+
+[hosts.hanmo]
+instance_id = "i-REPLACE_ME"
+region = "us-east-1"
+user = "ubuntu"
+python = "python3"
+
+[hosts.ayush]
+instance_id = "i-REPLACE_ME"
+region = "us-east-1"
+user = "ubuntu"
+python = "python3"

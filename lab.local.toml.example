@@ -1,0 +1,9 @@
+# Copy to lab.local.toml (gitignored) and fill in. Read only on laptops.
+owner = "hz"                       # your tag in run IDs: hz (Hanmo) or ay (Ayush)
+default_host = "hanmo"             # a host from lab_hosts.toml
+ssh_key = "~/.ssh/mld-605.pem"     # the key pair your instance was launched with
+# aws_profile = "default"          # AWS CLI profile, if not the default one
+
+# Keys for other hosts, if they differ from ssh_key:
+# [ssh_keys]
+# ayush = "~/.ssh/ayush-605.pem"
