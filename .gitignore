@@ -3,3 +3,14 @@ pool/
 runs/
 __pycache__/
 submission.zip
+
+# lab workflow (see .claude/skills/lab-workflow/SKILL.md)
+/models
+/pool
+/.cache/
+.lab_host
+.lab_launch/
+lab.local.toml
+results/.sync/
+*.tmp[0-9]*
+.DS_Store
