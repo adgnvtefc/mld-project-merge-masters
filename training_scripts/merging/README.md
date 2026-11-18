@@ -14,6 +14,9 @@ Coefficients are always picked on pool-val (lib/data.py), never on dev.
 | `regmean.py` | `regmean` | closed-form per-Linear merge from input Gram matrices, alpha picked on pool-val |
 | `learned_lambda.py` | `learned-lambda` | 375 coefficients (source x tensor group) trained with Adam on pool train |
 | `task_vector_stats.py` | `tv-stats` | norms and cosines of the task vectors (no model; launch with --no-eval) |
+| `low_rank.py` | `low-rank` | generalist + lam * sum of each expert's top-r SVD change (no extra parameters) |
+| `low_rank.py --orthogonalize` | `tsv` | the same, with the experts' kept directions orthogonalized (TSV-M) |
+| `routed_oracle.py` | `routed-oracle` | diagnostic: each domain scored with its own expert's rank-r piece (no model; --no-eval) |
 
     ./lab run --method merging --variant ta-grid --hypothesis "..." \
         -- python training_scripts/merging/task_arithmetic.py --scheme ta --out '$LAB_OUT'

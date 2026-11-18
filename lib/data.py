@@ -62,10 +62,10 @@ def val_windows(domain, windows):
 
 
 @torch.no_grad()
-def val_loss(model, windows=64, batch_size=8, device="cuda"):
+def val_loss(model, windows=64, batch_size=8, device="cuda", domains=DOMAINS):
     """Mean next-token cross-entropy on pool-val per domain, and their mean (bf16, like the official score)."""
     out = {}
-    for d in DOMAINS:
+    for d in domains:
         xy = val_windows(d, windows).to(device)
         total = 0.0
         for i in range(0, len(xy), batch_size):
@@ -75,5 +75,5 @@ def val_loss(model, windows=64, batch_size=8, device="cuda"):
             total += F.cross_entropy(logits[..., :VOCAB].float().reshape(-1, VOCAB), y.reshape(-1),
                                      reduction="sum").item()
         out[d] = total / (len(xy) * T)
-    out["mean"] = sum(out[d] for d in DOMAINS) / len(DOMAINS)
+    out["mean"] = sum(out[d] for d in domains) / len(domains)
     return out
