@@ -2,6 +2,13 @@
 
 Last updated: November 18, 2026 (evening). Runs by Hanmo on our EC2 machine.
 
+> **Caveat: a bug in how we chose settings.** Every mixing method picked its settings on a slice of
+> training text we set aside. For math, that slice was mostly one long book: a GMAT reading guide, not
+> math. On it, the math expert is no better than the generalist, so every choice leaned toward "keep
+> the generalist". The scores in this file are correct, but the settings behind them may not be the
+> best ones. The bug is fixed; the mixing runs have not been re-run yet. Details are in
+> `error_analysis.md`, which also explains why mixing failed.
+
 ## How to read the numbers
 
 Every model gets one **score**. The score measures how wrong the model is when it guesses the next
