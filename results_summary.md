@@ -128,10 +128,11 @@ This is only a check, not a model we can submit. It tells us whether such a mode
 |---|---|
 | The generalist, unchanged | 3.189 |
 | The expert's strongest changes (any rank we tried) | 3.44 to 3.62. Worse. |
-| The same, plus the expert's word list (its "embeddings") | 3.24 to 3.30. Still worse. |
+| The same, plus the expert's word list (its "embeddings") | Slightly better on code and history, worse on medicine |
 | The expert's full model | 2.915 |
 
-(These scores use our held-out text, so they differ a little from the other tables.)
+(These scores use our held-out text, so they differ a little from the other tables. The math part of this check was
+broken by a bug in our held-out text; see `error_analysis.md`. The rows above leave math out of the conclusions.)
 
 What this shows:
 
@@ -139,8 +140,9 @@ What this shows:
   carry its skill.
 - **The changes only work together with the expert's own word list.** Without it, they make things
   worse.
-- So even perfect routing, with the largest rank the size limit allows, does not beat the generalist
-  without training. A routed model would need training to make the pieces fit together.
+- Even with perfect routing, the expert's word list and the largest rank the size limit allows, the
+  pieces win back only about a tenth of each expert's lead (on code and history), and lose on
+  medicine. A routed model would need training to make the pieces fit together.
 
 ## Things we did not test
 

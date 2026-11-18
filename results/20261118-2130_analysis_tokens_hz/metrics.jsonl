@@ -1,0 +1,4 @@
+{"elapsed_s": 5.8, "step": 0, "domain": "math", "mean_gain": 0.2195936143398285}
+{"elapsed_s": 7.2, "step": 1, "domain": "code", "mean_gain": 0.4557356834411621}
+{"elapsed_s": 8.5, "step": 2, "domain": "medicine", "mean_gain": 0.18653030693531036}
+{"elapsed_s": 9.9, "step": 3, "domain": "history", "mean_gain": 0.4643828272819519}

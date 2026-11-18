@@ -1,0 +1,32 @@
+{
+  "run_id": "20261118-2131_analysis_paths_hz",
+  "method": "analysis",
+  "variant": "paths",
+  "owner": "hz",
+  "hypothesis": "Whether the straight line between the generalist and each expert (and between experts) has a loss barrier, i.e. whether they sit in one valley.",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/analysis/diagnostics.py",
+    "--which",
+    "paths",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-2131_analysis_paths_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "a8dc7e0b24f4678e44f2bc00f10a47e953f5a383",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 3492,
+  "started": "2026-11-18T21:31:59Z",
+  "heartbeat": "2026-11-18T21:34:40Z",
+  "ended": "2026-11-18T21:34:40Z",
+  "exit_code": 0,
+  "train_seconds": 161,
+  "a10g_hours": 0.0447,
+  "eval": null,
+  "progress": {
+    "step": 5,
+    "elapsed_s": 159.7
+  }
+}

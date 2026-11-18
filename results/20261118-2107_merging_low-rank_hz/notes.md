@@ -13,3 +13,7 @@ Dev 3.1700, worse than the generalist by 0.0145 (95% CI [+0.0142, +0.0148]) and 
 - Best pool-val point: r 16, lam 0.1, others moved by lam times the experts' mean change -> 3.2041, already above the generalist's 3.1888. Both r and lam are the smallest values in the grid, and lam = 0 (the generalist itself) was not in the grid.
 - Larger lam was always worse (for example r 128: lam 0.1 -> 3.22, 0.25 -> 3.36-3.40, 0.5 -> 4.05-4.25).
 - Per domain vs the generalist: math +0.0081, code +0.0237, medicine +0.0145, history +0.0117. No extra parameters (125.2M). 204 s, 0.057 A10G-hours.
+
+## Caveat (added 2026-11-18)
+
+Settings and pool-val numbers in this run used the first n pool-val windows in a row. For math these were 79% one GMAT reading-comprehension guide, where the math expert is barely better than the generalist, so math pulled every choice toward the generalist. Dev scores are correct. Fixed in commit d725d3f; this run has not been re-run. See error_analysis.md.

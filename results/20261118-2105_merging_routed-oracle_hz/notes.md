@@ -6,7 +6,7 @@ Status: done
 
 ## Outcome
 
-No model; diagnostic. With perfect routing, no rank-r piece (r <= 160) beat the generalist on pool-val (3.1888), whatever the other tensors came from. Only the full expert (2.9149) did.
+No model; diagnostic. Corrected 2026-11-18: the first version of this note said no rank-r piece (r <= 160) beat the generalist on pool-val. That came from the 4-domain mean, which the biased math windows (see Caveat) dragged up. Per domain, with the expert's LayerNorms, biases and embeddings, rank 160 does beat the generalist on code (3.1669 vs 3.2242) and history (3.5069 vs 3.5402), not on medicine (2.8570 vs 2.8105). It recovers only about 12% (code) and 8% (history) of the expert's lead; the full expert reaches 2.7558 and 3.1335. With the generalist's other tensors, every rank is worse than the generalist in every domain.
 
 ## Observations
 
@@ -15,3 +15,7 @@ No model; diagnostic. With perfect routing, no rank-r piece (r <= 160) beat the 
 - Taking the expert's LayerNorms, biases and embeddings: rank 16 -> 3.3041, 64 -> 3.2879, 128 -> 3.2589, 160 -> 3.2394, full -> 2.9149 (identical to the expert). This row improves with rank but is still 0.05 above the generalist at rank 160.
 - Rank 160 is about the most the 150M active limit allows (123.5M + 0.147M per rank). Separate embeddings per expert would also cost about 40M each against the 300M total.
 - Pool-val, 64 windows per domain; each domain scored only on its own text.
+
+## Caveat (added 2026-11-18)
+
+Settings and pool-val numbers in this run used the first n pool-val windows in a row. For math these were 79% one GMAT reading-comprehension guide, where the math expert is barely better than the generalist, so math pulled every choice toward the generalist. Dev scores are correct. Fixed in commit d725d3f; this run has not been re-run. See error_analysis.md.
