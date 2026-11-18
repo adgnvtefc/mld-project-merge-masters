@@ -1,0 +1,85 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261118-2105_merging_routed-oracle_hz", "ranks": "16,64,128,160,full", "others": "generalist,small,all", "val_windows": 64, "device": "cuda"}
+[   15.4s] math: rank 16, others from generalist -> 3.4271
+[   16.6s] math: rank 64, others from generalist -> 3.5539
+[   17.7s] math: rank 128, others from generalist -> 3.6515
+[   18.9s] math: rank 160, others from generalist -> 3.6789
+[   20.1s] math: rank full, others from generalist -> 3.8155
+[   21.2s] math: rank 16, others from small -> 4.4318
+[   22.4s] math: rank 64, others from small -> 4.8049
+[   23.6s] math: rank 128, others from small -> 5.0131
+[   24.8s] math: rank 160, others from small -> 5.0737
+[   25.9s] math: rank full, others from small -> 5.5768
+[   27.1s] math: rank 16, others from all -> 3.4337
+[   28.3s] math: rank 64, others from all -> 3.4523
+[   29.5s] math: rank 128, others from all -> 3.4412
+[   30.6s] math: rank 160, others from all -> 3.4267
+[   31.8s] math: rank full, others from all -> 3.1574
+[   31.8s] math: generalist 3.1801, expert 3.1574
+[   37.9s] code: rank 16, others from generalist -> 3.5827
+[   39.1s] code: rank 64, others from generalist -> 3.6674
+[   40.3s] code: rank 128, others from generalist -> 3.7387
+[   41.4s] code: rank 160, others from generalist -> 3.7549
+[   42.6s] code: rank full, others from generalist -> 3.5837
+[   43.8s] code: rank 16, others from small -> 4.5060
+[   45.0s] code: rank 64, others from small -> 4.8066
+[   46.1s] code: rank 128, others from small -> 5.0226
+[   47.3s] code: rank 160, others from small -> 5.1029
+[   48.5s] code: rank full, others from small -> 5.0093
+[   49.7s] code: rank 16, others from all -> 3.3040
+[   50.8s] code: rank 64, others from all -> 3.2533
+[   52.0s] code: rank 128, others from all -> 3.1982
+[   53.2s] code: rank 160, others from all -> 3.1669
+[   54.4s] code: rank full, others from all -> 2.7558
+[   54.4s] code: generalist 3.2242, expert 2.7558
+[   60.5s] medicine: rank 16, others from generalist -> 2.9323
+[   61.6s] medicine: rank 64, others from generalist -> 3.0021
+[   62.8s] medicine: rank 128, others from generalist -> 3.0533
+[   64.0s] medicine: rank 160, others from generalist -> 3.0691
+[   65.2s] medicine: rank full, others from generalist -> 2.9826
+[   66.3s] medicine: rank 16, others from small -> 3.0375
+[   67.5s] medicine: rank 64, others from small -> 3.1559
+[   68.7s] medicine: rank 128, others from small -> 3.2248
+[   69.8s] medicine: rank 160, others from small -> 3.2548
+[   71.0s] medicine: rank full, others from small -> 3.2266
+[   72.2s] medicine: rank 16, others from all -> 2.9011
+[   73.4s] medicine: rank 64, others from all -> 2.8880
+[   74.5s] medicine: rank 128, others from all -> 2.8692
+[   75.7s] medicine: rank 160, others from all -> 2.8570
+[   76.9s] medicine: rank full, others from all -> 2.6128
+[   76.9s] medicine: generalist 2.8105, expert 2.6127
+[   83.0s] history: rank 16, others from generalist -> 3.8285
+[   84.2s] history: rank 64, others from generalist -> 3.8979
+[   85.3s] history: rank 128, others from generalist -> 3.9628
+[   86.5s] history: rank 160, others from generalist -> 3.9891
+[   87.7s] history: rank full, others from generalist -> 3.8970
+[   88.9s] history: rank 16, others from small -> 4.5179
+[   90.0s] history: rank 64, others from small -> 4.6938
+[   91.2s] history: rank 128, others from small -> 4.9614
+[   92.4s] history: rank 160, others from small -> 5.0751
+[   93.6s] history: rank full, others from small -> 5.1435
+[   94.7s] history: rank 16, others from all -> 3.5778
+[   95.9s] history: rank 64, others from all -> 3.5579
+[   97.1s] history: rank 128, others from all -> 3.5270
+[   98.3s] history: rank 160, others from all -> 3.5069
+[   99.4s] history: rank full, others from all -> 3.1335
+[   99.4s] history: generalist 3.5402, expert 3.1334
+[   99.4s] pool-val loss with perfect routing (each domain scored with its own expert's piece):
+[   99.4s] model                                   math      code  medicine   history      mean
+[   99.4s] generalist (no piece)                 3.1801    3.2242    2.8105    3.5402    3.1888
+[   99.4s] rank 16, others: generalist           3.4271    3.5827    2.9323    3.8285    3.4427
+[   99.4s] rank 64, others: generalist           3.5539    3.6674    3.0021    3.8979    3.5303
+[   99.4s] rank 128, others: generalist          3.6515    3.7387    3.0533    3.9628    3.6016
+[   99.4s] rank 160, others: generalist          3.6789    3.7549    3.0691    3.9891    3.6230
+[   99.4s] rank full, others: generalist         3.8155    3.5837    2.9826    3.8970    3.5697
+[   99.4s] rank 16, others: small                4.4318    4.5060    3.0375    4.5179    4.1233
+[   99.4s] rank 64, others: small                4.8049    4.8066    3.1559    4.6938    4.3653
+[   99.4s] rank 128, others: small               5.0131    5.0226    3.2248    4.9614    4.5555
+[   99.4s] rank 160, others: small               5.0737    5.1029    3.2548    5.0751    4.6266
+[   99.4s] rank full, others: small              5.5768    5.0093    3.2266    5.1435    4.7390
+[   99.4s] rank 16, others: all                  3.4337    3.3040    2.9011    3.5778    3.3041
+[   99.4s] rank 64, others: all                  3.4523    3.2533    2.8880    3.5579    3.2879
+[   99.4s] rank 128, others: all                 3.4412    3.1982    2.8692    3.5270    3.2589
+[   99.4s] rank 160, others: all                 3.4267    3.1669    2.8570    3.5069    3.2394
+[   99.4s] rank full, others: all                3.1574    2.7558    2.6128    3.1335    2.9149
+[   99.4s] the expert itself                     3.1574    2.7558    2.6127    3.1334    2.9149
+[   99.4s] json {"generalist": {"math": 3.1800820529460907, "code": 3.2242231965065002, "medicine": 2.8105393946170807, "history": 3.5401591062545776, "mean": 3.1887509375810623}, "16/generalist": {"math": 3.427055776119232, "code": 3.5827484726905823, "medicine": 2.9323245882987976, "history": 3.8284941017627716, "mean": 3.442655734717846}, "64/generalist": {"math": 3.5539380609989166, "code": 3.66741019487381, "medicine": 3.0020536184310913, "history": 3.89794984459877, "mean": 3.530337929725647}, "128/generalist": {"math": 3.65145805478096, "code": 3.738667994737625, "medicine": 3.0533018112182617, "history": 3.9628461599349976, "mean": 3.601568505167961}, "160/generalist": {"math": 3.6788960099220276, "code": 3.7549285888671875, "medicine": 3.069110155105591, "history": 3.9891317188739777, "mean": 3.623016618192196}, "full/generalist": {"math": 3.815470725297928, "code": 3.5836711823940277, "medicine": 2.982560485601425, "history": 3.8970235884189606, "mean": 3.5696814954280853}, "16/small": {"math": 4.4317721128463745, "code": 4.505979239940643, "medicine": 3.0375480949878693, "history": 4.517908871173859, "mean": 4.123302079737186}, "64/small": {"math": 4.804866433143616, "code": 4.8066412806510925, "medicine": 3.1559197902679443, "history": 4.69383579492569, "mean": 4.365315824747086}, "128/small": {"math": 5.013066291809082, "code": 5.022599756717682, "medicine": 3.2248394787311554, "history": 4.961377918720245, "mean": 4.555470861494541}, "160/small": {"math": 5.073670387268066, "code": 5.102931439876556, "medicine": 3.254790633916855, "history": 5.075064480304718, "mean": 4.626614235341549}, "full/small": {"math": 5.576823055744171, "code": 5.009294867515564, "medicine": 3.226587027311325, "history": 5.143473565578461, "mean": 4.73904462903738}, "16/all": {"math": 3.433729737997055, "code": 3.303988456726074, "medicine": 2.901058942079544, "history": 3.5777769088745117, "mean": 3.3041385114192963}, "64/all": {"math": 3.4522594213485718, "code": 3.2532916367053986, "medicine": 2.888000249862671, "history": 3.5579437911510468, "mean": 3.287873774766922}, "128/all": {"math": 3.4411602318286896, "code": 3.1981924772262573, "medicine": 2.8692420423030853, "history": 3.526993989944458, "mean": 3.2588971853256226}, "160/all": {"math": 3.4266756772994995, "code": 3.1668959259986877, "medicine": 2.8570064306259155, "history": 3.5069068372249603, "mean": 3.2393712177872658}, "full/all": {"math": 3.1574224829673767, "code": 2.755789875984192, "medicine": 2.6127837002277374, "history": 3.1334551870822906, "mean": 2.914862811565399}, "expert": {"math": 3.1574399769306183, "code": 2.7557900846004486, "medicine": 2.612747609615326, "history": 3.1334291994571686, "mean": 2.9148517176508904}}

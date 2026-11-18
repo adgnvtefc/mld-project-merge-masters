@@ -1,6 +1,6 @@
 # Results summary
 
-Last updated: November 18, 2026. Runs by Hanmo on our EC2 machine.
+Last updated: November 18, 2026 (evening). Runs by Hanmo on our EC2 machine.
 
 ## How to read the numbers
 
@@ -97,16 +97,61 @@ So adding the experts on top of the generalist counts the same change twice or m
 overshoots and breaks. One example: adding just 10% of each expert to the generalist took the score
 from 3.19 to 5.36 on our held-out text.
 
+## Second try: mixing only the most important changes
+
+The first try mixed everything the experts changed. The second try starts from the generalist and
+adds only each expert's most important changes. We measured each expert's change from the generalist,
+and kept only its strongest directions. A setting called the **rank** says how many directions to
+keep. A low rank keeps a few; a high rank keeps many. This adds no size to the model.
+
+Measured from the generalist, the experts overlap much less than when measured from the starting
+model. So we hoped they would interfere less.
+
+| Method | Score | Better than the generalist? |
+|---|---|---|
+| Keep the strongest changes | 3.170 | No, worse by 0.015 |
+| Keep the strongest changes, and stop them from overlapping | 3.160 | No, worse by 0.004 |
+
+- Both were worse than the generalist on all four kinds of text.
+- Stopping the changes from overlapping always helped. But it was not enough.
+- Both picked the smallest amount we tried. In other words, the less we added, the better. Adding
+  nothing at all would have been best.
+
+## A check: what if each text got its own expert's changes?
+
+We also asked a "what if" question. Suppose a model could always tell which kind of text it is
+reading. It could then use only that expert's strongest changes. How well would that do?
+
+This is only a check, not a model we can submit. It tells us whether such a model is worth building.
+
+| What each kind of text gets | Score |
+|---|---|
+| The generalist, unchanged | 3.189 |
+| The expert's strongest changes (any rank we tried) | 3.44 to 3.62. Worse. |
+| The same, plus the expert's word list (its "embeddings") | 3.24 to 3.30. Still worse. |
+| The expert's full model | 2.915 |
+
+(These scores use our held-out text, so they differ a little from the other tables.)
+
+What this shows:
+
+- **An expert's knowledge is spread across the whole model.** A small part of its changes does not
+  carry its skill.
+- **The changes only work together with the expert's own word list.** Without it, they make things
+  worse.
+- So even perfect routing, with the largest rank the size limit allows, does not beat the generalist
+  without training. A routed model would need training to make the pieces fit together.
+
 ## Things we did not test
 
-- Three methods picked a setting at the very edge of what we tried. Smaller settings might do a bit
-  better. We did not try them.
+- Several methods picked a setting at the very edge of what we tried. In the second try, the best
+  choice may simply be "add nothing." We did not try settings in between.
 - The learned mix always started from the generalist. We did not try other starting points.
 - We ran each method once.
 
 ## Cost
 
-All 14 runs took about 0.3 hours of GPU time in total. The learned mix was the most expensive at 7
+All 17 runs took about 0.45 hours of GPU time in total. The learned mix was the most expensive at 7
 minutes.
 
 ## Where to find more
