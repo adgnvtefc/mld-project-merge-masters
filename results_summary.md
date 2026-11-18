@@ -151,7 +151,7 @@ What this shows:
 
 ## Cost
 
-All 17 runs took about 0.45 hours of GPU time in total. The learned mix was the most expensive at 7
+All 17 runs took about half an hour of GPU time in total. The learned mix was the most expensive at 7
 minutes.
 
 ## Where to find more
