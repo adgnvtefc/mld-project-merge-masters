@@ -63,6 +63,12 @@ class Host:
             out = run(cmd)
         except FileNotFoundError:
             raise SystemExit("the AWS CLI is not installed: brew install awscli, then aws configure")
+        except SystemExit as e:
+            if "UnauthorizedOperation" in str(e):
+                raise SystemExit(f"{e}\n\nYour IAM user needs ec2:DescribeInstances (and ec2:StartInstances / "
+                                 "ec2:StopInstances for ./lab start/stop). An account admin adds them in IAM > Users > "
+                                 "Permissions; see tools/ec2_iam_policy.json.")
+            raise
         return json.loads(out) if out else {}
 
     def describe(self):
