@@ -11,6 +11,9 @@ Diagnostics for why weight-space merges of the provided models fail. No model is
                     in a few token types, how it splits by token frequency, and by position in the window.
     --which swaps   each expert's gain when one part (embeddings, LayerNorms, attention, MLP) of the generalist
                     is replaced by the expert's, and when that part of the expert is replaced by the generalist's.
+    --which slices  the generalist's and each expert's own-domain loss at 10 evenly spaced places in each pool
+                    file (and on pool-val), to check whether the pool files are ordered so that the held-out
+                    tail looks different from the rest.
 
     python3 training_scripts/analysis/diagnostics.py --which paths --out runs/x
 """
@@ -221,10 +224,48 @@ def swaps(args, log):
     return out
 
 
+@torch.no_grad()
+def slices(args, log):
+    header, gen = m.load_checkpoint("generalist", args.device)
+    model = m.new_model(header, args.device)
+    T, n_win = 2048, args.val_windows
+    out = {}
+    for step, d in enumerate(m.DOMAINS):
+        _, expert = m.load_checkpoint(f"expert_{d}", args.device)
+        tokens = m.data._tokens(d)
+        starts = [int(f * (len(tokens) - n_win * T - 1)) for f in np.linspace(0, 1, 10)]
+        rows = []
+        for i, start in enumerate(starts):
+            xy = torch.from_numpy(np.stack([np.asarray(tokens[start + w * T:start + (w + 1) * T + 1], dtype=np.int64)
+                                            for w in range(n_win)])).to(args.device)
+            losses = []
+            for params in (gen, expert):
+                m.set_params(model, params)
+                total = 0.0
+                for j in range(0, n_win, 8):
+                    with torch.autocast(args.device, dtype=torch.bfloat16):
+                        logits = model(xy[j:j + 8, :-1])
+                    total += F.cross_entropy(logits[..., :VOCAB].float().reshape(-1, VOCAB),
+                                             xy[j:j + 8, 1:].reshape(-1), reduction="sum").item()
+                losses.append(total / (n_win * T))
+            rows.append({"position": start / len(tokens), "generalist": losses[0], "expert": losses[1],
+                         "gap": losses[0] - losses[1]})
+            m.metrics.log(step=step * 10 + i, domain=d, position=start / len(tokens), generalist=losses[0],
+                          expert=losses[1])
+        out[d] = rows
+        log(f"{d}: own-domain loss at 10 places in pool/{d}.bin ({n_win} windows each); pool-val is the last "
+            f"{m.data.VAL_TOKENS / len(tokens):.1%}")
+        for r in rows:
+            log(f"  at {r['position']:5.1%}: generalist {r['generalist']:.4f} expert {r['expert']:.4f} "
+                f"gap {r['gap']:+.4f}")
+        del expert
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", required=True)
-    parser.add_argument("--which", required=True, choices=["paths", "scale", "tokens", "swaps"])
+    parser.add_argument("--which", required=True, choices=["paths", "scale", "tokens", "swaps", "slices"])
     parser.add_argument("--val-windows", type=int, default=32, help="pool-val windows per domain")
     parser.add_argument("--token-windows", type=int, default=16, help="tokens: pool-val windows per domain")
     parser.add_argument("--learned", default="", help="scale: a learned-lambda model.bin to include")
@@ -232,7 +273,7 @@ def main():
     args = parser.parse_args()
     log = m.Logger(args.out)
     log(f"settings: {json.dumps(vars(args))}")
-    result = {"paths": paths, "scale": scale, "tokens": tokens, "swaps": swaps}[args.which](args, log)
+    result = {"paths": paths, "scale": scale, "tokens": tokens, "swaps": swaps, "slices": slices}[args.which](args, log)
     log("json " + json.dumps(result))
 
 
