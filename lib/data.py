@@ -55,10 +55,14 @@ def batch(domains, seq_len, rng, split="train", device="cuda"):
 
 
 def val_windows(domain, windows):
-    """The first `windows` non-overlapping T-token windows of the domain's pool-val, as [n, T + 1] int64."""
+    """`windows` non-overlapping T-token windows spread evenly over the domain's pool-val, as [n, T + 1] int64.
+
+    Spread, not the first n in a row: pool-val's first 131K math tokens are 79% one document (a GMAT reading
+    guide), which made the math expert look no better than the generalist on pool-val (fixed 2026-11-18)."""
     tokens = pool(domain, "val")
     n = min(windows, (len(tokens) - 1) // T)
-    return torch.from_numpy(np.stack([np.asarray(tokens[i * T:(i + 1) * T + 1], dtype=np.int64) for i in range(n)]))
+    starts = np.linspace(0, len(tokens) - T - 1, n).astype(np.int64) if n > 1 else np.zeros(1, dtype=np.int64)
+    return torch.from_numpy(np.stack([np.asarray(tokens[s:s + T + 1], dtype=np.int64) for s in starts]))
 
 
 @torch.no_grad()
