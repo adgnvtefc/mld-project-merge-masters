@@ -11,3 +11,7 @@ The best pool-val point was lam_e = 0, lam_g = 0, which is the seed itself; dev 
 ## Observations
 
 - DARE (drop 90%, rescale x10) made every non-zero point much worse: the DARE'd generalist alone at lam_g 1.0 scored 20.19 on pool-val, vs 3.19 without DARE. Larger coefficients were monotonically worse (up to 36.1).
+
+## Caveat (added 2026-11-18)
+
+Settings and pool-val numbers in this run used the first n pool-val windows in a row. For math these were 79% one GMAT reading-comprehension guide, where the math expert is barely better than the generalist, so math pulled every choice toward the generalist. Dev scores are correct. Fixed in commit d725d3f; this run has not been re-run. See error_analysis.md.

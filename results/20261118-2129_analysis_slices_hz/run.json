@@ -1,0 +1,32 @@
+{
+  "run_id": "20261118-2129_analysis_slices_hz",
+  "method": "analysis",
+  "variant": "slices",
+  "owner": "hz",
+  "hypothesis": "Checks whether the pool files are ordered, so that pool-val (the last 2M tokens) differs from the rest; the math expert barely beats the generalist on pool-val but leads by 0.47 on dev.",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/analysis/diagnostics.py",
+    "--which",
+    "slices",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-2129_analysis_slices_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "a8dc7e0b24f4678e44f2bc00f10a47e953f5a383",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 2123,
+  "started": "2026-11-18T21:29:23Z",
+  "heartbeat": "2026-11-18T21:30:17Z",
+  "ended": "2026-11-18T21:30:17Z",
+  "exit_code": 0,
+  "train_seconds": 54,
+  "a10g_hours": 0.0149,
+  "eval": null,
+  "progress": {
+    "step": 39,
+    "elapsed_s": 52.2
+  }
+}

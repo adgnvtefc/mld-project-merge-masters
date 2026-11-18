@@ -1,0 +1,46 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261118-2129_analysis_slices_hz", "which": "slices", "val_windows": 32, "token_windows": 16, "learned": "", "device": "cuda"}
+[   15.1s] math: own-domain loss at 10 places in pool/math.bin (32 windows each); pool-val is the last 3.3%
+[   15.1s]   at  0.0%: generalist 3.1989 expert 2.7701 gap +0.4288
+[   15.1s]   at 11.1%: generalist 3.2387 expert 2.6884 gap +0.5502
+[   15.1s]   at 22.2%: generalist 3.0320 expert 2.5532 gap +0.4788
+[   15.1s]   at 33.3%: generalist 3.0642 expert 2.5857 gap +0.4785
+[   15.1s]   at 44.4%: generalist 3.1462 expert 2.7293 gap +0.4169
+[   15.1s]   at 55.5%: generalist 3.1358 expert 2.6019 gap +0.5339
+[   15.1s]   at 66.6%: generalist 3.1489 expert 2.6599 gap +0.4890
+[   15.1s]   at 77.7%: generalist 3.2021 expert 2.7524 gap +0.4496
+[   15.1s]   at 88.8%: generalist 2.9033 expert 2.5009 gap +0.4024
+[   15.1s]   at 99.9%: generalist 3.0750 expert 2.6674 gap +0.4076
+[   27.1s] code: own-domain loss at 10 places in pool/code.bin (32 windows each); pool-val is the last 3.3%
+[   27.1s]   at  0.0%: generalist 3.1862 expert 2.7573 gap +0.4289
+[   27.1s]   at 11.1%: generalist 3.1606 expert 2.6388 gap +0.5218
+[   27.1s]   at 22.2%: generalist 3.1560 expert 2.7049 gap +0.4511
+[   27.1s]   at 33.3%: generalist 3.2158 expert 2.7752 gap +0.4406
+[   27.1s]   at 44.4%: generalist 3.1102 expert 2.6305 gap +0.4796
+[   27.1s]   at 55.5%: generalist 3.0378 expert 2.5908 gap +0.4470
+[   27.1s]   at 66.6%: generalist 3.1981 expert 2.7900 gap +0.4081
+[   27.1s]   at 77.7%: generalist 2.9514 expert 2.4429 gap +0.5086
+[   27.1s]   at 88.8%: generalist 3.2006 expert 2.7400 gap +0.4605
+[   27.1s]   at 99.9%: generalist 2.9370 expert 2.4561 gap +0.4809
+[   39.1s] medicine: own-domain loss at 10 places in pool/medicine.bin (32 windows each); pool-val is the last 3.3%
+[   39.1s]   at  0.0%: generalist 2.9280 expert 2.7234 gap +0.2046
+[   39.1s]   at 11.1%: generalist 2.8256 expert 2.6536 gap +0.1720
+[   39.1s]   at 22.2%: generalist 2.8719 expert 2.6964 gap +0.1755
+[   39.1s]   at 33.3%: generalist 2.8157 expert 2.6203 gap +0.1954
+[   39.1s]   at 44.4%: generalist 2.7712 expert 2.5803 gap +0.1909
+[   39.1s]   at 55.5%: generalist 2.8812 expert 2.7017 gap +0.1795
+[   39.1s]   at 66.6%: generalist 2.8051 expert 2.6263 gap +0.1789
+[   39.1s]   at 77.7%: generalist 2.8254 expert 2.6335 gap +0.1919
+[   39.1s]   at 88.8%: generalist 2.8048 expert 2.6021 gap +0.2027
+[   39.1s]   at 99.9%: generalist 2.8015 expert 2.6158 gap +0.1857
+[   51.1s] history: own-domain loss at 10 places in pool/history.bin (32 windows each); pool-val is the last 3.3%
+[   51.1s]   at  0.0%: generalist 3.3004 expert 2.8630 gap +0.4375
+[   51.1s]   at 11.1%: generalist 3.4486 expert 3.1184 gap +0.3302
+[   51.1s]   at 22.2%: generalist 3.4670 expert 3.0868 gap +0.3802
+[   51.1s]   at 33.3%: generalist 3.4897 expert 3.1142 gap +0.3755
+[   51.1s]   at 44.4%: generalist 3.6404 expert 3.1502 gap +0.4902
+[   51.1s]   at 55.5%: generalist 3.6520 expert 3.2564 gap +0.3957
+[   51.1s]   at 66.6%: generalist 3.6555 expert 3.2255 gap +0.4300
+[   51.1s]   at 77.7%: generalist 3.7667 expert 3.5373 gap +0.2294
+[   51.1s]   at 88.8%: generalist 3.5162 expert 3.1076 gap +0.4086
+[   51.1s]   at 99.9%: generalist 3.5584 expert 3.1783 gap +0.3801
+[   51.1s] json {"math": [{"position": 0.0, "generalist": 3.1988726258277893, "expert": 2.770085394382477, "gap": 0.4287872314453125}, {"position": 0.11098974075085494, "generalist": 3.2386812567710876, "expert": 2.6884471774101257, "gap": 0.5502340793609619}, {"position": 0.22197948150170987, "generalist": 3.03199303150177, "expert": 2.5531616806983948, "gap": 0.47883135080337524}, {"position": 0.3329692389192301, "generalist": 3.0642356276512146, "expert": 2.5857009887695312, "gap": 0.47853463888168335}, {"position": 0.443958979670085, "generalist": 3.1461811661720276, "expert": 2.729300081729889, "gap": 0.41688108444213867}, {"position": 0.55494872042094, "generalist": 3.1358320116996765, "expert": 2.6018874645233154, "gap": 0.5339445471763611}, {"position": 0.6659384778384602, "generalist": 3.148881196975708, "expert": 2.6599097847938538, "gap": 0.48897141218185425}, {"position": 0.7769282185893152, "generalist": 3.2020857334136963, "expert": 2.7524489164352417, "gap": 0.4496368169784546}, {"position": 0.88791795934017, "generalist": 2.903323173522949, "expert": 2.5009101033210754, "gap": 0.4024130702018738}, {"position": 0.9989077167576903, "generalist": 3.0750006437301636, "expert": 2.6673967838287354, "gap": 0.4076038599014282}], "code": [{"position": 0.0, "generalist": 3.1861826181411743, "expert": 2.757313370704651, "gap": 0.42886924743652344}, {"position": 0.11098974075085494, "generalist": 3.160598933696747, "expert": 2.6388004422187805, "gap": 0.5217984914779663}, {"position": 0.22197948150170987, "generalist": 3.155996859073639, "expert": 2.7048915028572083, "gap": 0.45110535621643066}, {"position": 0.3329692389192301, "generalist": 3.2158321142196655, "expert": 2.7752098441123962, "gap": 0.4406222701072693}, {"position": 0.443958979670085, "generalist": 3.1101680397987366, "expert": 2.6305190324783325, "gap": 0.47964900732040405}, {"position": 0.55494872042094, "generalist": 3.0378300547599792, "expert": 2.590794265270233, "gap": 0.4470357894897461}, {"position": 0.6659384778384602, "generalist": 3.198137879371643, "expert": 2.7900262475013733, "gap": 0.4081116318702698}, {"position": 0.7769282185893152, "generalist": 2.951446533203125, "expert": 2.442870259284973, "gap": 0.5085762739181519}, {"position": 0.88791795934017, "generalist": 3.200566351413727, "expert": 2.740048050880432, "gap": 0.4605183005332947}, {"position": 0.9989077167576903, "generalist": 2.9369576275348663, "expert": 2.4560684263706207, "gap": 0.4808892011642456}], "medicine": [{"position": 0.0, "generalist": 2.9280319809913635, "expert": 2.7234129309654236, "gap": 0.20461905002593994}, {"position": 0.11098974075085494, "generalist": 2.8255991339683533, "expert": 2.6535943746566772, "gap": 0.17200475931167603}, {"position": 0.22197948150170987, "generalist": 2.8719255924224854, "expert": 2.696397840976715, "gap": 0.17552775144577026}, {"position": 0.3329692389192301, "generalist": 2.815719783306122, "expert": 2.620348274707794, "gap": 0.19537150859832764}, {"position": 0.443958979670085, "generalist": 2.7712085843086243, "expert": 2.580311954021454, "gap": 0.1908966302871704}, {"position": 0.55494872042094, "generalist": 2.881186604499817, "expert": 2.7016857266426086, "gap": 0.17950087785720825}, {"position": 0.6659384778384602, "generalist": 2.805146634578705, "expert": 2.6262868642807007, "gap": 0.17885977029800415}, {"position": 0.7769282185893152, "generalist": 2.8254435062408447, "expert": 2.633500397205353, "gap": 0.19194310903549194}, {"position": 0.88791795934017, "generalist": 2.8047796487808228, "expert": 2.602109372615814, "gap": 0.20267027616500854}, {"position": 0.9989077167576903, "generalist": 2.8015276193618774, "expert": 2.6157910227775574, "gap": 0.18573659658432007}], "history": [{"position": 0.0, "generalist": 3.3004409670829773, "expert": 2.862970769405365, "gap": 0.4374701976776123}, {"position": 0.11098974075085494, "generalist": 3.4485665559768677, "expert": 3.118380546569824, "gap": 0.33018600940704346}, {"position": 0.22197948150170987, "generalist": 3.467036247253418, "expert": 3.086846113204956, "gap": 0.3801901340484619}, {"position": 0.3329692389192301, "generalist": 3.48969429731369, "expert": 3.1141669750213623, "gap": 0.3755273222923279}, {"position": 0.443958979670085, "generalist": 3.6403775215148926, "expert": 3.1501646041870117, "gap": 0.49021291732788086}, {"position": 0.55494872042094, "generalist": 3.652018368244171, "expert": 3.2563567757606506, "gap": 0.3956615924835205}, {"position": 0.6659384778384602, "generalist": 3.655544102191925, "expert": 3.225500464439392, "gap": 0.43004363775253296}, {"position": 0.7769282185893152, "generalist": 3.766725480556488, "expert": 3.5373088717460632, "gap": 0.2294166088104248}, {"position": 0.88791795934017, "generalist": 3.5162473917007446, "expert": 3.10760635137558, "gap": 0.4086410403251648}, {"position": 0.9989077167576903, "generalist": 3.558374762535095, "expert": 3.178274691104889, "gap": 0.3801000714302063}]}

@@ -17,7 +17,10 @@ import torch
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [ROOT, os.path.join(ROOT, "code")]
 import gpt  # noqa: E402
-from lib import data, metrics  # noqa: E402,F401  (re-exported for the scripts)
+from lib import data, metrics  # noqa: E402  (used by the scripts through this module)
+
+__all__ = ["DOMAINS", "EXPERTS", "SOURCES", "Logger", "combine", "data", "floats", "fmt", "gpt", "is_matrix",
+           "load_checkpoint", "load_task_vectors", "metrics", "new_model", "save_solution", "score", "set_params"]
 
 DOMAINS = ["math", "code", "medicine", "history"]
 EXPERTS = [f"expert_{d}" for d in DOMAINS]
@@ -72,8 +75,17 @@ def set_params(model, params):
     return model
 
 
-def score(model, params, windows):
-    return data.val_loss(set_params(model, params), windows=windows, device=next(model.parameters()).device.type)
+def score(model, params, windows, domains=DOMAINS):
+    return data.val_loss(set_params(model, params), windows=windows, device=next(model.parameters()).device.type,
+                         domains=domains)
+
+
+MATRICES = (".attn.c_attn.weight", ".attn.c_proj.weight", ".mlp.c_fc.weight", ".mlp.c_proj.weight")
+
+
+def is_matrix(name):
+    """The 48 weight matrices of the transformer blocks (not embeddings, biases or LayerNorms)."""
+    return name.startswith("transformer.h.") and name.endswith(MATRICES)
 
 
 def save_solution(out, header, params, log):
@@ -83,7 +95,7 @@ def save_solution(out, header, params, log):
 
 
 def fmt(losses):
-    return " | ".join(f"{d} {losses[d]:.4f}" for d in DOMAINS) + f" | mean {losses['mean']:.4f}"
+    return " | ".join(f"{d} {losses[d]:.4f}" for d in DOMAINS if d in losses) + f" | mean {losses['mean']:.4f}"
 
 
 def floats(text):

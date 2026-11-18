@@ -55,17 +55,21 @@ def batch(domains, seq_len, rng, split="train", device="cuda"):
 
 
 def val_windows(domain, windows):
-    """The first `windows` non-overlapping T-token windows of the domain's pool-val, as [n, T + 1] int64."""
+    """`windows` non-overlapping T-token windows spread evenly over the domain's pool-val, as [n, T + 1] int64.
+
+    Spread, not the first n in a row: pool-val's first 131K math tokens are 79% one document (a GMAT reading
+    guide), which made the math expert look no better than the generalist on pool-val (fixed 2026-11-18)."""
     tokens = pool(domain, "val")
     n = min(windows, (len(tokens) - 1) // T)
-    return torch.from_numpy(np.stack([np.asarray(tokens[i * T:(i + 1) * T + 1], dtype=np.int64) for i in range(n)]))
+    starts = np.linspace(0, len(tokens) - T - 1, n).astype(np.int64) if n > 1 else np.zeros(1, dtype=np.int64)
+    return torch.from_numpy(np.stack([np.asarray(tokens[s:s + T + 1], dtype=np.int64) for s in starts]))
 
 
 @torch.no_grad()
-def val_loss(model, windows=64, batch_size=8, device="cuda"):
+def val_loss(model, windows=64, batch_size=8, device="cuda", domains=DOMAINS):
     """Mean next-token cross-entropy on pool-val per domain, and their mean (bf16, like the official score)."""
     out = {}
-    for d in DOMAINS:
+    for d in domains:
         xy = val_windows(d, windows).to(device)
         total = 0.0
         for i in range(0, len(xy), batch_size):
@@ -75,5 +79,5 @@ def val_loss(model, windows=64, batch_size=8, device="cuda"):
             total += F.cross_entropy(logits[..., :VOCAB].float().reshape(-1, VOCAB), y.reshape(-1),
                                      reduction="sum").item()
         out[d] = total / (len(xy) * T)
-    out["mean"] = sum(out[d] for d in DOMAINS) / len(DOMAINS)
+    out["mean"] = sum(out[d] for d in domains) / len(domains)
     return out

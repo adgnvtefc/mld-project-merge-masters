@@ -1,0 +1,34 @@
+{
+  "run_id": "20261118-2130_analysis_scale_hz",
+  "method": "analysis",
+  "variant": "scale",
+  "owner": "hz",
+  "hypothesis": "Whether failed merges are mostly miscalibrated (fixable by output temperature) or have shrunken hidden states.",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/analysis/diagnostics.py",
+    "--which",
+    "scale",
+    "--learned",
+    "runs/20261118-2018_merging_learned-lambda_hz/model.bin",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-2130_analysis_scale_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "a8dc7e0b24f4678e44f2bc00f10a47e953f5a383",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 2957,
+  "started": "2026-11-18T21:30:53Z",
+  "heartbeat": "2026-11-18T21:31:41Z",
+  "ended": "2026-11-18T21:31:41Z",
+  "exit_code": 0,
+  "train_seconds": 48,
+  "a10g_hours": 0.0133,
+  "eval": null,
+  "progress": {
+    "step": 5,
+    "elapsed_s": 46.8
+  }
+}
