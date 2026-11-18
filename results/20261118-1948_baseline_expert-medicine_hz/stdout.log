@@ -1,0 +1,10 @@
+wrote /home/ubuntu/mld/hz/runs/20261118-1948_baseline_expert-medicine_hz: model.bin -> /home/ubuntu/mld/_data/models/expert_medicine.bin, model_def.py
+submission  2026-11-18 19:48 UTC | /home/ubuntu/mld/hz/runs/20261118-1948_baseline_expert-medicine_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.5738 | code 3.8332 | medicine 2.5865 | history 3.8723 | mean 3.4664
+valid
+RESULT {"data": "dev", "losses": {"math": 3.5738336332142353, "code": 3.8331504072993994, "medicine": 2.5864675994962454, "history": 3.8722757771611214}, "mean": 3.4664318542927504, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261118-1948_baseline_expert-medicine_hz/submission.log
+per-window means match the official score within 9.50e-08

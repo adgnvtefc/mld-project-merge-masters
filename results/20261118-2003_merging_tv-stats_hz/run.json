@@ -1,0 +1,27 @@
+{
+  "run_id": "20261118-2003_merging_tv-stats_hz",
+  "method": "merging",
+  "variant": "tv-stats",
+  "owner": "hz",
+  "hypothesis": "Records the norms and pairwise cosines of the five task vectors, to explain how the merges behave.",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/task_vector_stats.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-2003_merging_tv-stats_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "461b155d351cd12daff5375616b0b81b5ef534df",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 8327,
+  "started": "2026-11-18T20:03:43Z",
+  "heartbeat": "2026-11-18T20:03:49Z",
+  "ended": "2026-11-18T20:03:49Z",
+  "exit_code": 0,
+  "train_seconds": 6,
+  "a10g_hours": 0.0017,
+  "eval": null,
+  "progress": null
+}

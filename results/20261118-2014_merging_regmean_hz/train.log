@@ -1,0 +1,12 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261118-2014_merging_regmean_hz", "sources": "expert_math,expert_code,expert_medicine,expert_history,generalist", "tokens": 1000000, "alpha": "0.5,0.7,0.9,1.0", "micro_batch": 4, "val_windows": 64, "device": "cuda", "seed": 0}
+[   16.9s] expert_math: Grams of 48 Linear layers from 1,000,000 tokens of math
+[   31.8s] expert_code: Grams of 48 Linear layers from 1,000,000 tokens of code
+[   46.8s] expert_medicine: Grams of 48 Linear layers from 1,000,000 tokens of medicine
+[   61.7s] expert_history: Grams of 48 Linear layers from 1,000,000 tokens of history
+[   76.6s] generalist: Grams of 48 Linear layers from 1,000,000 tokens of math, code, medicine, history
+[   86.9s] alpha 0.5: pool-val math 3.3328 | code 3.4543 | medicine 3.2824 | history 3.8526 | mean 3.4805
+[   96.3s] alpha 0.7: pool-val math 3.9082 | code 4.0134 | medicine 3.9206 | history 4.4073 | mean 4.0624
+[  105.7s] alpha 0.9: pool-val math 6.6532 | code 6.4505 | medicine 6.7735 | history 7.0437 | mean 6.7302
+[  115.1s] alpha 1.0: pool-val math 9.7424 | code 9.8092 | medicine 9.7763 | history 9.7697 | mean 9.7744
+[  115.1s] best on pool-val: alpha 0.5 -> math 3.3328 | code 3.4543 | medicine 3.2824 | history 3.8526 | mean 3.4805
+[  120.1s] saved /home/ubuntu/mld/hz/runs/20261118-2014_merging_regmean_hz/model.bin and model_def.py

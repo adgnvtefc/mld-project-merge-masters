@@ -1,0 +1,46 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261118-2018_merging_learned-lambda_hz", "steps": 300, "batch_size": 16, "micro_batch": 4, "lr": 0.005, "warmup": 20, "init_experts": 0.0, "init_generalist": 1.0, "val_every": 100, "val_windows": 64, "log_every": 10, "device": "cuda", "seed": 0}
+[    4.4s] 375 coefficients: 5 sources x 75 groups
+[    9.7s] step 0: pool-val math 3.1801 | code 3.2242 | medicine 2.8105 | history 3.5401 | mean 3.1887
+[   22.2s] step 10/300 | loss 3.3777 | mean lam experts 0.003 generalist 1.002
+[   34.5s] step 20/300 | loss 3.0939 | mean lam experts 0.011 generalist 1.003
+[   46.9s] step 30/300 | loss 3.2141 | mean lam experts 0.017 generalist 1.002
+[   59.3s] step 40/300 | loss 2.9871 | mean lam experts 0.019 generalist 0.999
+[   71.6s] step 50/300 | loss 3.2905 | mean lam experts 0.020 generalist 0.997
+[   84.0s] step 60/300 | loss 3.2126 | mean lam experts 0.022 generalist 0.995
+[   96.4s] step 70/300 | loss 3.1434 | mean lam experts 0.022 generalist 0.993
+[  108.7s] step 80/300 | loss 3.3426 | mean lam experts 0.022 generalist 0.991
+[  121.1s] step 90/300 | loss 3.0114 | mean lam experts 0.023 generalist 0.990
+[  133.5s] step 100/300 | loss 3.0843 | mean lam experts 0.024 generalist 0.988
+[  138.2s] step 100: pool-val math 3.1669 | code 3.2035 | medicine 2.8307 | history 3.5215 | mean 3.1806
+[  150.5s] step 110/300 | loss 3.0781 | mean lam experts 0.024 generalist 0.988
+[  162.9s] step 120/300 | loss 3.1635 | mean lam experts 0.024 generalist 0.987
+[  175.2s] step 130/300 | loss 3.2807 | mean lam experts 0.025 generalist 0.987
+[  187.6s] step 140/300 | loss 3.1218 | mean lam experts 0.025 generalist 0.986
+[  200.0s] step 150/300 | loss 2.9079 | mean lam experts 0.025 generalist 0.984
+[  212.3s] step 160/300 | loss 2.8807 | mean lam experts 0.025 generalist 0.984
+[  224.7s] step 170/300 | loss 3.0592 | mean lam experts 0.026 generalist 0.984
+[  237.1s] step 180/300 | loss 3.2439 | mean lam experts 0.024 generalist 0.981
+[  249.4s] step 190/300 | loss 3.0611 | mean lam experts 0.025 generalist 0.982
+[  261.8s] step 200/300 | loss 3.1221 | mean lam experts 0.025 generalist 0.981
+[  266.5s] step 200: pool-val math 3.1627 | code 3.2000 | medicine 2.8355 | history 3.5213 | mean 3.1799
+[  278.9s] step 210/300 | loss 3.1547 | mean lam experts 0.025 generalist 0.980
+[  291.2s] step 220/300 | loss 3.1985 | mean lam experts 0.026 generalist 0.981
+[  303.6s] step 230/300 | loss 3.3311 | mean lam experts 0.025 generalist 0.980
+[  315.9s] step 240/300 | loss 3.1308 | mean lam experts 0.025 generalist 0.980
+[  328.3s] step 250/300 | loss 3.3393 | mean lam experts 0.026 generalist 0.981
+[  340.7s] step 260/300 | loss 3.0992 | mean lam experts 0.026 generalist 0.979
+[  353.0s] step 270/300 | loss 3.1994 | mean lam experts 0.025 generalist 0.978
+[  365.4s] step 280/300 | loss 3.1398 | mean lam experts 0.025 generalist 0.977
+[  377.7s] step 290/300 | loss 3.2591 | mean lam experts 0.026 generalist 0.978
+[  390.1s] step 300/300 | loss 3.0192 | mean lam experts 0.026 generalist 0.978
+[  394.8s] step 300: pool-val math 3.1635 | code 3.1994 | medicine 2.8353 | history 3.5218 | mean 3.1800
+[  395.2s] saved /home/ubuntu/mld/hz/runs/20261118-2018_merging_learned-lambda_hz/model.bin and model_def.py
+submission  2026-11-18 20:25 UTC | /home/ubuntu/mld/hz/runs/20261118-2018_merging_learned-lambda_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.1002 | code 3.1446 | medicine 2.8126 | history 3.5067 | mean 3.1411
+valid
+RESULT {"data": "dev", "losses": {"math": 3.1002266369760036, "code": 3.1446031276136637, "medicine": 2.812632592394948, "history": 3.5067392606288195}, "mean": 3.1410504044033587, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261118-2018_merging_learned-lambda_hz/submission.log
+per-window means match the official score within 1.25e-07

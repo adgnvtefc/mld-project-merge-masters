@@ -119,7 +119,8 @@ one. Don't guess instance IDs or key paths.
 ./lab stop <host> --yes            stop it (refuses while a run is active)
 ./lab setup <host>                 idempotent first-time setup: torch 2.10.0, data download, host marker
 ./lab push [host]                  sync tracked code + .git to the host (excludes data, runs/, results/)
-./lab run [host] … -- <cmd>        push + launch under the recorder (see §3)
+./lab run [host] … -- <cmd>        push + launch under the recorder (see §3); --wait blocks until it
+                                   ends, so `./lab run --wait … && ./lab run --wait …` is a queue
 ./lab runs [host] [--owner hz]     runs on the host with status, step, heartbeat age, dev score
 ./lab logs <run_id> [-f]           tail stdout.log
 ./lab kill <run_id>                stop a run; status becomes killed

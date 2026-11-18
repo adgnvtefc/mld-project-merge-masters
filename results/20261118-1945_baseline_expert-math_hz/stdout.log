@@ -1,0 +1,10 @@
+wrote /home/ubuntu/mld/hz/runs/20261118-1945_baseline_expert-math_hz: model.bin -> /home/ubuntu/mld/_data/models/expert_math.bin, model_def.py
+submission  2026-11-18 19:45 UTC | /home/ubuntu/mld/hz/runs/20261118-1945_baseline_expert-math_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 2.6749 | code 3.2659 | medicine 3.4463 | history 3.9367 | mean 3.3309
+valid
+RESULT {"data": "dev", "losses": {"math": 2.6749197598546743, "code": 3.265854112803936, "medicine": 3.4463054779917, "history": 3.9367098100483418}, "mean": 3.330947290174663, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261118-1945_baseline_expert-math_hz/submission.log
+per-window means match the official score within 2.46e-07
