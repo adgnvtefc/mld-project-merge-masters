@@ -207,6 +207,7 @@ def cmd_run(args):
                        check=True)
         check = lambda: os.path.exists(os.path.join(RESULTS, run_id, "run.json"))  # noqa: E731
         err = lambda: open(os.path.join(ROOT, ".lab_launch", f"{run_id}.err")).read()  # noqa: E731
+        record = lambda: read_json(os.path.join(RESULTS, run_id, "run.json"), {})  # noqa: E731
     else:
         host, me = host_for(args.host), local_config()["owner"]
         host.push(me)
@@ -217,13 +218,27 @@ def cmd_run(args):
         check = lambda: os.environ.get("LAB_DRY_RUN") or host.ssh(  # noqa: E731
             f"test -f mld/{me}/results/{run_id}/run.json && echo yes", check=False).strip() == "yes"
         err = lambda: host.ssh(f"cat mld/{me}/.lab_launch/{run_id}.err", check=False)  # noqa: E731
+        record = lambda: json.loads(host.ssh(f"cat mld/{me}/results/{run_id}/run.json", check=False) or "{}")  # noqa: E731
     for _ in range(10):
         if check():
-            print(f"launched {run_id}")
-            print(f"  ./lab logs {run_id} -f    ./lab runs    ./lab pull")
-            return
+            break
         time.sleep(1)
-    raise SystemExit(f"{run_id} did not start:\n{err()}")
+    else:
+        raise SystemExit(f"{run_id} did not start:\n{err()}")
+    print(f"launched {run_id}", flush=True)
+    if not args.wait:
+        print(f"  ./lab logs {run_id} -f    ./lab runs    ./lab pull")
+        return
+    while True:  # --wait: block until the run (and its eval) ends, so runs can be queued with &&
+        time.sleep(20)
+        rec = record()
+        if effective_status(rec) in ("done", "failed", "killed", "lost"):
+            ev = rec.get("eval") or {}
+            score = f"dev {ev['mean']:.4f}" if "mean" in ev else ev.get("error", "no eval")
+            print(f"{run_id}: {effective_status(rec)} after {rec.get('train_seconds')}s ({score})", flush=True)
+            if effective_status(rec) != "done":
+                raise SystemExit(1)
+            return
 
 
 def remote_runs(host):
@@ -345,6 +360,7 @@ def main():
     p.add_argument("--allow-dirty", action="store_true", help="run uncommitted code; the diff is saved")
     p.add_argument("--no-eval", action="store_true", help="skip the dev evaluation")
     p.add_argument("--force", action="store_true", help="launch even if the GPU is in use")
+    p.add_argument("--wait", action="store_true", help="block until the run ends; exit 1 unless it is done")
     p.epilog = "After --, the command to run; pass '$LAB_OUT' (quoted) as its --out."
 
     p = add("runs", cmd_runs, "runs on a host with status, step, heartbeat age, dev score", host=True)
