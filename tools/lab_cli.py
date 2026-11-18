@@ -166,6 +166,7 @@ mkdir -p ~/{DATA_DIR}/models ~/{DATA_DIR}/pool
 for d in models pool; do [ -L $d ] || {{ [ -e $d ] && echo "$d exists and is not a link; leaving it" || ln -s ~/{DATA_DIR}/$d $d; }}; done
 command -v tmux >/dev/null || sudo apt-get install -y tmux
 nvidia-smi -L
+case "{py}" in */bin/python) [ -x "{py}" ] || python3 -m venv "$(dirname "$(dirname "{py}")")";; esac
 {py} -c "import torch, sys; sys.exit(0 if torch.__version__.startswith('2.10.0') and torch.cuda.is_available() else 1)" \\
   || {py} -m pip install --no-cache-dir torch==2.10.0 numpy huggingface_hub
 [ -f ~/{DATA_DIR}/.verified ] || {{ {py} code/download_data.py && touch ~/{DATA_DIR}/.verified; }}

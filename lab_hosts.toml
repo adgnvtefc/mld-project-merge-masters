@@ -1,12 +1,14 @@
 # EC2 hosts, shared by the team. ./lab finds each one's current IP from instance_id with the AWS CLI.
-# instance_id: EC2 console > Instances. python: the interpreter on that instance that has torch 2.10.0.
+# instance_id: EC2 console > Instances. python: the interpreter on that instance that has torch 2.10.0;
+# if it is a path ending in /bin/python that does not exist yet, ./lab setup creates that venv.
 # Each owner gets a checkout at ~/mld/<owner> on any host, so a shared instance needs no extra entry.
 
 [hosts.hanmo]
 instance_id = "i-0633595aaf52f5789"
 region = "us-east-1"
 user = "ubuntu"
-python = "python3"
+# Plain Ubuntu 26.04 image: NVIDIA driver 580-server installed by hand, Python in a venv made by ./lab setup
+python = "/home/ubuntu/mld/venv/bin/python"
 
 [hosts.ayush]
 instance_id = "i-REPLACE_ME"
