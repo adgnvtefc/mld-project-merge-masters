@@ -1,0 +1,7 @@
+submission  2026-11-18 19:50 UTC | /home/ubuntu/mld/hz/runs/20261118-1950_baseline_expert-history_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.5144 | code 3.7599 | medicine 3.3369 | history 3.1448 | mean 3.4390
+valid
+RESULT {"data": "dev", "losses": {"math": 3.514384949579835, "code": 3.75990011356771, "medicine": 3.336870474740863, "history": 3.144760364666581}, "mean": 3.438978975638747, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}

@@ -1,0 +1,45 @@
+{
+  "run_id": "20261118-2014_merging_regmean_hz",
+  "method": "merging",
+  "variant": "regmean",
+  "owner": "hz",
+  "hypothesis": "RegMean is the best closed-form merge and beats the generalist (3.156).",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/regmean.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-2014_merging_regmean_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "461b155d351cd12daff5375616b0b81b5ef534df",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 11695,
+  "started": "2026-11-18T20:14:54Z",
+  "heartbeat": "2026-11-18T20:18:28Z",
+  "ended": "2026-11-18T20:18:28Z",
+  "exit_code": 0,
+  "train_seconds": 123,
+  "a10g_hours": 0.0341,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.284918688237667,
+      "code": 3.4135617092251778,
+      "medicine": 3.262898398563266,
+      "history": 3.8171127568930387
+    },
+    "mean": 3.4446228882297873,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.6577541828155518e-07,
+    "evaluated_at": "2026-11-18T20:18:27Z"
+  },
+  "progress": {
+    "step": 3,
+    "elapsed_s": 116.3
+  }
+}

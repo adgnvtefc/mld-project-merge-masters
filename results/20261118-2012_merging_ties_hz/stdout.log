@@ -1,0 +1,20 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261118-2012_merging_ties_hz", "scheme": "ties", "lam_experts": "0,0.1,0.2,0.25,0.3,0.4,0.5", "lam_generalist": "0,0.5,0.75,1.0", "lam": "0.4,0.6,0.8,1.0,1.2,1.5", "drop": 0.9, "keep": 0.2, "val_windows": 64, "device": "cuda", "seed": 0}
+[    4.4s] loaded seed and 5 task vectors on cuda
+[    5.0s] TIES: kept top 20% of each task vector per tensor, elected signs, disjoint mean
+[   10.3s] grid 1/6 {'lam': 0.4}: pool-val math 3.6421 | code 3.7795 | medicine 3.4607 | history 4.1065 | mean 3.7472
+[   15.0s] grid 2/6 {'lam': 0.6}: pool-val math 4.2594 | code 4.4143 | medicine 4.3170 | history 4.7869 | mean 4.4444
+[   19.6s] grid 3/6 {'lam': 0.8}: pool-val math 5.4124 | code 5.4920 | medicine 5.6389 | history 5.9459 | mean 5.6223
+[   24.3s] grid 4/6 {'lam': 1.0}: pool-val math 6.7885 | code 6.8100 | medicine 7.0565 | history 7.2450 | mean 6.9750
+[   29.0s] grid 5/6 {'lam': 1.2}: pool-val math 8.6296 | code 8.6447 | medicine 8.8531 | history 8.9422 | mean 8.7674
+[   33.7s] grid 6/6 {'lam': 1.5}: pool-val math 9.0619 | code 8.9930 | medicine 9.2521 | history 9.3016 | mean 9.1522
+[   33.7s] best on pool-val: {'lam': 0.4} -> math 3.6421 | code 3.7795 | medicine 3.4607 | history 4.1065 | mean 3.7472
+[   34.1s] saved /home/ubuntu/mld/hz/runs/20261118-2012_merging_ties_hz/model.bin and model_def.py
+submission  2026-11-18 20:13 UTC | /home/ubuntu/mld/hz/runs/20261118-2012_merging_ties_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.6217 | code 3.7320 | medicine 3.4382 | history 4.0864 | mean 3.7196
+valid
+RESULT {"data": "dev", "losses": {"math": 3.621690981090069, "code": 3.731964334845543, "medicine": 3.4382178597152233, "history": 4.086403036490083}, "mean": 3.7195690530352294, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261118-2012_merging_ties_hz/submission.log
+per-window means match the official score within 2.53e-07

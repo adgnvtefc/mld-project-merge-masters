@@ -1,0 +1,42 @@
+{
+  "run_id": "20261118-1953_baseline_average-experts_hz",
+  "method": "baseline",
+  "variant": "average-experts",
+  "owner": "hz",
+  "hypothesis": "Reference: the starter's uniform weight average of the four experts (handout: 3.516).",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "solutions/average_experts.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-1953_baseline_average-experts_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "461b155d351cd12daff5375616b0b81b5ef534df",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 6006,
+  "started": "2026-11-18T19:54:02Z",
+  "heartbeat": "2026-11-18T19:55:36Z",
+  "ended": "2026-11-18T19:55:36Z",
+  "exit_code": 0,
+  "train_seconds": 4,
+  "a10g_hours": 0.001,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.312713271006942,
+      "code": 3.455177176743746,
+      "medicine": 3.3928418774157763,
+      "history": 3.902481844648719
+    },
+    "mean": 3.5158035424537957,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.7695128917694092e-07,
+    "evaluated_at": "2026-11-18T19:55:35Z"
+  },
+  "progress": null
+}

@@ -1,0 +1,42 @@
+{
+  "run_id": "20261118-1955_baseline_short-training_hz",
+  "method": "baseline",
+  "variant": "short-training",
+  "owner": "hz",
+  "hypothesis": "Reference: the starter's generalist + extra layer, 200 steps (about 3.16).",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "solutions/short_training.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-1955_baseline_short-training_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "461b155d351cd12daff5375616b0b81b5ef534df",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 6626,
+  "started": "2026-11-18T19:55:48Z",
+  "heartbeat": "2026-11-18T20:03:25Z",
+  "ended": "2026-11-18T20:03:25Z",
+  "exit_code": 0,
+  "train_seconds": 365,
+  "a10g_hours": 0.1015,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.1170192938297987,
+      "code": 3.1516631804406643,
+      "medicine": 2.8342790734022856,
+      "history": 3.5485620331019163
+    },
+    "mean": 3.162880895193666,
+    "parameters": 125622016,
+    "active_parameters": 123925248,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.2293457984924316e-07,
+    "evaluated_at": "2026-11-18T20:03:24Z"
+  },
+  "progress": null
+}

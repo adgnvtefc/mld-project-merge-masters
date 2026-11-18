@@ -1,0 +1,32 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261118-2004_merging_ta-grid_hz", "scheme": "ta", "lam_experts": "0,0.1,0.2,0.25,0.3,0.4,0.5", "lam_generalist": "0,0.5,0.75,1.0", "lam": "0.4,0.6,0.8,1.0,1.2,1.5", "drop": 0.9, "keep": 0.2, "val_windows": 64, "device": "cuda", "seed": 0}
+[    4.4s] loaded seed and 5 task vectors on cuda
+[    9.1s] grid 1/28 {'lam_e': 0.0, 'lam_g': 0.0}: pool-val math 3.4730 | code 3.5547 | medicine 3.1022 | history 3.8614 | mean 3.4979
+[   13.8s] grid 2/28 {'lam_e': 0.0, 'lam_g': 0.5}: pool-val math 3.3306 | code 3.4042 | medicine 2.9655 | history 3.7134 | mean 3.3534
+[   18.5s] grid 3/28 {'lam_e': 0.0, 'lam_g': 0.75}: pool-val math 3.2478 | code 3.3097 | medicine 2.8828 | history 3.6223 | mean 3.2656
+[   23.2s] grid 4/28 {'lam_e': 0.0, 'lam_g': 1.0}: pool-val math 3.1801 | code 3.2242 | medicine 2.8105 | history 3.5401 | mean 3.1887
+[   27.9s] grid 5/28 {'lam_e': 0.1, 'lam_g': 0.0}: pool-val math 3.3843 | code 3.4739 | medicine 3.0922 | history 3.8073 | mean 3.4394
+[   32.6s] grid 6/28 {'lam_e': 0.1, 'lam_g': 0.5}: pool-val math 3.2454 | code 3.3232 | medicine 2.9831 | history 3.6704 | mean 3.3055
+[   37.3s] grid 7/28 {'lam_e': 0.1, 'lam_g': 0.75}: pool-val math 3.2363 | code 3.2978 | medicine 2.9821 | history 3.6463 | mean 3.2906
+[   42.0s] grid 8/28 {'lam_e': 0.1, 'lam_g': 1.0}: pool-val math 5.3000 | code 5.3748 | medicine 5.1027 | history 5.6721 | mean 5.3624
+[   46.6s] grid 9/28 {'lam_e': 0.2, 'lam_g': 0.0}: pool-val math 3.3607 | code 3.4720 | medicine 3.2527 | history 3.8677 | mean 3.4883
+[   51.3s] grid 10/28 {'lam_e': 0.2, 'lam_g': 0.5}: pool-val math 3.9273 | code 4.0031 | medicine 4.0176 | history 4.4641 | mean 4.1030
+[   56.0s] grid 11/28 {'lam_e': 0.2, 'lam_g': 0.75}: pool-val math 9.9326 | code 10.4688 | medicine 10.3598 | history 10.7684 | mean 10.3824
+[   60.7s] grid 12/28 {'lam_e': 0.2, 'lam_g': 1.0}: pool-val math 11.8210 | code 11.5251 | medicine 11.5764 | history 11.7145 | mean 11.6593
+[   65.4s] grid 13/28 {'lam_e': 0.25, 'lam_g': 0.0}: pool-val math 3.3718 | code 3.4968 | medicine 3.4101 | history 3.9423 | mean 3.5552
+[   70.1s] grid 14/28 {'lam_e': 0.25, 'lam_g': 0.5}: pool-val math 7.3289 | code 7.7691 | medicine 7.6774 | history 8.1927 | mean 7.7420
+[   74.8s] grid 15/28 {'lam_e': 0.25, 'lam_g': 0.75}: pool-val math 13.9211 | code 13.5320 | medicine 13.5709 | history 13.5955 | mean 13.6549
+[   79.4s] grid 16/28 {'lam_e': 0.25, 'lam_g': 1.0}: pool-val math 9.6200 | code 9.6465 | medicine 9.4676 | history 9.8142 | mean 9.6371
+[   84.1s] grid 17/28 {'lam_e': 0.3, 'lam_g': 0.0}: pool-val math 3.5543 | code 3.6645 | medicine 3.7710 | history 4.1898 | mean 3.7949
+[   88.8s] grid 18/28 {'lam_e': 0.3, 'lam_g': 0.5}: pool-val math 14.0836 | code 13.8952 | medicine 13.8055 | history 13.7961 | mean 13.8951
+[   93.5s] grid 19/28 {'lam_e': 0.3, 'lam_g': 0.75}: pool-val math 9.3844 | code 9.3904 | medicine 9.3328 | history 9.5404 | mean 9.4120
+[   98.2s] grid 20/28 {'lam_e': 0.3, 'lam_g': 1.0}: pool-val math 11.7323 | code 11.8994 | medicine 11.8497 | history 12.4208 | mean 11.9756
+[  102.9s] grid 21/28 {'lam_e': 0.4, 'lam_g': 0.0}: pool-val math 12.8034 | code 12.9489 | medicine 12.8663 | history 12.8871 | mean 12.8765
+[  107.6s] grid 22/28 {'lam_e': 0.4, 'lam_g': 0.5}: pool-val math 11.0758 | code 11.1280 | medicine 11.1321 | history 11.5165 | mean 11.2131
+[  112.2s] grid 23/28 {'lam_e': 0.4, 'lam_g': 0.75}: pool-val math 13.0448 | code 13.2701 | medicine 13.3711 | history 14.0642 | mean 13.4376
+[  116.9s] grid 24/28 {'lam_e': 0.4, 'lam_g': 1.0}: pool-val math 12.6960 | code 13.0533 | medicine 13.0726 | history 13.9759 | mean 13.1994
+[  121.6s] grid 25/28 {'lam_e': 0.5, 'lam_g': 0.0}: pool-val math 9.2586 | code 9.2209 | medicine 9.3363 | history 9.5923 | mean 9.3520
+[  126.3s] grid 26/28 {'lam_e': 0.5, 'lam_g': 0.5}: pool-val math 13.2223 | code 13.4477 | medicine 13.6414 | history 14.4157 | mean 13.6818
+[  131.0s] grid 27/28 {'lam_e': 0.5, 'lam_g': 0.75}: pool-val math 12.5104 | code 12.8280 | medicine 12.9529 | history 13.8810 | mean 13.0431
+[  135.7s] grid 28/28 {'lam_e': 0.5, 'lam_g': 1.0}: pool-val math 12.5123 | code 12.8801 | medicine 13.0413 | history 14.0690 | mean 13.1257
+[  135.7s] best on pool-val: {'lam_e': 0.0, 'lam_g': 1.0} -> math 3.1801 | code 3.2242 | medicine 2.8105 | history 3.5401 | mean 3.1887
+[  136.1s] saved /home/ubuntu/mld/hz/runs/20261118-2004_merging_ta-grid_hz/model.bin and model_def.py

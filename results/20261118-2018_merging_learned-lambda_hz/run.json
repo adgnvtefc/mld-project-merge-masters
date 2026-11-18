@@ -1,0 +1,45 @@
+{
+  "run_id": "20261118-2018_merging_learned-lambda_hz",
+  "method": "merging",
+  "variant": "learned-lambda",
+  "owner": "hz",
+  "hypothesis": "375 per-layer coefficients learned on pool train beat the best single-coefficient merge.",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/learned_lambda.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261118-2018_merging_learned-lambda_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "461b155d351cd12daff5375616b0b81b5ef534df",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 12715,
+  "started": "2026-11-18T20:18:44Z",
+  "heartbeat": "2026-11-18T20:26:53Z",
+  "ended": "2026-11-18T20:26:53Z",
+  "exit_code": 0,
+  "train_seconds": 398,
+  "a10g_hours": 0.1105,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.1002266369760036,
+      "code": 3.1446031276136637,
+      "medicine": 2.812632592394948,
+      "history": 3.5067392606288195
+    },
+    "mean": 3.1410504044033587,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.2479722499847412e-07,
+    "evaluated_at": "2026-11-18T20:26:52Z"
+  },
+  "progress": {
+    "step": 300,
+    "elapsed_s": 396.0
+  }
+}
