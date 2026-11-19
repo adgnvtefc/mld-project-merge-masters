@@ -14,3 +14,5 @@ No loss barrier between the generalist and any expert, or between experts: the m
 - Largest bump above the straight line on the mean: 0.039 (generalist -> code); 0.008 (math -> code); 0.002 (medicine -> history).
 - At a = 0.1 toward any expert the mean is already worse than the generalist (3.209 -> 3.209-3.225).
 - Run before commit d725d3f, so its pool-val windows were the first n in a row. For math those were 79% one 104K-token GMAT reading-comprehension guide, where the math expert is barely better than the generalist. Math columns here describe that book, not math; code, medicine and history are unaffected.
+
+Re-run as 20261119-1538_analysis_paths_hz after the fix (2026-11-19), with every domain's windows spread over pool-val: see that run for the corrected numbers; error_analysis.md uses them.

@@ -5,8 +5,8 @@ Last updated: November 19, 2026. Runs by Hanmo on our EC2 machine.
 > **A bug we found and fixed.** Every mixing method picks its settings on a slice of training text we
 > set aside. For math, that slice was mostly one long book: a GMAT reading guide, not math. We fixed it
 > and re-ran every affected method on November 19. **Every method chose the same settings and got the
-> same score**, so the results below stand. Details are in `error_analysis.md`, which also explains why
-> mixing failed.
+> same score**, so the results below stand. We also re-ran the checks behind `error_analysis.md`, which
+> explains why mixing failed. Its conclusions held too.
 
 ## How to read the numbers
 
@@ -101,7 +101,7 @@ We measured how much each model changed from the starting model, and in which di
 Mixing works best when each model changes different things. Here the models changed the same things.
 So adding the experts on top of the generalist counts the same change twice or more. The model
 overshoots and breaks. One example: adding just 10% of each expert to the generalist took the score
-from 3.19 to 5.36 on our held-out text.
+from 3.13 to 5.35 on our held-out text.
 
 ## Second try: mixing only the most important changes
 
@@ -160,7 +160,7 @@ What this shows:
 
 ## Cost
 
-All 30 runs, including the error analysis and the re-runs, took about an hour of GPU time in
+All 34 runs, including the error analysis and the re-runs, took about an hour of GPU time in
 total. The learned mix was the most expensive at 7 minutes.
 
 ## Where to find more

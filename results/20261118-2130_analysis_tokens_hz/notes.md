@@ -15,3 +15,5 @@ Each expert's gain is spread over most tokens and token types, larger per occurr
 - Gain by position is roughly flat (for example code 0.49 / 0.49 / 0.53 / 0.44 for positions 0-16 / 16-128 / 128-512 / 512-2048), so it is not just a prior that context quickly overrides.
 - Top types by total gain are common ones ('.', ' the', newline, ','); decoded lists are in error_analysis.md.
 - Run before commit d725d3f, so its pool-val windows were the first n in a row. For math those were 79% one 104K-token GMAT reading-comprehension guide, where the math expert is barely better than the generalist. Math columns here describe that book, not math; code, medicine and history are unaffected.
+
+Re-run as 20261119-1537_analysis_tokens_hz after the fix (2026-11-19), with every domain's windows spread over pool-val: see that run for the corrected numbers; error_analysis.md uses them.

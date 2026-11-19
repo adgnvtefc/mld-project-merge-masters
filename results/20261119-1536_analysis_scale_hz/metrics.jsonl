@@ -1,0 +1,5 @@
+{"elapsed_s": 15.7, "step": 1, "model": "generalist", "loss_t1": 3.130470298230648, "best_t": 1.0, "loss_best_t": 3.130470298230648}
+{"elapsed_s": 23.5, "step": 2, "model": "expert_math", "loss_t1": 3.321093387901783, "best_t": 1.0, "loss_best_t": 3.321093387901783}
+{"elapsed_s": 31.4, "step": 3, "model": "average of experts", "loss_t1": 3.5029615312814713, "best_t": 1.0, "loss_best_t": 3.5029615312814713}
+{"elapsed_s": 39.2, "step": 4, "model": "ta lam_e 0.1 lam_g 1.0", "loss_t1": 5.349629923701286, "best_t": 0.8, "loss_best_t": 5.120652601122856}
+{"elapsed_s": 47.1, "step": 5, "model": "learned-lambda", "loss_t1": 3.1160218939185143, "best_t": 1.0, "loss_best_t": 3.1160218939185143}

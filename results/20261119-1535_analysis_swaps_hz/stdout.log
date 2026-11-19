@@ -1,0 +1,23 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-1535_analysis_swaps_hz", "which": "swaps", "val_windows": 32, "token_windows": 16, "learned": "", "device": "cuda"}
+[   32.6s] own-domain pool-val loss when one part is swapped (expert - own X = expert with the generalist's X):
+[   32.6s]                                     math      code  medicine   history      mean
+[   32.6s] generalist                        3.1508    2.9851    2.7285    3.6575    3.1305
+[   32.6s] expert                            2.7155    2.5322    2.5315    3.2345    2.7534
+[   32.6s] generalist + expert embeddings    4.6447    4.9313    3.1490    5.4424    4.5418
+[   32.6s] expert - own embeddings           4.4014    4.6009    3.1209    5.2650    4.3471
+[   32.6s] generalist + expert layernorms    3.1609    2.9991    2.7337    3.6611    3.1387
+[   32.6s] expert - own layernorms           2.7158    2.5330    2.5311    3.2346    2.7536
+[   32.6s] generalist + expert attention     3.5005    3.4597    2.8797    4.0118    3.4629
+[   32.6s] expert - own attention            2.9530    2.7750    2.6543    3.4630    2.9613
+[   32.6s] generalist + expert mlp           3.4782    3.4151    2.9081    3.9701    3.4429
+[   32.6s] expert - own mlp                  3.4064    3.2768    2.9068    4.0472    3.4093
+[   32.6s] share of the expert's gain recovered by each swap (1 = the expert, 0 = the generalist):
+[   32.6s]   generalist + expert embeddings    math -3.43 code -4.30 medicine -2.13 history -4.22
+[   32.6s]   expert - own embeddings           math -2.87 code -3.57 medicine -1.99 history -3.80
+[   32.6s]   generalist + expert layernorms    math -0.02 code -0.03 medicine -0.03 history -0.01
+[   32.6s]   expert - own layernorms           math +1.00 code +1.00 medicine +1.00 history +1.00
+[   32.6s]   generalist + expert attention     math -0.80 code -1.05 medicine -0.77 history -0.84
+[   32.6s]   expert - own attention            math +0.45 code +0.46 medicine +0.38 history +0.46
+[   32.6s]   generalist + expert mlp           math -0.75 code -0.95 medicine -0.91 history -0.74
+[   32.6s]   expert - own mlp                  math -0.59 code -0.64 medicine -0.90 history -0.92
+[   32.6s] json {"math": {"generalist": 3.150767207145691, "expert": 2.7155088782310486, "generalist + expert embeddings": 4.644679069519043, "expert - own embeddings": 4.401426076889038, "generalist + expert layernorms": 3.160902738571167, "expert - own layernorms": 2.715803802013397, "generalist + expert attention": 3.500530242919922, "expert - own attention": 2.953008234500885, "generalist + expert mlp": 3.4782131910324097, "expert - own mlp": 3.4064420461654663}, "code": {"generalist": 2.985127091407776, "expert": 2.532189130783081, "generalist + expert embeddings": 4.931257009506226, "expert - own embeddings": 4.600924491882324, "generalist + expert layernorms": 2.999106466770172, "expert - own layernorms": 2.533044219017029, "generalist + expert attention": 3.4596553444862366, "expert - own attention": 2.7750093936920166, "generalist + expert mlp": 3.415074110031128, "expert - own mlp": 3.2767903208732605}, "medicine": {"generalist": 2.728517472743988, "expert": 2.5314759016036987, "generalist + expert embeddings": 3.148966908454895, "expert - own embeddings": 3.120877504348755, "generalist + expert layernorms": 2.733729362487793, "expert - own layernorms": 2.5311467051506042, "generalist + expert attention": 2.8796525597572327, "expert - own attention": 2.6542567014694214, "generalist + expert mlp": 2.908099055290222, "expert - own mlp": 2.906788170337677}, "history": {"generalist": 3.65747332572937, "expert": 3.234455704689026, "generalist + expert embeddings": 5.442358493804932, "expert - own embeddings": 5.26502251625061, "generalist + expert layernorms": 3.661129415035248, "expert - own layernorms": 3.234592020511627, "generalist + expert attention": 4.011828362941742, "expert - own attention": 3.4629551768302917, "generalist + expert mlp": 3.970097243785858, "expert - own mlp": 4.047240376472473}}
