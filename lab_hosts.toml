@@ -11,7 +11,7 @@ user = "ubuntu"
 python = "/home/ubuntu/mld/venv/bin/python"
 
 [hosts.ayush]
-instance_id = "i-REPLACE_ME"
+instance_id = "i-0fba89750ab471f1e"
 region = "us-east-1"
 user = "ubuntu"
-python = "python3"
+python = "/home/ubuntu/mld/venv/bin/python"

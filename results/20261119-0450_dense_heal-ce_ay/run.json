@@ -1,0 +1,47 @@
+{
+  "run_id": "20261119-0450_dense_heal-ce_ay",
+  "method": "dense",
+  "variant": "heal-ce",
+  "owner": "ay",
+  "hypothesis": "the generalist trained the same way improves less than the MoE, so the MoE's gain is not just extra training",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/moe/heal.py",
+    "--arch",
+    "dense",
+    "--out",
+    "/home/ubuntu/mld/ay/runs/20261119-0450_dense_heal-ce_ay"
+  ],
+  "host": "ayush",
+  "git_commit": "ce13823b21451c4868b55264d1ca4b2590707fee",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 15570,
+  "started": "2026-11-19T04:50:20Z",
+  "heartbeat": "2026-11-19T05:15:51Z",
+  "ended": "2026-11-19T05:15:51Z",
+  "exit_code": 0,
+  "train_seconds": 1445,
+  "a10g_hours": 0.4013,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.055795144289732,
+      "code": 3.0865078698843718,
+      "medicine": 2.8218527548015118,
+      "history": 3.5102912206202745
+    },
+    "mean": 3.1186117473989725,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.210719347000122e-07,
+    "evaluated_at": "2026-11-19T05:15:50Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 1443.7
+  }
+}

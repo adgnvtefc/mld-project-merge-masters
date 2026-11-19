@@ -1,0 +1,45 @@
+{
+  "run_id": "20261119-0302_moe_init-check_ay",
+  "method": "moe",
+  "variant": "init-check",
+  "owner": "ay",
+  "hypothesis": "an untrained MoE of the experts' MLPs is worse than the generalist, and frequency-weighted embedding maps recover part of the gap",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/moe/init_check.py",
+    "--out",
+    "/home/ubuntu/mld/ay/runs/20261119-0302_moe_init-check_ay"
+  ],
+  "host": "ayush",
+  "git_commit": "eef45344dd97c274d6b4dd0bf395aac8b7bad2eb",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 3625,
+  "started": "2026-11-19T03:02:25Z",
+  "heartbeat": "2026-11-19T03:06:03Z",
+  "ended": "2026-11-19T03:06:03Z",
+  "exit_code": 0,
+  "train_seconds": 114,
+  "a10g_hours": 0.0318,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.0509344898164272,
+      "code": 3.168184207752347,
+      "medicine": 2.967698795720935,
+      "history": 3.6403173450380564
+    },
+    "mean": 3.2067837095819414,
+    "parameters": 297596164,
+    "active_parameters": 124714752,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.7508864402770996e-07,
+    "evaluated_at": "2026-11-19T03:06:03Z"
+  },
+  "progress": {
+    "step": 5,
+    "elapsed_s": 112.3
+  }
+}
