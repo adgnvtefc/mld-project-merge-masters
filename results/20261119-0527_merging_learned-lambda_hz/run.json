@@ -1,0 +1,47 @@
+{
+  "run_id": "20261119-0527_merging_learned-lambda_hz",
+  "method": "merging",
+  "variant": "learned-lambda",
+  "owner": "hz",
+  "hypothesis": "Re-run of 20261118-2018_merging_learned-lambda_hz after the pool-val fix (d725d3f: windows spread over the whole slice, not the first 64 in a row); same grid and settings. Original hypothesis: 375 per-layer coefficients learned on pool train beat the best single-coefficient merge. Training does not read pool-val, so the model and dev score should reproduce exactly.",
+  "parents": [
+    "20261118-2018_merging_learned-lambda_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/learned_lambda.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-0527_merging_learned-lambda_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "93ff3d81721783003672fe7cc402ea959b5b7844",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 7897,
+  "started": "2026-11-19T05:27:23Z",
+  "heartbeat": "2026-11-19T05:35:36Z",
+  "ended": "2026-11-19T05:35:36Z",
+  "exit_code": 0,
+  "train_seconds": 402,
+  "a10g_hours": 0.1117,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.100308744236827,
+      "code": 3.14469325914979,
+      "medicine": 2.812538357451558,
+      "history": 3.5067374128848314
+    },
+    "mean": 3.1410694434307516,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 2.1047890186309814e-07,
+    "evaluated_at": "2026-11-19T05:35:35Z"
+  },
+  "progress": {
+    "step": 300,
+    "elapsed_s": 400.3
+  }
+}

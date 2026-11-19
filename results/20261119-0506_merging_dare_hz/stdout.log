@@ -1,0 +1,42 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-0506_merging_dare_hz", "scheme": "dare", "lam_experts": "0,0.1,0.2,0.25,0.3,0.4,0.5", "lam_generalist": "0,0.5,0.75,1.0", "lam": "0.4,0.6,0.8,1.0,1.2,1.5", "drop": 0.9, "keep": 0.2, "val_windows": 64, "device": "cuda", "seed": 0}
+[    4.3s] loaded seed and 5 task vectors on cuda
+[    4.4s] DARE: dropped 90% of each task vector, rescaled the rest
+[    9.1s] grid 1/28 {'lam_e': 0.0, 'lam_g': 0.0}: pool-val math 3.3947 | code 3.4371 | medicine 3.0965 | history 3.8699 | mean 3.4496
+[   13.8s] grid 2/28 {'lam_e': 0.0, 'lam_g': 0.5}: pool-val math 8.7293 | code 8.8181 | medicine 8.7586 | history 9.0869 | mean 8.8482
+[   18.5s] grid 3/28 {'lam_e': 0.0, 'lam_g': 0.75}: pool-val math 12.8225 | code 12.8003 | medicine 12.7386 | history 13.0529 | mean 12.8536
+[   23.2s] grid 4/28 {'lam_e': 0.0, 'lam_g': 1.0}: pool-val math 20.1687 | code 20.4014 | medicine 20.1870 | history 20.2773 | mean 20.2586
+[   27.9s] grid 5/28 {'lam_e': 0.1, 'lam_g': 0.0}: pool-val math 3.7765 | code 3.8437 | medicine 3.6129 | history 4.3427 | mean 3.8940
+[   32.5s] grid 6/28 {'lam_e': 0.1, 'lam_g': 0.5}: pool-val math 9.9172 | code 9.9191 | medicine 9.9676 | history 10.2915 | mean 10.0239
+[   37.2s] grid 7/28 {'lam_e': 0.1, 'lam_g': 0.75}: pool-val math 14.0362 | code 13.8840 | medicine 13.9604 | history 14.1157 | mean 13.9990
+[   41.9s] grid 8/28 {'lam_e': 0.1, 'lam_g': 1.0}: pool-val math 21.4667 | code 21.5066 | medicine 21.6541 | history 22.0087 | mean 21.6590
+[   46.6s] grid 9/28 {'lam_e': 0.2, 'lam_g': 0.0}: pool-val math 8.8806 | code 8.9079 | medicine 9.1375 | history 9.2395 | mean 9.0414
+[   51.3s] grid 10/28 {'lam_e': 0.2, 'lam_g': 0.5}: pool-val math 11.8383 | code 11.8386 | medicine 11.9822 | history 12.0745 | mean 11.9334
+[   55.9s] grid 11/28 {'lam_e': 0.2, 'lam_g': 0.75}: pool-val math 18.0818 | code 18.2990 | medicine 18.3741 | history 18.6288 | mean 18.3459
+[   60.6s] grid 12/28 {'lam_e': 0.2, 'lam_g': 1.0}: pool-val math 26.6436 | code 26.8132 | medicine 26.7786 | history 26.9752 | mean 26.8026
+[   65.3s] grid 13/28 {'lam_e': 0.25, 'lam_g': 0.0}: pool-val math 10.7216 | code 10.8112 | medicine 10.8756 | history 10.9799 | mean 10.8471
+[   70.0s] grid 14/28 {'lam_e': 0.25, 'lam_g': 0.5}: pool-val math 14.7334 | code 14.7683 | medicine 14.9545 | history 14.9496 | mean 14.8515
+[   74.7s] grid 15/28 {'lam_e': 0.25, 'lam_g': 0.75}: pool-val math 21.2932 | code 21.6028 | medicine 21.4940 | history 21.6473 | mean 21.5093
+[   79.3s] grid 16/28 {'lam_e': 0.25, 'lam_g': 1.0}: pool-val math 29.2979 | code 29.2493 | medicine 29.2305 | history 29.4491 | mean 29.3067
+[   84.0s] grid 17/28 {'lam_e': 0.3, 'lam_g': 0.0}: pool-val math 12.4248 | code 12.6285 | medicine 12.8701 | history 12.8683 | mean 12.6979
+[   88.7s] grid 18/28 {'lam_e': 0.3, 'lam_g': 0.5}: pool-val math 16.3914 | code 16.5298 | medicine 16.7529 | history 16.7818 | mean 16.6140
+[   93.4s] grid 19/28 {'lam_e': 0.3, 'lam_g': 0.75}: pool-val math 23.9564 | code 24.2302 | medicine 23.8955 | history 23.9924 | mean 24.0186
+[   98.1s] grid 20/28 {'lam_e': 0.3, 'lam_g': 1.0}: pool-val math 30.6969 | code 30.6784 | medicine 30.6373 | history 30.8359 | mean 30.7121
+[  102.8s] grid 21/28 {'lam_e': 0.4, 'lam_g': 0.0}: pool-val math 18.3953 | code 18.4047 | medicine 18.4542 | history 18.3981 | mean 18.4131
+[  107.4s] grid 22/28 {'lam_e': 0.4, 'lam_g': 0.5}: pool-val math 22.9143 | code 23.0484 | medicine 23.4077 | history 23.4661 | mean 23.2091
+[  112.1s] grid 23/28 {'lam_e': 0.4, 'lam_g': 0.75}: pool-val math 30.7866 | code 30.7380 | medicine 30.6203 | history 31.0104 | mean 30.7888
+[  116.8s] grid 24/28 {'lam_e': 0.4, 'lam_g': 1.0}: pool-val math 35.9656 | code 36.0629 | medicine 35.9959 | history 36.2966 | mean 36.0803
+[  121.5s] grid 25/28 {'lam_e': 0.5, 'lam_g': 0.0}: pool-val math 27.8882 | code 27.9185 | medicine 28.1380 | history 28.2828 | mean 28.0569
+[  126.2s] grid 26/28 {'lam_e': 0.5, 'lam_g': 0.5}: pool-val math 33.8107 | code 34.0771 | medicine 33.9882 | history 34.0285 | mean 33.9761
+[  130.8s] grid 27/28 {'lam_e': 0.5, 'lam_g': 0.75}: pool-val math 42.2081 | code 42.1658 | medicine 41.7789 | history 42.1296 | mean 42.0706
+[  135.5s] grid 28/28 {'lam_e': 0.5, 'lam_g': 1.0}: pool-val math 47.1520 | code 47.2315 | medicine 47.2621 | history 47.1827 | mean 47.2071
+[  135.5s] best on pool-val: {'lam_e': 0.0, 'lam_g': 0.0} -> math 3.3947 | code 3.4371 | medicine 3.0965 | history 3.8699 | mean 3.4496
+[  135.9s] saved /home/ubuntu/mld/hz/runs/20261119-0506_merging_dare_hz/model.bin and model_def.py
+submission  2026-11-19 05:08 UTC | /home/ubuntu/mld/hz/runs/20261119-0506_merging_dare_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.4490 | code 3.4950 | medicine 3.0843 | history 3.8456 | mean 3.4684
+valid
+RESULT {"data": "dev", "losses": {"math": 3.4489898066967726, "code": 3.4949643220752478, "medicine": 3.0842746794223785, "history": 3.84555228240788}, "mean": 3.4684452726505697, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261119-0506_merging_dare_hz/submission.log
+per-window means match the official score within 1.49e-07

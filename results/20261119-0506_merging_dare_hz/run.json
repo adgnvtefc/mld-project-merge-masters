@@ -1,0 +1,49 @@
+{
+  "run_id": "20261119-0506_merging_dare_hz",
+  "method": "merging",
+  "variant": "dare",
+  "owner": "hz",
+  "hypothesis": "Re-run of 20261118-2008_merging_dare_hz after the pool-val fix (d725d3f: windows spread over the whole slice, not the first 64 in a row); same grid and settings. Original hypothesis: DARE (drop 90%, rescale) before task arithmetic reduces interference and beats plain task arithmetic.",
+  "parents": [
+    "20261118-2008_merging_dare_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/task_arithmetic.py",
+    "--scheme",
+    "dare",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-0506_merging_dare_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "93ff3d81721783003672fe7cc402ea959b5b7844",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 2537,
+  "started": "2026-11-19T05:06:23Z",
+  "heartbeat": "2026-11-19T05:10:12Z",
+  "ended": "2026-11-19T05:10:12Z",
+  "exit_code": 0,
+  "train_seconds": 138,
+  "a10g_hours": 0.0384,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.4489898066967726,
+      "code": 3.4949643220752478,
+      "medicine": 3.0842746794223785,
+      "history": 3.84555228240788
+    },
+    "mean": 3.4684452726505697,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.4901161193847656e-07,
+    "evaluated_at": "2026-11-19T05:10:11Z"
+  },
+  "progress": {
+    "step": 27,
+    "elapsed_s": 136.7
+  }
+}

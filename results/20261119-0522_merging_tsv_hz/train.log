@@ -1,0 +1,47 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-0522_merging_tsv_hz", "orthogonalize": true, "ranks": "16,64,128,192", "lam": "0.1,0.25,0.5,0.75,1.0", "others": "0,1", "val_windows": 64, "device": "cuda", "seed": 0}
+[    5.0s] expert_math: top-192 SVD of its change from the generalist in 48 matrices
+[    7.9s] expert_code: top-192 SVD of its change from the generalist in 48 matrices
+[   10.7s] expert_medicine: top-192 SVD of its change from the generalist in 48 matrices
+[   13.6s] expert_history: top-192 SVD of its change from the generalist in 48 matrices
+[   19.4s] r 16 lam 0.1 others 0: pool-val math 3.0785 | code 3.1217 | medicine 2.8115 | history 3.5483 | mean 3.1400
+[   24.0s] r 16 lam 0.1 others 1: pool-val math 3.0743 | code 3.1196 | medicine 2.8182 | history 3.5515 | mean 3.1409
+[   28.7s] r 16 lam 0.25 others 0: pool-val math 3.1009 | code 3.1549 | medicine 2.8354 | history 3.5742 | mean 3.1664
+[   33.4s] r 16 lam 0.25 others 1: pool-val math 3.0901 | code 3.1482 | medicine 2.8638 | history 3.5891 | mean 3.1728
+[   38.1s] r 16 lam 0.5 others 0: pool-val math 3.1843 | code 3.2556 | medicine 2.9264 | history 3.6638 | mean 3.2576
+[   42.7s] r 16 lam 0.5 others 1: pool-val math 3.1639 | code 3.2464 | medicine 3.0118 | history 3.7130 | mean 3.2838
+[   47.4s] r 16 lam 0.75 others 0: pool-val math 3.3231 | code 3.4058 | medicine 3.0970 | history 3.8193 | mean 3.4113
+[   52.1s] r 16 lam 0.75 others 1: pool-val math 3.2955 | code 3.3985 | medicine 3.2424 | history 3.9032 | mean 3.4599
+[   56.7s] r 16 lam 1.0 others 0: pool-val math 3.5510 | code 3.6551 | medicine 3.3828 | history 4.1012 | mean 3.6725
+[   61.4s] r 16 lam 1.0 others 1: pool-val math 3.4993 | code 3.6134 | medicine 3.5609 | history 4.1684 | mean 3.7105
+[   67.0s] r 64 lam 0.1 others 0: pool-val math 3.0807 | code 3.1251 | medicine 2.8184 | history 3.5517 | mean 3.1440
+[   71.7s] r 64 lam 0.1 others 1: pool-val math 3.0762 | code 3.1223 | medicine 2.8239 | history 3.5542 | mean 3.1442
+[   76.4s] r 64 lam 0.25 others 0: pool-val math 3.1235 | code 3.1818 | medicine 2.8756 | history 3.6013 | mean 3.1956
+[   81.1s] r 64 lam 0.25 others 1: pool-val math 3.1097 | code 3.1726 | medicine 2.8976 | history 3.6128 | mean 3.1982
+[   85.7s] r 64 lam 0.5 others 0: pool-val math 3.2941 | code 3.3791 | medicine 3.0991 | history 3.7940 | mean 3.3916
+[   90.4s] r 64 lam 0.5 others 1: pool-val math 3.2560 | code 3.3532 | medicine 3.1548 | history 3.8218 | mean 3.3965
+[   95.1s] r 64 lam 0.75 others 0: pool-val math 3.6882 | code 3.8165 | medicine 3.5994 | history 4.2383 | mean 3.8356
+[   99.7s] r 64 lam 0.75 others 1: pool-val math 3.5843 | code 3.7155 | medicine 3.6362 | history 4.2378 | mean 3.7934
+[  104.4s] r 64 lam 1.0 others 0: pool-val math 4.6553 | code 4.8317 | medicine 4.6798 | history 5.2730 | mean 4.8599
+[  109.1s] r 64 lam 1.0 others 1: pool-val math 4.3644 | code 4.5037 | medicine 4.5772 | history 5.1194 | mean 4.6412
+[  116.2s] r 128 lam 0.1 others 0: pool-val math 3.0825 | code 3.1277 | medicine 2.8254 | history 3.5570 | mean 3.1482
+[  120.9s] r 128 lam 0.1 others 1: pool-val math 3.0781 | code 3.1251 | medicine 2.8304 | history 3.5591 | mean 3.1482
+[  125.6s] r 128 lam 0.25 others 0: pool-val math 3.1455 | code 3.2067 | medicine 2.9166 | history 3.6355 | mean 3.2261
+[  130.3s] r 128 lam 0.25 others 1: pool-val math 3.1313 | code 3.1963 | medicine 2.9363 | history 3.6429 | mean 3.2267
+[  134.9s] r 128 lam 0.5 others 0: pool-val math 3.4234 | code 3.5154 | medicine 3.2949 | history 3.9663 | mean 3.5500
+[  139.6s] r 128 lam 0.5 others 1: pool-val math 3.3780 | code 3.4790 | medicine 3.3334 | history 3.9685 | mean 3.5397
+[  144.3s] r 128 lam 0.75 others 0: pool-val math 4.2894 | code 4.4254 | medicine 4.3364 | history 4.9510 | mean 4.5006
+[  148.9s] r 128 lam 0.75 others 1: pool-val math 4.1232 | code 4.2583 | medicine 4.2881 | history 4.8266 | mean 4.3741
+[  153.6s] r 128 lam 1.0 others 0: pool-val math 6.2329 | code 6.3823 | medicine 6.3295 | history 6.8037 | mean 6.4371
+[  158.3s] r 128 lam 1.0 others 1: pool-val math 5.7882 | code 5.9407 | medicine 6.1251 | history 6.4984 | mean 6.0881
+[  168.1s] r 192 lam 0.1 others 0: pool-val math 3.0875 | code 3.1329 | medicine 2.8328 | history 3.5632 | mean 3.1541
+[  172.8s] r 192 lam 0.1 others 1: pool-val math 3.0828 | code 3.1300 | medicine 2.8374 | history 3.5651 | mean 3.1538
+[  177.5s] r 192 lam 0.25 others 0: pool-val math 3.1813 | code 3.2456 | medicine 2.9652 | history 3.6789 | mean 3.2677
+[  182.1s] r 192 lam 0.25 others 1: pool-val math 3.1651 | code 3.2338 | medicine 2.9824 | history 3.6848 | mean 3.2665
+[  186.8s] r 192 lam 0.5 others 0: pool-val math 3.7255 | code 3.8365 | medicine 3.6683 | history 4.3054 | mean 3.8839
+[  191.5s] r 192 lam 0.5 others 1: pool-val math 3.6473 | code 3.7686 | medicine 3.6799 | history 4.2807 | mean 3.8441
+[  196.2s] r 192 lam 0.75 others 0: pool-val math 5.6010 | code 5.6893 | medicine 5.6850 | history 6.1217 | mean 5.7742
+[  200.8s] r 192 lam 0.75 others 1: pool-val math 5.2538 | code 5.3847 | medicine 5.5375 | history 5.9013 | mean 5.5193
+[  205.5s] r 192 lam 1.0 others 0: pool-val math 7.5184 | code 7.5323 | medicine 7.5262 | history 7.7560 | mean 7.5832
+[  210.2s] r 192 lam 1.0 others 1: pool-val math 7.1069 | code 7.1554 | medicine 7.3272 | history 7.4961 | mean 7.2714
+[  210.2s] best on pool-val: {'r': 16, 'lam': 0.1, 'others': 0.0} -> math 3.0785 | code 3.1217 | medicine 2.8115 | history 3.5483 | mean 3.1400
+[  210.7s] saved /home/ubuntu/mld/hz/runs/20261119-0522_merging_tsv_hz/model.bin and model_def.py

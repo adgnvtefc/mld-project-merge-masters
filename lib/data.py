@@ -7,8 +7,8 @@ use it to tune, select and early-stop (dev is for comparing only). The rest is t
     x, y = data.batch(["math", "code"], 2048, rng, "train")      # one random window per listed domain
     losses = data.val_loss(model, windows=64)                    # {"math": ..., ..., "mean": ...}
 
-pool-val windows are the first `windows` non-overlapping 2,048-token windows of each domain's pool-val
-slice, so every method and every run scores the same tokens.
+pool-val windows are `windows` non-overlapping 2,048-token windows spread evenly over each domain's pool-val
+slice (see val_windows), so every method and every run scores the same tokens.
 """
 
 import functools

@@ -1,0 +1,34 @@
+{
+  "run_id": "20261119-1537_analysis_tokens_hz",
+  "method": "analysis",
+  "variant": "tokens",
+  "owner": "hz",
+  "hypothesis": "Re-run with the fixed pool-val windows: whether each expert's gain is spread over all tokens or concentrated in rare ones, now including math.",
+  "parents": [
+    "20261118-2130_analysis_tokens_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/analysis/diagnostics.py",
+    "--which",
+    "tokens",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1537_analysis_tokens_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "a5b73eeb6c0cfce489d87812cac8f1d03fec8c50",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 2552,
+  "started": "2026-11-19T15:38:00Z",
+  "heartbeat": "2026-11-19T15:38:11Z",
+  "ended": "2026-11-19T15:38:11Z",
+  "exit_code": 0,
+  "train_seconds": 11,
+  "a10g_hours": 0.0031,
+  "eval": null,
+  "progress": {
+    "step": 3,
+    "elapsed_s": 10.1
+  }
+}

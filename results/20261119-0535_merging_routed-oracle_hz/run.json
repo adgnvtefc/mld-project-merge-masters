@@ -1,0 +1,32 @@
+{
+  "run_id": "20261119-0535_merging_routed-oracle_hz",
+  "method": "merging",
+  "variant": "routed-oracle",
+  "owner": "hz",
+  "hypothesis": "Re-run of 20261118-2105_merging_routed-oracle_hz after the pool-val fix (d725d3f: windows spread over the whole slice, not the first 64 in a row); same grid and settings. Original hypothesis: Measures how close each domain gets to its own expert when given only that expert's rank-r change from the generalist, and which other tensors (LayerNorms, biases, embeddings) the change needs.",
+  "parents": [
+    "20261118-2105_merging_routed-oracle_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/routed_oracle.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-0535_merging_routed-oracle_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "93ff3d81721783003672fe7cc402ea959b5b7844",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 9622,
+  "started": "2026-11-19T05:35:45Z",
+  "heartbeat": "2026-11-19T05:37:22Z",
+  "ended": "2026-11-19T05:37:22Z",
+  "exit_code": 0,
+  "train_seconds": 97,
+  "a10g_hours": 0.0269,
+  "eval": null,
+  "progress": {
+    "step": 3,
+    "elapsed_s": 95.5
+  }
+}
