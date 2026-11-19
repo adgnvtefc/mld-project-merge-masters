@@ -1,0 +1,27 @@
+# routed
+Description: pruned experts with their own attention, shared embeddings plus per-expert low-rank corrections, and a causal prefix router
+Owner: hz
+Status: active
+
+Design A from `training_scripts/pruning/` turned into a submittable model. `build.py` makes it from the provided
+models with no training, and writes a solution directory whose `model_def.py` is `routed_model_def.py`.
+
+The model:
+
+- **Shared:** word and position embeddings (the average of the four experts').
+- **Per expert:** its own attention and LayerNorms; its FFN neurons pruned to fit the 300M total (global taylor
+  ranking on its own pool train text, least-squares refit of each layer's output); a rank-r correction of the
+  shared word and position embeddings toward its own (truncated SVD of the difference; also used by the tied
+  output layer).
+- **Router, no parameters:** for the first `commit` tokens of a sequence all four experts run, and the output mixes
+  their predictions, weighted by each expert's likelihood of the text so far (a posterior with a uniform prior).
+  At token `commit` the sequence commits to the expert with the lowest loss on the prefix, which then predicts
+  every later token. Each expert needs its own attention state for earlier tokens, so the committed expert reruns
+  the prefix. Active parameters per 2,048-token window: (4 x commit + 2048) / 2048 times one expert's.
+
+`commit` is chosen on pool-val among `--commits`; rank and embedding source come from the Phase 2 runs
+(`20261119-1707_pruning_assemble-oracle-ranks_hz`).
+
+| Script | Variant | What it does |
+|---|---|---|
+| `build.py` | `design-a` | builds the model, reports routing accuracy by position and pool-val loss for each commit point, saves the best |
