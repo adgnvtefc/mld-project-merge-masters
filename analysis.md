@@ -1,7 +1,7 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 49 runs (44 by Hanmo, 5 by Ayush),
-about 3.1 GPU-hours.
+November 19, 2026. Everything we have measured so far, in one place: 51 runs (46 by Hanmo, 5 by Ayush),
+about 4.2 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
 full detail behind section 5. Each number here comes from a run in `results/`; section 12 lists them.
 
@@ -23,14 +23,14 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   taken from the experts will need training to fit together.
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
-  - **Best so far: Ayush's trained mixture of experts, 2.989 on dev** (section 9). It is 0.166 better
-    than the generalist and closes 44% of the gap. Its four experts share attention and embeddings. Only
-    the shared parts were trained, for 25 minutes.
-  - **Pruned experts with their own attention (design A): 3.042 on dev with no training** (sections 7
-    and 8). It is 0.114 better than the generalist and closes 30% of the gap.
+  - **Best so far: design A trained for 30 minutes with its FFN layers frozen, 2.973 on dev** (section
+    9). It is 0.183 better than the generalist and closes 48% of the gap. Design A is pruned experts that
+    keep their own attention (sections 7 and 8).
+  - **Close behind: Ayush's trained mixture of experts, 2.989.** Its experts share attention. Trained
+    the same way, it closes 44% of the gap.
+  - **Untrained, design A was far ahead** (3.042 against 3.207). Training closed most of that difference.
   - **Training the generalist the same way gains only 0.037.** So the gain comes from routing to
     experts, not from extra training alone.
-  - **Design A starts 0.165 ahead of the untrained mixture of experts,** but has not been trained yet.
 
 ## 1. The task
 
@@ -251,7 +251,7 @@ deterministic reference build is `20261119-1936`).
   provided. We read the 300M limit as stopping routing to the provided experts as they are, so we
   consider this allowed.
 
-## 9. Method 2: a trained mixture of experts (Ayush)
+## 9. Training the routed models (Method 2 and design A)
 
 Ayush built Method 2 from the plan and trained it (`training_scripts/moe/`).
 
@@ -267,7 +267,11 @@ Ayush built Method 2 from the plan and trained it (`training_scripts/moe/`).
 - **Training ("healing"):** next-token loss on the training text, 800 steps of 32 texts. That is 52M
   tokens, equal across domains, with each text sent to its own expert, in about 25 minutes.
 
-**Dev scores** (`20261119-0302`, `-0352`, `-0423`, `-0450`):
+We then trained design A the same way (`training_scripts/routed/heal.py`): the same data, in the same
+order, the same steps and the same schedule. So Ayush's dense control applies to it too. "Frozen" means
+the experts' FFN layers do not train; everything else does.
+
+**Dev scores** (`20261119-0302`, `-0352`, `-0423`, `-0450`, `-2206`, `-2241`):
 
 | Model | Training | Math | Code | Medicine | History | Mean | vs generalist (95% range) |
 |---|---|---|---|---|---|---|---|
@@ -276,18 +280,28 @@ Ayush built Method 2 from the plan and trained it (`training_scripts/moe/`).
 | Generalist trained the same way (control) | 0.40 GPU-h | 3.056 | 3.087 | 2.822 | 3.510 | 3.119 | −0.037 (−0.039 to −0.035) |
 | Design A (ours) | none | 2.913 | 2.948 | 2.853 | 3.453 | 3.042 | −0.114 (−0.121 to −0.107) |
 | Mixture of experts, everything trained | 0.47 GPU-h | 2.887 | 2.932 | 2.801 | 3.415 | 3.009 | −0.147 (−0.153 to −0.141) |
-| **Mixture of experts, experts frozen** | 0.42 GPU-h | **2.865** | **2.916** | **2.781** | **3.395** | **2.989** | **−0.166 (−0.172 to −0.160)** |
+| Design A, everything trained | 0.56 GPU-h | 2.879 | 2.906 | 2.791 | 3.392 | 2.992 | −0.164 (−0.171 to −0.156) |
+| Mixture of experts, experts frozen | 0.42 GPU-h | 2.865 | 2.916 | 2.781 | 3.395 | 2.989 | −0.166 (−0.172 to −0.160) |
+| **Design A, FFN frozen** | 0.53 GPU-h | **2.858** | **2.887** | **2.772** | **3.375** | **2.973** | **−0.183 (−0.190 to −0.175)** |
+
+GPU-hours include building the model and scoring it on dev.
 
 - **Training does most of the work.** It takes the mixture of experts from 3.207 to 2.989. The same
   training on the generalist gains only 0.037, and medicine gets worse for it.
 - **Freezing the experts beat training everything,** by 0.020 on every domain. Only the shared parts
-  trained (71M of 298M parameters). But at the end, training everything was still improving about 3×
-  faster (0.015 per 100 steps against 0.005). These runs used 25 minutes of the 2-hour budget, so the
-  order could flip with longer training.
+  trained (71M of 298M parameters). These runs used 25 to 30 minutes of the 2-hour budget, so the order
+  could flip with longer training.
 - **Training fixes medicine.** With the experts frozen, medicine is level with the generalist (−0.006,
   range −0.014 to +0.003). Untrained, it was 0.181 worse.
-- **Against design A,** the frozen-expert model is 0.052 better (−0.056 to −0.049). It is better on 84% of
-  math windows, 74% of code, 93% of medicine and 91% of history.
+- **Trained design A is the best model,** 0.016 better than the trained mixture of experts (95% range
+  0.013 to 0.020). It is better on 72% of math windows, 87% of code, 63% of medicine and 81% of history.
+- **Its head start mostly disappeared.** Untrained, design A led by 0.165; trained, by 0.016. Training
+  gained design A 0.069 and the mixture of experts 0.218. Shared attention, trained on all four domains,
+  seems to learn much of what design A's separate attention already had.
+- **Medicine finally beats the generalist** with trained design A (−0.015, on 65% of windows).
+- **The same pattern in both designs:** freezing the FFN layers wins at 800 steps. Training everything
+  first makes the model worse (design A's held-out loss rose by 0.09 in the first 100 steps), then
+  improves faster. At the end it was still gaining 0.014 per 100 steps, against 0.003 to 0.005 frozen.
 - **Routing costs both designs about the same:** 0.012 to 0.013 over the true label, on the held-out
   slice.
 
@@ -302,16 +316,18 @@ This section is our interpretation. The sections above are measured.
 - **Training is what makes routed experts work.** Section 9 confirms what the error analysis
   predicted: expert parts need training to fit together. 25 minutes took Method 2 from worse than the
   generalist to the best model we have.
-- **The fair next comparison is design A trained the same way.** Design A starts 0.165 ahead of the
-  untrained mixture of experts, because each expert keeps its own attention. Whether that lead survives
-  the same training is the open question. Ayush's training loop can be reused.
-- **Longer training is the other open question.** Each training run so far used 25 of the 120 minutes
-  the final recipe allows, and was still improving.
+- **Trained design A is the front-runner, but narrowly.** Its lead over the trained mixture of experts
+  (0.016) is a fraction of its untrained lead. Either design could win with a different training plan.
+- **Longer training is the main open question.** Every training run so far used 25 to 30 of the 120
+  minutes the final recipe allows, and all were still improving. Training everything improves fastest
+  at the end, so the frozen-versus-everything choice needs re-checking at full length.
+- **Design A's active parameters are 1% under the limit** (148.5M, from its commit point of 224
+  tokens). A final recipe should either keep that margin checked or commit earlier (128: 129.1M).
 - **Method 3 (teaching one model from the experts) avoids the compatibility problem.** It copies the
   experts' predictions, not their weights. The open question is room: the experts' skill is broad, and a
   124M model may not hold all four.
-- **Watch medicine.** Every untrained method hurt it. Training the shared parts brought it level with
-  the generalist, but not past it.
+- **Watch medicine.** Every untrained method hurt it. Training brought it level with the generalist
+  (mixture of experts) or just past it (design A, by 0.015).
 
 ## 11. How sure we are
 
@@ -325,8 +341,8 @@ This section is our interpretation. The sections above are measured.
 - **Our two hosts agree.** Ayush's machine scores the generalist identically, window for window.
 - **Reproducible.** The learned mix scored the same to within 0.00002 when re-run. It is not
   bit-identical, because GPU arithmetic varies slightly between runs. Design A's build is now
-  bit-identical from run to run. The training runs in section 9 have not been repeated yet; the final
-  recipe must reproduce within 0.005.
+  bit-identical from run to run. The training runs in section 9 have not been repeated yet, and GPU
+  training is not bit-identical; the final recipe must reproduce within 0.005.
 - **Not yet tested:**
   - Several searches chose the smallest amount we tried, so settings below it are untested.
   - The learned mix always started from the generalist.
@@ -350,6 +366,7 @@ This section is our interpretation. The sections above are measured.
 | Design A, deterministic builds | `20261119-1912`, `-1921` (bit-identical twins), `-1936` (reference) (`routed_design-a-det_hz`) |
 | Mixture of experts (Ayush) | `20261119-0302_moe_init-check_ay`, `20261119-0352_moe_heal-all_ay`, `20261119-0423_moe_heal-shared_ay` |
 | Dense control and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
+| Design A trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
 The code is in `training_scripts/`: `merging/`, `pruning/`, `routed/`, `moe/`, `dense/` and `analysis/`.

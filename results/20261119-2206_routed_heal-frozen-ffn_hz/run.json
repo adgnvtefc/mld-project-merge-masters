@@ -1,0 +1,49 @@
+{
+  "run_id": "20261119-2206_routed_heal-frozen-ffn_hz",
+  "method": "routed",
+  "variant": "heal-frozen-ffn",
+  "owner": "hz",
+  "hypothesis": "Design A trained like Ayush's best MoE run (experts' FFNs frozen; embeddings, corrections, attention and LayerNorms trained; same data and schedule) keeps its 0.165 head start and beats his 2.9893 on dev.",
+  "parents": [
+    "20261119-1936_routed_design-a-det_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "frozen-ffn",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-2206_routed_heal-frozen-ffn_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "c51277946262141e2b8eb59678645fd0480c21ea",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1352,
+  "started": "2026-11-19T22:06:39Z",
+  "heartbeat": "2026-11-19T22:41:22Z",
+  "ended": "2026-11-19T22:41:22Z",
+  "exit_code": 0,
+  "train_seconds": 1916,
+  "a10g_hours": 0.5322,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.857627620920539,
+      "code": 2.887481542304158,
+      "medicine": 2.7716928580775857,
+      "history": 3.37474718503654
+    },
+    "mean": 2.9728873015847057,
+    "parameters": 299995804,
+    "active_parameters": 148473832,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 2.2910535335540771e-07,
+    "evaluated_at": "2026-11-19T22:41:20Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 1910.7
+  }
+}

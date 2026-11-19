@@ -1,0 +1,49 @@
+{
+  "run_id": "20261119-2241_routed_heal-all_hz",
+  "method": "routed",
+  "variant": "heal-all",
+  "owner": "hz",
+  "hypothesis": "Design A with every weight trained (same data and schedule) does better or worse than with the FFNs frozen, as a check on which parts need training.",
+  "parents": [
+    "20261119-1936_routed_design-a-det_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "all",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-2241_routed_heal-all_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "c51277946262141e2b8eb59678645fd0480c21ea",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 7484,
+  "started": "2026-11-19T22:41:27Z",
+  "heartbeat": "2026-11-19T23:18:01Z",
+  "ended": "2026-11-19T23:18:01Z",
+  "exit_code": 0,
+  "train_seconds": 2027,
+  "a10g_hours": 0.5631,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.878653174266219,
+      "code": 2.9058909937739372,
+      "medicine": 2.791305461898446,
+      "history": 3.39180850982666
+    },
+    "mean": 2.9919145349413157,
+    "parameters": 299995804,
+    "active_parameters": 148473832,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.2479722499847412e-07,
+    "evaluated_at": "2026-11-19T23:18:00Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 2024.7
+  }
+}
