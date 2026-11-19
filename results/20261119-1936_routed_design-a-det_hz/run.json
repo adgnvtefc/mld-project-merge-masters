@@ -1,0 +1,49 @@
+{
+  "run_id": "20261119-1936_routed_design-a-det_hz",
+  "method": "routed",
+  "variant": "design-a-det",
+  "owner": "hz",
+  "hypothesis": "Grouping the taylor statistic by 4 windows again (as in the original sweep) recovers the earlier build's dev score (about 3.041) while staying deterministic.",
+  "parents": [
+    "20261119-1921_routed_design-a-det_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/build.py",
+    "--commits",
+    "128,160,192,224",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1936_routed_design-a-det_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "60d1b37b988aa2604bdb5368f63d957ea71f157d",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1360,
+  "started": "2026-11-19T19:36:05Z",
+  "heartbeat": "2026-11-19T19:44:44Z",
+  "ended": "2026-11-19T19:44:44Z",
+  "exit_code": 0,
+  "train_seconds": 352,
+  "a10g_hours": 0.0978,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.912735566496849,
+      "code": 2.947752933949232,
+      "medicine": 2.8527229502797127,
+      "history": 3.4529973957687616
+    },
+    "mean": 3.041552211623639,
+    "parameters": 299995804,
+    "active_parameters": 148473832,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.7136335372924805e-07,
+    "evaluated_at": "2026-11-19T19:44:43Z"
+  },
+  "progress": {
+    "step": 4,
+    "elapsed_s": 347.1
+  }
+}

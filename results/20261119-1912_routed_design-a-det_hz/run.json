@@ -1,0 +1,49 @@
+{
+  "run_id": "20261119-1912_routed_design-a-det_hz",
+  "method": "routed",
+  "variant": "design-a-det",
+  "owner": "hz",
+  "hypothesis": "With deterministic calibration, two builds of design A give bit-identical weights (same fingerprint), the same routing and the same dev score; build 1 of 2.",
+  "parents": [
+    "20261119-1850_routed_design-a-commit_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/build.py",
+    "--commits",
+    "128,160,192,224",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1912_routed_design-a-det_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "d4f7be57e5f551ed3b7cb822e5504acffb450789",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1358,
+  "started": "2026-11-19T19:12:21Z",
+  "heartbeat": "2026-11-19T19:21:04Z",
+  "ended": "2026-11-19T19:21:04Z",
+  "exit_code": 0,
+  "train_seconds": 354,
+  "a10g_hours": 0.0983,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.916356148198247,
+      "code": 2.9492753697559237,
+      "medicine": 2.8551866579800844,
+      "history": 3.458264948800206
+    },
+    "mean": 3.0447707811836153,
+    "parameters": 299995804,
+    "active_parameters": 148473832,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.955777406692505e-07,
+    "evaluated_at": "2026-11-19T19:21:02Z"
+  },
+  "progress": {
+    "step": 4,
+    "elapsed_s": 348.7
+  }
+}
