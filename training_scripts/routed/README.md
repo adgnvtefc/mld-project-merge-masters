@@ -19,7 +19,10 @@ The model:
   every later token. Each expert needs its own attention state for earlier tokens, so the committed expert reruns
   the prefix. Active parameters per 2,048-token window: (4 x commit + 2048) / 2048 times one expert's.
 
-`commit` is chosen on pool-val among `--commits`; rank and embedding source come from the Phase 2 runs
+The build is deterministic: calibration runs in PyTorch's deterministic mode with the plain-math attention kernel
+(the fused kernels' backward accumulates in a varying order), and the log prints a fingerprint of the saved
+weights, so two builds can be compared. `commit` is chosen on pool-val among `--commits`, on 256 windows per
+domain (with 64, one misrouted window moves the mean by about 0.002); rank and embedding source come from the Phase 2 runs
 (`20261119-1707_pruning_assemble-oracle-ranks_hz`).
 
 | Script | Variant | What it does |

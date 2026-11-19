@@ -15,6 +15,8 @@ import json
 import os
 import sys
 
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")  # lets deterministic mode use cuBLAS (set before CUDA starts)
+
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -35,7 +37,24 @@ def proj(i):
     return f"transformer.h.{i}.mlp.c_proj"
 
 
-def calibration_stats(model, params, domain, windows, batch_size, seed, device):
+def calibration_stats(model, params, domain, windows, batch_size, seed, device, deterministic=False):
+    """See _calibration_stats. deterministic=True gives bit-identical statistics from run to run: PyTorch's
+    deterministic mode (an error on any nondeterministic op) and the plain-math attention kernel, whose backward,
+    unlike the fused kernels, does not accumulate in a varying order. The math kernel keeps every layer's attention
+    matrix for the backward pass, so use batch_size 1 at 2,048 tokens."""
+    if not deterministic:
+        return _calibration_stats(model, params, domain, windows, batch_size, seed, device)
+    from torch.nn.attention import SDPBackend, sdpa_kernel
+    previous = torch.are_deterministic_algorithms_enabled()
+    torch.use_deterministic_algorithms(True)
+    try:
+        with sdpa_kernel(SDPBackend.MATH):
+            return _calibration_stats(model, params, domain, windows, batch_size, seed, device)
+    finally:
+        torch.use_deterministic_algorithms(previous)
+
+
+def _calibration_stats(model, params, domain, windows, batch_size, seed, device):
     """Per layer: Gram E[h h^T] (fp64), mean E[h], and taylor |sum h*g| over own-domain pool train windows."""
     m.set_params(model, params)
     for p in model.parameters():

@@ -12,10 +12,13 @@ within 150M active parameters is saved. Dev is never read here.
 """
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
 import sys
+
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")  # deterministic cuBLAS for the calibration pass
 
 import numpy as np
 import torch
@@ -81,7 +84,10 @@ def main():
                         help="shared embeddings")
     parser.add_argument("--commits", default="32,64,128", help="commit points to compare on pool-val")
     parser.add_argument("--calib-windows", type=int, default=128)
-    parser.add_argument("--val-windows", type=int, default=64)
+    parser.add_argument("--calib-batch-size", type=int, default=1,
+                        help="calibration runs in deterministic mode, whose attention needs batch 1 to fit")
+    parser.add_argument("--val-windows", type=int, default=256,
+                        help="pool-val windows per domain (one misrouted window moves a 64-window mean by ~0.002)")
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--store-dtype", default="fp32", choices=["bf16", "fp32"],
                         help="dtype of saved matrices (autocast feeds bf16 to the matmuls anyway)")
@@ -110,7 +116,8 @@ def main():
     state = {"wte.weight": shared["transformer.wte.weight"][:V], "wpe.weight": shared["transformer.wpe.weight"]}
     widths = []
     for e, d in enumerate(m.DOMAINS):
-        stats = ps.calibration_stats(work, experts[d], d, args.calib_windows, args.batch_size, args.seed, dev)
+        stats = ps.calibration_stats(work, experts[d], d, args.calib_windows, args.calib_batch_size, args.seed, dev,
+                                     deterministic=True)
         masks = ps.keep_masks(ps.scores("taylor", experts[d], stats, L, args.seed), kept / (L * H), "global")
         params = ps.pruned_params(experts[d], masks, "lstsq", stats)
         widths.append([int(k.sum()) for k in masks])
@@ -138,6 +145,11 @@ def main():
     state = {k: (v.to(store) if v.dim() >= 2 else v).cpu() for k, v in state.items()}
     model.load_state_dict({k: v.float() for k, v in state.items()})
     model = model.to(dev).eval()
+    digest = hashlib.sha256()
+    for k in sorted(state):
+        digest.update(k.encode())
+        digest.update(state[k].contiguous().view(torch.uint8).numpy().tobytes())
+    log(f"weights fingerprint (sha256 of every saved tensor): {digest.hexdigest()[:16]}")
     n_params = official.count_parameters(model)
     log(f"parameters: {n_params:,} (budget {total:,}; limit {official.MAX_PARAMETERS:,})")
     assert n_params <= official.MAX_PARAMETERS
@@ -184,7 +196,7 @@ def main():
     log(f"saved {args.out}/model.pt, config.json and model_def.py")
     log("json " + json.dumps({"oracle": oracle, "accuracy": acc, "positions": POSITIONS,
                               "commits": {str(k): r for k, r in results.items()}, "chosen": best,
-                              "parameters": n_params}))
+                              "parameters": n_params, "fingerprint": digest.hexdigest()}))
 
 
 if __name__ == "__main__":
