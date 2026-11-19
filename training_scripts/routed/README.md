@@ -28,6 +28,9 @@ domain (with 64, one misrouted window moves the mean by about 0.002); rank and e
 | Script | Variant | What it does |
 |---|---|---|
 | `build.py` | `design-a`, `design-a-commit` | builds the model, reports routing accuracy by position and pool-val loss for each commit point, saves the best |
+| `build.py` | `design-a-det` | the same, deterministic (calibration in deterministic mode; prints a weights fingerprint) |
+| `heal.py --train frozen-ffn` | `heal-frozen-ffn` | trains design A with the next-token loss, matched to `moe/heal.py` (same data stream, steps, schedule); each expert's FFN frozen |
+| `heal.py --train all` | `heal-all` | the same with every weight trained |
 
 Results: dev 3.0466 at commit 128 (`20261119-1845`), 3.0413 at commit 224 (`20261119-1850`, 148.5M active),
 against 3.1555 for the generalist. See analysis.md section 8.

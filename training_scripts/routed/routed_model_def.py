@@ -82,10 +82,21 @@ class RoutedExperts(nn.Module):
             logits = logits + F.linear(F.linear(h, ex.wte_v), ex.wte_u)
         return logits
 
-    def forward(self, idx):
+    def forward(self, idx, route=None):
+        """route: optional [B] expert index per sequence (training and oracle scoring); None = the prefix router."""
         if self.force is not None:
             return self.expert_logits(self.force, idx)
         B, T = idx.shape
+        if route is not None:
+            out = None
+            for e in range(len(self.experts)):
+                rows = (route == e).nonzero().squeeze(1)
+                if rows.numel():
+                    logits = self.expert_logits(e, idx[rows])
+                    if out is None:
+                        out = logits.new_empty(B, T, logits.shape[-1])
+                    out[rows] = logits
+            return out
         E, k = len(self.experts), min(self.commit, T)
         logp = torch.stack([F.log_softmax(self.expert_logits(e, idx[:, :k]).float(), -1) for e in range(E)])
         tok_nll = torch.zeros(E, B, k, device=idx.device)

@@ -76,6 +76,63 @@ def routing_accuracy(model, windows, device):
     return acc
 
 
+def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dtype, dev, log):
+    """Design A from the provided checkpoints, deterministically. Returns (model on dev in eval mode, config dict,
+    saved-state dict on CPU, weights fingerprint, total parameter budget). config["commit"] is 0; set it."""
+    header, gen = m.load_checkpoint("generalist", dev)
+    s = ao.sizes(header)
+    L, H, V = s["L"], s["H"], s["V"]
+    kept, total, active = ao.budget_a(s, rank)
+    log(f"budget: {kept:,} FFN neurons per expert ({kept / (L * H):.1%}), total {total:,}, one expert's active "
+        f"{active / 1e6:.2f}M")
+    experts = {d: m.load_checkpoint(f"expert_{d}", dev)[1] for d in m.DOMAINS}
+    if source == "generalist":
+        shared = {k: gen[k] for k in ao.EMBEDDINGS}
+    else:
+        shared = {k: sum(experts[d][k] for d in m.DOMAINS) / len(m.DOMAINS) for k in ao.EMBEDDINGS}
+    del gen
+
+    work = m.new_model(header, dev)
+    state = {"wte.weight": shared["transformer.wte.weight"][:V], "wpe.weight": shared["transformer.wpe.weight"]}
+    widths = []
+    for e, d in enumerate(m.DOMAINS):
+        stats = ps.calibration_stats(work, experts[d], d, calib_windows, calib_batch_size, seed, dev,
+                                     deterministic=True)
+        masks = ps.keep_masks(ps.scores("taylor", experts[d], stats, L, seed), kept / (L * H), "global")
+        params = ps.pruned_params(experts[d], masks, "lstsq", stats)
+        widths.append([int(k.sum()) for k in masks])
+        log(f"{d}: FFN widths {widths[-1]} ({sum(widths[-1]):,} neurons)")
+        for k, v in physical_expert(params, masks, L).items():
+            state[f"experts.{e}.{k}"] = v
+        if rank:
+            for name, key in (("wte", "transformer.wte.weight"), ("wpe", "transformer.wpe.weight")):
+                u, v = factors(shared[key], experts[d][key], rank)
+                state[f"experts.{e}.{name}_u"] = u[:V] if name == "wte" else u
+                state[f"experts.{e}.{name}_v"] = v
+        del stats, params
+        torch.cuda.empty_cache()
+    del work, experts
+
+    cfg = m.gpt.config_from_header(header)
+    config = {"gpt_config": {"block_size": cfg.block_size, "vocab_size": cfg.vocab_size, "n_layer": cfg.n_layer,
+                             "n_head": cfg.n_head, "n_embd": cfg.n_embd, "width_mult": cfg.width_mult,
+                             "attn_mult": cfg.attn_mult},
+              "widths": widths, "rank": rank, "commit": 0, "domains": m.DOMAINS,
+              "source": source}
+    model = rmd.build(config)
+    # evaluate exactly what is saved
+    store = torch.bfloat16 if store_dtype == "bf16" else torch.float32
+    state = {k: (v.to(store) if v.dim() >= 2 else v).cpu() for k, v in state.items()}
+    model.load_state_dict({k: v.float() for k, v in state.items()})
+    model = model.to(dev).eval()
+    digest = hashlib.sha256()
+    for k in sorted(state):
+        digest.update(k.encode())
+        digest.update(state[k].contiguous().view(torch.uint8).numpy().tobytes())
+    log(f"weights fingerprint (sha256 of every saved tensor): {digest.hexdigest()[:16]}")
+    return model, config, state, digest, total
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", required=True)
@@ -99,57 +156,8 @@ def main():
     dev = args.device
     torch.manual_seed(args.seed)
 
-    header, gen = m.load_checkpoint("generalist", dev)
-    s = ao.sizes(header)
-    L, H, V = s["L"], s["H"], s["V"]
-    kept, total, active = ao.budget_a(s, args.rank)
-    log(f"budget: {kept:,} FFN neurons per expert ({kept / (L * H):.1%}), total {total:,}, one expert's active "
-        f"{active / 1e6:.2f}M")
-    experts = {d: m.load_checkpoint(f"expert_{d}", dev)[1] for d in m.DOMAINS}
-    if args.source == "generalist":
-        shared = {k: gen[k] for k in ao.EMBEDDINGS}
-    else:
-        shared = {k: sum(experts[d][k] for d in m.DOMAINS) / len(m.DOMAINS) for k in ao.EMBEDDINGS}
-    del gen
-
-    work = m.new_model(header, dev)
-    state = {"wte.weight": shared["transformer.wte.weight"][:V], "wpe.weight": shared["transformer.wpe.weight"]}
-    widths = []
-    for e, d in enumerate(m.DOMAINS):
-        stats = ps.calibration_stats(work, experts[d], d, args.calib_windows, args.calib_batch_size, args.seed, dev,
-                                     deterministic=True)
-        masks = ps.keep_masks(ps.scores("taylor", experts[d], stats, L, args.seed), kept / (L * H), "global")
-        params = ps.pruned_params(experts[d], masks, "lstsq", stats)
-        widths.append([int(k.sum()) for k in masks])
-        log(f"{d}: FFN widths {widths[-1]} ({sum(widths[-1]):,} neurons)")
-        for k, v in physical_expert(params, masks, L).items():
-            state[f"experts.{e}.{k}"] = v
-        if args.rank:
-            for name, key in (("wte", "transformer.wte.weight"), ("wpe", "transformer.wpe.weight")):
-                u, v = factors(shared[key], experts[d][key], args.rank)
-                state[f"experts.{e}.{name}_u"] = u[:V] if name == "wte" else u
-                state[f"experts.{e}.{name}_v"] = v
-        del stats, params
-        torch.cuda.empty_cache()
-    del work, experts
-
-    cfg = m.gpt.config_from_header(header)
-    config = {"gpt_config": {"block_size": cfg.block_size, "vocab_size": cfg.vocab_size, "n_layer": cfg.n_layer,
-                             "n_head": cfg.n_head, "n_embd": cfg.n_embd, "width_mult": cfg.width_mult,
-                             "attn_mult": cfg.attn_mult},
-              "widths": widths, "rank": args.rank, "commit": 0, "domains": m.DOMAINS,
-              "source": args.source}
-    model = rmd.build(config)
-    # evaluate exactly what is saved
-    store = torch.bfloat16 if args.store_dtype == "bf16" else torch.float32
-    state = {k: (v.to(store) if v.dim() >= 2 else v).cpu() for k, v in state.items()}
-    model.load_state_dict({k: v.float() for k, v in state.items()})
-    model = model.to(dev).eval()
-    digest = hashlib.sha256()
-    for k in sorted(state):
-        digest.update(k.encode())
-        digest.update(state[k].contiguous().view(torch.uint8).numpy().tobytes())
-    log(f"weights fingerprint (sha256 of every saved tensor): {digest.hexdigest()[:16]}")
+    model, config, state, digest, total = build_design_a(args.rank, args.source, args.calib_windows,
+                                                         args.calib_batch_size, args.seed, args.store_dtype, dev, log)
     n_params = official.count_parameters(model)
     log(f"parameters: {n_params:,} (budget {total:,}; limit {official.MAX_PARAMETERS:,})")
     assert n_params <= official.MAX_PARAMETERS
