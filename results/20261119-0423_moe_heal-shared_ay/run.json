@@ -1,0 +1,47 @@
+{
+  "run_id": "20261119-0423_moe_heal-shared_ay",
+  "method": "moe",
+  "variant": "heal-shared",
+  "owner": "ay",
+  "hypothesis": "freezing the experts' MLPs and training only the shared parts keeps more of the experts' gains than training everything",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/moe/heal.py",
+    "--train",
+    "shared",
+    "--out",
+    "/home/ubuntu/mld/ay/runs/20261119-0423_moe_heal-shared_ay"
+  ],
+  "host": "ayush",
+  "git_commit": "ce13823b21451c4868b55264d1ca4b2590707fee",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 10557,
+  "started": "2026-11-19T04:23:15Z",
+  "heartbeat": "2026-11-19T04:50:07Z",
+  "ended": "2026-11-19T04:50:07Z",
+  "exit_code": 0,
+  "train_seconds": 1510,
+  "a10g_hours": 0.4193,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.865322282537818,
+      "code": 2.915645407512784,
+      "medicine": 2.7808789191767573,
+      "history": 3.3953173477202654
+    },
+    "mean": 2.989290989236906,
+    "parameters": 297596164,
+    "active_parameters": 124714752,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.0151416063308716e-07,
+    "evaluated_at": "2026-11-19T04:50:06Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 1507.9
+  }
+}

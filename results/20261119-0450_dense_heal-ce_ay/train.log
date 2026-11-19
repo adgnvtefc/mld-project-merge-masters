@@ -1,0 +1,93 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/ay/runs/20261119-0450_dense_heal-ce_ay", "arch": "dense", "shared": "mean5", "maps": 1, "lambda_settings": "", "train": "all", "expert_lr_mult": 1.0, "steps": 800, "batch_size": 32, "micro_batch": 4, "lr": 0.0003, "warmup": 30, "weight_decay": 0.3816, "val_every": 100, "val_windows": 32, "router_windows": 32, "log_every": 10, "device": "cuda", "seed": 0}
+[    1.5s] dense: 125,226,240 parameters, 125,226,240 trained
+[    1.5s] optimizer groups: hidden (84,934,656, lr x0.25), embedding (40,170,240, lr x1), vector (121,344, lr x1)
+[    4.8s] step 0: pool-val dense  math 3.1508 | code 2.9851 | medicine 2.7285 | history 3.6575 | mean 3.1305
+[   22.6s] step 10/800 | loss 3.1281 | math 2.932 code 3.267 medicine 2.728 history 3.586 | lr 1.00e-04 | 36.8K tok/s | eta 23.5 min
+[   40.4s] step 20/800 | loss 3.1279 | math 3.002 code 3.209 medicine 2.820 history 3.481 | lr 2.00e-04 | 36.9K tok/s | eta 23.1 min
+[   58.1s] step 30/800 | loss 3.2879 | math 3.315 code 3.218 medicine 2.968 history 3.651 | lr 3.00e-04 | 36.9K tok/s | eta 22.8 min
+[   75.8s] step 40/800 | loss 3.4275 | math 3.589 code 3.374 medicine 2.974 history 3.773 | lr 2.96e-04 | 36.9K tok/s | eta 22.5 min
+[   93.6s] step 50/800 | loss 3.2572 | math 3.147 code 3.379 medicine 2.876 history 3.628 | lr 2.93e-04 | 36.9K tok/s | eta 22.2 min
+[  111.3s] step 60/800 | loss 3.2273 | math 3.219 code 3.105 medicine 2.979 history 3.606 | lr 2.89e-04 | 36.9K tok/s | eta 21.9 min
+[  129.0s] step 70/800 | loss 3.3828 | math 3.374 code 3.250 medicine 3.151 history 3.755 | lr 2.85e-04 | 36.9K tok/s | eta 21.6 min
+[  146.8s] step 80/800 | loss 3.1136 | math 3.256 code 3.042 medicine 2.876 history 3.280 | lr 2.81e-04 | 36.9K tok/s | eta 21.3 min
+[  164.5s] step 90/800 | loss 3.3035 | math 3.272 code 3.338 medicine 2.938 history 3.666 | lr 2.77e-04 | 36.9K tok/s | eta 21.0 min
+[  182.2s] step 100/800 | loss 3.2489 | math 3.267 code 3.057 medicine 3.038 history 3.634 | lr 2.73e-04 | 36.9K tok/s | eta 20.7 min
+[  184.6s] step 100: pool-val dense  math 3.2020 | code 3.0505 | medicine 2.8452 | history 3.7574 | mean 3.2138
+[  202.3s] step 110/800 | loss 3.2504 | math 3.144 code 3.232 medicine 2.831 history 3.795 | lr 2.69e-04 | 36.5K tok/s | eta 20.6 min
+[  220.0s] step 120/800 | loss 3.3650 | math 3.343 code 3.340 medicine 2.937 history 3.840 | lr 2.65e-04 | 36.5K tok/s | eta 20.3 min
+[  237.8s] step 130/800 | loss 3.2257 | math 2.924 code 3.250 medicine 2.977 history 3.752 | lr 2.61e-04 | 36.6K tok/s | eta 20.0 min
+[  255.5s] step 140/800 | loss 3.2699 | math 3.022 code 3.313 medicine 2.977 history 3.768 | lr 2.58e-04 | 36.6K tok/s | eta 19.7 min
+[  273.3s] step 150/800 | loss 3.1558 | math 3.116 code 3.175 medicine 2.703 history 3.629 | lr 2.54e-04 | 36.6K tok/s | eta 19.4 min
+[  291.0s] step 160/800 | loss 3.2921 | math 3.369 code 3.257 medicine 3.159 history 3.384 | lr 2.50e-04 | 36.6K tok/s | eta 19.1 min
+[  308.7s] step 170/800 | loss 3.2676 | math 3.281 code 3.317 medicine 2.947 history 3.526 | lr 2.46e-04 | 36.7K tok/s | eta 18.8 min
+[  326.5s] step 180/800 | loss 3.2218 | math 3.134 code 3.075 medicine 2.950 history 3.728 | lr 2.42e-04 | 36.7K tok/s | eta 18.5 min
+[  344.2s] step 190/800 | loss 3.2641 | math 3.224 code 3.010 medicine 3.128 history 3.695 | lr 2.38e-04 | 36.7K tok/s | eta 18.2 min
+[  361.9s] step 200/800 | loss 3.2412 | math 2.983 code 3.326 medicine 2.889 history 3.767 | lr 2.34e-04 | 36.7K tok/s | eta 17.9 min
+[  364.3s] step 200: pool-val dense  math 3.1817 | code 3.0176 | medicine 2.8469 | history 3.7473 | mean 3.1984
+[  382.0s] step 210/800 | loss 3.2203 | math 3.232 code 3.252 medicine 2.858 history 3.539 | lr 2.30e-04 | 36.5K tok/s | eta 17.7 min
+[  399.7s] step 220/800 | loss 3.2336 | math 2.970 code 3.290 medicine 2.896 history 3.778 | lr 2.26e-04 | 36.5K tok/s | eta 17.4 min
+[  417.5s] step 230/800 | loss 3.1502 | math 3.106 code 3.066 medicine 2.741 history 3.688 | lr 2.22e-04 | 36.5K tok/s | eta 17.0 min
+[  435.2s] step 240/800 | loss 3.0974 | math 3.078 code 2.794 medicine 2.983 history 3.535 | lr 2.19e-04 | 36.5K tok/s | eta 16.7 min
+[  452.9s] step 250/800 | loss 3.2493 | math 3.115 code 3.144 medicine 3.018 history 3.720 | lr 2.15e-04 | 36.6K tok/s | eta 16.4 min
+[  470.7s] step 260/800 | loss 3.1807 | math 3.186 code 3.221 medicine 2.948 history 3.368 | lr 2.11e-04 | 36.6K tok/s | eta 16.1 min
+[  488.4s] step 270/800 | loss 3.2954 | math 3.264 code 3.353 medicine 2.918 history 3.647 | lr 2.07e-04 | 36.6K tok/s | eta 15.8 min
+[  506.1s] step 280/800 | loss 3.1169 | math 2.993 code 3.154 medicine 2.746 history 3.575 | lr 2.03e-04 | 36.6K tok/s | eta 15.5 min
+[  523.9s] step 290/800 | loss 3.2209 | math 3.247 code 3.128 medicine 2.898 history 3.609 | lr 1.99e-04 | 36.6K tok/s | eta 15.2 min
+[  541.6s] step 300/800 | loss 3.2432 | math 3.413 code 2.966 medicine 3.001 history 3.592 | lr 1.95e-04 | 36.6K tok/s | eta 14.9 min
+[  543.9s] step 300: pool-val dense  math 3.1581 | code 2.9925 | medicine 2.8340 | history 3.7266 | mean 3.1778
+[  561.7s] step 310/800 | loss 3.2224 | math 3.174 code 3.317 medicine 2.901 history 3.498 | lr 1.91e-04 | 36.5K tok/s | eta 14.7 min
+[  579.4s] step 320/800 | loss 3.2174 | math 3.262 code 3.056 medicine 2.976 history 3.575 | lr 1.87e-04 | 36.5K tok/s | eta 14.4 min
+[  597.1s] step 330/800 | loss 3.0489 | math 2.941 code 2.841 medicine 2.850 history 3.564 | lr 1.84e-04 | 36.5K tok/s | eta 14.1 min
+[  614.9s] step 340/800 | loss 3.1616 | math 3.197 code 3.168 medicine 2.924 history 3.358 | lr 1.80e-04 | 36.5K tok/s | eta 13.8 min
+[  632.6s] step 350/800 | loss 3.1174 | math 3.179 code 3.166 medicine 2.731 history 3.393 | lr 1.76e-04 | 36.5K tok/s | eta 13.5 min
+[  650.3s] step 360/800 | loss 3.2033 | math 3.143 code 3.168 medicine 2.951 history 3.552 | lr 1.72e-04 | 36.5K tok/s | eta 13.1 min
+[  668.1s] step 370/800 | loss 3.3150 | math 3.149 code 3.381 medicine 3.056 history 3.674 | lr 1.68e-04 | 36.6K tok/s | eta 12.8 min
+[  685.8s] step 380/800 | loss 3.2117 | math 3.090 code 3.164 medicine 2.868 history 3.725 | lr 1.64e-04 | 36.6K tok/s | eta 12.5 min
+[  703.5s] step 390/800 | loss 3.2001 | math 2.931 code 3.141 medicine 2.959 history 3.769 | lr 1.60e-04 | 36.6K tok/s | eta 12.2 min
+[  721.3s] step 400/800 | loss 3.1366 | math 3.035 code 3.129 medicine 2.924 history 3.458 | lr 1.56e-04 | 36.6K tok/s | eta 11.9 min
+[  723.6s] step 400: pool-val dense  math 3.1333 | code 2.9720 | medicine 2.8186 | history 3.7028 | mean 3.1567
+[  741.3s] step 410/800 | loss 3.1831 | math 2.836 code 3.235 medicine 3.104 history 3.557 | lr 1.52e-04 | 36.5K tok/s | eta 11.7 min
+[  759.1s] step 420/800 | loss 3.2519 | math 3.171 code 3.270 medicine 3.061 history 3.505 | lr 1.48e-04 | 36.5K tok/s | eta 11.4 min
+[  776.8s] step 430/800 | loss 3.2431 | math 2.851 code 3.234 medicine 3.215 history 3.673 | lr 1.45e-04 | 36.5K tok/s | eta 11.1 min
+[  794.5s] step 440/800 | loss 3.3483 | math 3.498 code 3.376 medicine 2.937 history 3.583 | lr 1.41e-04 | 36.5K tok/s | eta 10.8 min
+[  812.3s] step 450/800 | loss 3.1770 | math 3.051 code 3.323 medicine 2.831 history 3.504 | lr 1.37e-04 | 36.5K tok/s | eta 10.5 min
+[  830.0s] step 460/800 | loss 3.2325 | math 3.186 code 3.346 medicine 2.847 history 3.551 | lr 1.33e-04 | 36.5K tok/s | eta 10.2 min
+[  847.8s] step 470/800 | loss 3.1137 | math 3.155 code 3.080 medicine 2.782 history 3.438 | lr 1.29e-04 | 36.5K tok/s | eta 9.9 min
+[  865.5s] step 480/800 | loss 3.0299 | math 2.577 code 3.262 medicine 2.663 history 3.617 | lr 1.25e-04 | 36.5K tok/s | eta 9.6 min
+[  883.2s] step 490/800 | loss 3.3883 | math 3.303 code 3.381 medicine 3.194 history 3.675 | lr 1.21e-04 | 36.6K tok/s | eta 9.3 min
+[  901.0s] step 500/800 | loss 3.2223 | math 2.815 code 3.178 medicine 2.907 history 3.990 | lr 1.17e-04 | 36.6K tok/s | eta 9.0 min
+[  903.3s] step 500: pool-val dense  math 3.1175 | code 2.9483 | medicine 2.8029 | history 3.6836 | mean 3.1381
+[  921.0s] step 510/800 | loss 3.1214 | math 3.021 code 3.235 medicine 2.811 history 3.419 | lr 1.13e-04 | 36.5K tok/s | eta 8.7 min
+[  938.8s] step 520/800 | loss 3.0682 | math 2.944 code 3.051 medicine 2.796 history 3.481 | lr 1.09e-04 | 36.5K tok/s | eta 8.4 min
+[  956.5s] step 530/800 | loss 3.3321 | math 3.319 code 3.430 medicine 2.916 history 3.663 | lr 1.06e-04 | 36.5K tok/s | eta 8.1 min
+[  974.2s] step 540/800 | loss 2.9919 | math 2.965 code 3.001 medicine 2.723 history 3.278 | lr 1.02e-04 | 36.5K tok/s | eta 7.8 min
+[  992.0s] step 550/800 | loss 3.1513 | math 3.039 code 3.363 medicine 2.842 history 3.361 | lr 9.78e-05 | 36.5K tok/s | eta 7.5 min
+[ 1009.7s] step 560/800 | loss 3.0865 | math 2.655 code 3.239 medicine 2.770 history 3.682 | lr 9.39e-05 | 36.5K tok/s | eta 7.2 min
+[ 1027.4s] step 570/800 | loss 3.1694 | math 3.016 code 3.272 medicine 2.821 history 3.569 | lr 9.00e-05 | 36.5K tok/s | eta 6.9 min
+[ 1045.2s] step 580/800 | loss 3.1793 | math 3.260 code 3.187 medicine 2.912 history 3.359 | lr 8.61e-05 | 36.5K tok/s | eta 6.6 min
+[ 1062.9s] step 590/800 | loss 3.1539 | math 3.233 code 3.043 medicine 2.750 history 3.591 | lr 8.22e-05 | 36.5K tok/s | eta 6.3 min
+[ 1080.6s] step 600/800 | loss 3.0509 | math 2.904 code 3.063 medicine 2.767 history 3.469 | lr 7.83e-05 | 36.6K tok/s | eta 6.0 min
+[ 1083.0s] step 600: pool-val dense  math 3.0973 | code 2.9270 | medicine 2.7871 | history 3.6627 | mean 3.1185
+[ 1100.7s] step 610/800 | loss 3.1428 | math 3.142 code 2.883 medicine 2.938 history 3.609 | lr 7.44e-05 | 36.5K tok/s | eta 5.7 min
+[ 1118.4s] step 620/800 | loss 3.2121 | math 3.224 code 2.981 medicine 2.961 history 3.682 | lr 7.05e-05 | 36.5K tok/s | eta 5.4 min
+[ 1136.2s] step 630/800 | loss 2.9386 | math 2.790 code 2.854 medicine 2.793 history 3.318 | lr 6.66e-05 | 36.5K tok/s | eta 5.1 min
+[ 1153.9s] step 640/800 | loss 3.0711 | math 3.073 code 2.875 medicine 2.900 history 3.436 | lr 6.27e-05 | 36.5K tok/s | eta 4.8 min
+[ 1171.6s] step 650/800 | loss 3.1642 | math 2.923 code 3.223 medicine 2.916 history 3.595 | lr 5.88e-05 | 36.5K tok/s | eta 4.5 min
+[ 1189.4s] step 660/800 | loss 2.9925 | math 2.736 code 2.915 medicine 2.745 history 3.574 | lr 5.49e-05 | 36.5K tok/s | eta 4.2 min
+[ 1207.1s] step 670/800 | loss 3.0735 | math 2.796 code 3.275 medicine 2.745 history 3.477 | lr 5.10e-05 | 36.5K tok/s | eta 3.9 min
+[ 1224.8s] step 680/800 | loss 3.1775 | math 3.026 code 3.246 medicine 2.866 history 3.571 | lr 4.71e-05 | 36.5K tok/s | eta 3.6 min
+[ 1242.6s] step 690/800 | loss 3.1530 | math 3.122 code 3.222 medicine 2.862 history 3.406 | lr 4.32e-05 | 36.5K tok/s | eta 3.3 min
+[ 1260.3s] step 700/800 | loss 3.1956 | math 3.198 code 3.275 medicine 2.891 history 3.419 | lr 3.94e-05 | 36.5K tok/s | eta 3.0 min
+[ 1262.7s] step 700: pool-val dense  math 3.0810 | code 2.9084 | medicine 2.7735 | history 3.6448 | mean 3.1019
+[ 1280.4s] step 710/800 | loss 3.1237 | math 2.999 code 3.034 medicine 3.008 history 3.453 | lr 3.55e-05 | 36.5K tok/s | eta 2.7 min
+[ 1298.1s] step 720/800 | loss 2.9431 | math 2.910 code 2.902 medicine 2.934 history 3.026 | lr 3.16e-05 | 36.5K tok/s | eta 2.4 min
+[ 1315.9s] step 730/800 | loss 3.0574 | math 3.068 code 3.034 medicine 2.693 history 3.434 | lr 2.77e-05 | 36.5K tok/s | eta 2.1 min
+[ 1333.6s] step 740/800 | loss 3.1283 | math 2.861 code 2.885 medicine 3.203 history 3.564 | lr 2.38e-05 | 36.5K tok/s | eta 1.8 min
+[ 1351.3s] step 750/800 | loss 3.1094 | math 2.982 code 3.233 medicine 2.803 history 3.420 | lr 1.99e-05 | 36.5K tok/s | eta 1.5 min
+[ 1369.1s] step 760/800 | loss 3.2254 | math 2.981 code 3.372 medicine 2.910 history 3.639 | lr 1.60e-05 | 36.5K tok/s | eta 1.2 min
+[ 1386.8s] step 770/800 | loss 2.9670 | math 2.929 code 2.750 medicine 2.897 history 3.292 | lr 1.21e-05 | 36.5K tok/s | eta 0.9 min
+[ 1404.5s] step 780/800 | loss 3.0066 | math 2.903 code 3.055 medicine 2.561 history 3.508 | lr 8.18e-06 | 36.5K tok/s | eta 0.6 min
+[ 1422.3s] step 790/800 | loss 3.0535 | math 3.205 code 2.942 medicine 2.629 history 3.438 | lr 4.29e-06 | 36.5K tok/s | eta 0.3 min
+[ 1440.0s] step 800/800 | loss 3.0866 | math 3.269 code 2.804 medicine 2.847 history 3.426 | lr 3.90e-07 | 36.5K tok/s | eta 0.0 min
+[ 1442.4s] step 800: pool-val dense  math 3.0706 | code 2.8978 | medicine 2.7642 | history 3.6337 | mean 3.0916
+[ 1442.7s] saved /home/ubuntu/mld/ay/runs/20261119-0450_dense_heal-ce_ay (52.4M training tokens, 24.0 min)
