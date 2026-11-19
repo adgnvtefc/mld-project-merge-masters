@@ -1,6 +1,7 @@
 # Error analysis: why merging the experts did not work
 
-November 18, 2026. Covers the 17 scored runs (8 baselines, 9 merges and checks) and 5 diagnostic runs.
+November 18, 2026; updated November 19 after re-running the affected runs. Covers the 17 scored runs
+(8 baselines, 9 merges and checks), their 8 re-runs, and 5 diagnostic runs.
 Scores are next-token loss in nats; **lower is better**. "Dev" numbers are official course scores. The
 diagnostics use our held-out slice of the training pool instead, so they differ a little from dev.
 
@@ -38,10 +39,14 @@ English prose, not math, and the math expert is barely better than the generalis
   documents per domain, and no document holds more than 6%.
 - **Not affected:** every dev score, and every comparison between runs on dev.
 - **Affected:** every setting chosen on pool-val before the fix (λ, rank, α, and the learned mix's
-  monitoring), and the math column of every pool-val table. The bug pulled every choice toward "stay
-  with the generalist", because on that book there was nothing to gain. Each affected run's notes now
-  carry a caveat. The Method 1 runs have **not** been re-run.
-- **One conclusion changed:** see section 6.
+  monitoring), and the math column of every pool-val table. Each affected run's notes carry a caveat.
+- **Re-run on November 19 with the fix.** All 8 affected runs were repeated with the same grids. Every
+  merge picked **exactly the same setting**, and its dev per-window losses are identical to the original.
+  On the fixed windows the merges are still worse than the generalist in every domain, so fixing math
+  did not flip any choice. The learned mix's training never reads pool-val; it reproduced to within
+  0.00002 on dev (not bit-identical: individual windows differ by up to 0.005, from GPU arithmetic).
+  **Every Method 1 result stands.**
+- **One conclusion changed:** the perfect-routing check in section 6, which now has valid math numbers.
 
 ## 2. What the experts are better at
 
@@ -144,13 +149,22 @@ two incompatible "dictionaries".
 **Low-rank pieces** (diagnostic `routed-oracle`, held-out loss): we gave each domain only its own
 expert's strongest changes (rank 16 to 160), as if a perfect router existed.
 
+Numbers below are from the re-run with fixed windows (`20261119-0535_merging_routed-oracle_hz`).
+
+| Each domain gets | math | code | medicine | history | mean |
+|---|---|---|---|---|---|
+| The generalist (no piece) | 3.077 | 3.116 | 2.807 | 3.545 | 3.136 |
+| Rank 160 piece, generalist's other parts | 3.548 | 3.635 | 3.064 | 3.978 | 3.557 |
+| Rank 160 piece, expert's embeddings and small parts | 3.024 | 3.080 | 2.845 | 3.518 | 3.117 |
+| The expert itself | 2.572 | 2.676 | 2.597 | 3.142 | 2.747 |
+
 - With the generalist's embeddings and other small parts, every rank is worse than the generalist, in
   every domain.
-- With the expert's own embeddings and small parts, rank 160 beats the generalist on code (3.167 vs
-  3.224) and history (3.507 vs 3.540), but not on medicine (2.857 vs 2.811). It wins back only about
-  12% (code) and 8% (history) of the expert's lead.
-- **Correction:** an earlier note said this check "never beats the generalist". That came from the
-  4-domain average, which the math bug dragged down. The per-domain result above is the right one.
+- With the expert's own embeddings and small parts, rank 160 beats the generalist on math, code and
+  history, but not on medicine. On average it wins back only about 5% of the gap to the experts (math
+  10%, code 8%, history 7%, medicine −18%).
+- **Correction history:** the first version of this check said it "never beats the generalist"; that
+  came from the math bug. The table above is the corrected result.
 
 In the weights themselves, keeping each expert's top 160 directions holds only 51 to 69% of the "energy" of its change,
 depending on the layer type. The changes are not low-rank.
@@ -175,8 +189,7 @@ The facts above are measured. This section is our reading of them.
 - **One dense set of weights between these models cannot get far below the generalist.** Each expert's
   skill comes bundled with forgetting, the changes overlap heavily, and every step toward one domain is
   a step away from the others. The learned mix probably sits near the best trade, about 0.014 better.
-  Re-running the selections with the fixed held-out windows might move this a little. It is unlikely to
-  change the picture, because the dev scores show the same pattern.
+  Re-running every selection with the fixed held-out windows chose the same settings.
 - **To recover much of the 0.38 gap, a model has to use different weights for different text.** The
   per-window gap is broad and present from the first tokens of a window, which is what routing on the
   text so far needs.
@@ -194,8 +207,9 @@ The facts above are measured. This section is our reading of them.
   effects here, not small ones.
 - Except for `slices`, every diagnostic ran before the fix, so its math numbers describe the GMAT book.
   Conclusions above leave math out wherever that matters.
-- The Method 1 runs were not re-run with the fixed held-out windows.
-- Every run was done once, with one seed.
+- The merges were re-run once after the fix, with the same grids. Several searches still stop at the
+  edge of their grid, so settings beyond it are untested.
+- Every run used one seed.
 
 ## Where the numbers come from
 
@@ -208,6 +222,7 @@ The facts above are measured. This section is our reading of them.
 | Token-level gains | `20261118-2130_analysis_tokens_hz` |
 | Calibration and signal sizes | `20261118-2130_analysis_scale_hz` |
 | Straight-line paths | `20261118-2131_analysis_paths_hz` |
-| Low-rank pieces with perfect routing | `20261118-2105_merging_routed-oracle_hz` |
+| Low-rank pieces with perfect routing | `20261119-0535_merging_routed-oracle_hz` (re-run; replaces `20261118-2105`) |
+| Re-runs after the fix | `results/20261119-*_merging_*` (each lists the run it replaces as its parent) |
 
 The diagnostics code is `training_scripts/analysis/diagnostics.py`.

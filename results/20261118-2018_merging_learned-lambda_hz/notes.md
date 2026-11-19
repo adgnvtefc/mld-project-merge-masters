@@ -18,3 +18,5 @@ Dev 3.1411, the only merge below the generalist: Δ -0.0144, 95% CI [-0.0149, -0
 ## Caveat (added 2026-11-18)
 
 Settings and pool-val numbers in this run used the first n pool-val windows in a row. For math these were 79% one GMAT reading-comprehension guide, where the math expert is barely better than the generalist, so math pulled every choice toward the generalist. Dev scores are correct. Fixed in commit d725d3f; this run has not been re-run. See error_analysis.md.
+
+Re-run as 20261119-0527_merging_learned-lambda_hz after the fix (2026-11-19): same choice and same dev score, so the result above stands.

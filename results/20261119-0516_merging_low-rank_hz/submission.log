@@ -1,0 +1,7 @@
+submission  2026-11-19 05:20 UTC | /home/ubuntu/mld/hz/runs/20261119-0516_merging_low-rank_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.1497 | code 3.1925 | medicine 2.8013 | history 3.5365 | mean 3.1700
+valid
+RESULT {"data": "dev", "losses": {"math": 3.1496916599571705, "code": 3.1925278455018997, "medicine": 2.801288800314069, "history": 3.5364852733910084}, "mean": 3.169998394791037, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}

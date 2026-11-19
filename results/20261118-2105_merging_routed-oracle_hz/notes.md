@@ -19,3 +19,5 @@ No model; diagnostic. Corrected 2026-11-18: the first version of this note said 
 ## Caveat (added 2026-11-18)
 
 Settings and pool-val numbers in this run used the first n pool-val windows in a row. For math these were 79% one GMAT reading-comprehension guide, where the math expert is barely better than the generalist, so math pulled every choice toward the generalist. Dev scores are correct. Fixed in commit d725d3f; this run has not been re-run. See error_analysis.md.
+
+Re-run as 20261119-0535_merging_routed-oracle_hz after the fix (2026-11-19): see that run for the corrected table; its conclusions are in error_analysis.md.

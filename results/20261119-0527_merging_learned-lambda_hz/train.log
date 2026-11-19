@@ -1,0 +1,37 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-0527_merging_learned-lambda_hz", "steps": 300, "batch_size": 16, "micro_batch": 4, "lr": 0.005, "warmup": 20, "init_experts": 0.0, "init_generalist": 1.0, "val_every": 100, "val_windows": 64, "log_every": 10, "device": "cuda", "seed": 0}
+[    4.3s] 375 coefficients: 5 sources x 75 groups
+[   10.7s] step 0: pool-val math 3.0769 | code 3.1156 | medicine 2.8073 | history 3.5445 | mean 3.1361
+[   23.3s] step 10/300 | loss 3.3779 | mean lam experts 0.003 generalist 1.002
+[   35.8s] step 20/300 | loss 3.0939 | mean lam experts 0.011 generalist 1.003
+[   48.3s] step 30/300 | loss 3.2141 | mean lam experts 0.017 generalist 1.002
+[   60.7s] step 40/300 | loss 2.9868 | mean lam experts 0.019 generalist 0.999
+[   73.2s] step 50/300 | loss 3.2905 | mean lam experts 0.020 generalist 0.997
+[   85.7s] step 60/300 | loss 3.2128 | mean lam experts 0.022 generalist 0.995
+[   98.2s] step 70/300 | loss 3.1436 | mean lam experts 0.022 generalist 0.993
+[  110.7s] step 80/300 | loss 3.3423 | mean lam experts 0.022 generalist 0.990
+[  123.1s] step 90/300 | loss 3.0113 | mean lam experts 0.023 generalist 0.989
+[  135.6s] step 100/300 | loss 3.0844 | mean lam experts 0.024 generalist 0.988
+[  140.3s] step 100: pool-val math 3.0414 | code 3.0968 | medicine 2.8299 | history 3.5262 | mean 3.1236
+[  152.8s] step 110/300 | loss 3.0782 | mean lam experts 0.023 generalist 0.987
+[  165.3s] step 120/300 | loss 3.1636 | mean lam experts 0.024 generalist 0.987
+[  177.8s] step 130/300 | loss 3.2807 | mean lam experts 0.025 generalist 0.987
+[  190.2s] step 140/300 | loss 3.1216 | mean lam experts 0.025 generalist 0.986
+[  202.6s] step 150/300 | loss 2.9075 | mean lam experts 0.025 generalist 0.985
+[  215.1s] step 160/300 | loss 2.8806 | mean lam experts 0.025 generalist 0.984
+[  227.6s] step 170/300 | loss 3.0587 | mean lam experts 0.026 generalist 0.984
+[  240.1s] step 180/300 | loss 3.2435 | mean lam experts 0.024 generalist 0.981
+[  252.6s] step 190/300 | loss 3.0610 | mean lam experts 0.025 generalist 0.982
+[  265.0s] step 200/300 | loss 3.1219 | mean lam experts 0.025 generalist 0.981
+[  269.7s] step 200: pool-val math 3.0352 | code 3.0931 | medicine 2.8354 | history 3.5250 | mean 3.1222
+[  282.2s] step 210/300 | loss 3.1549 | mean lam experts 0.025 generalist 0.980
+[  294.7s] step 220/300 | loss 3.1983 | mean lam experts 0.026 generalist 0.981
+[  307.2s] step 230/300 | loss 3.3309 | mean lam experts 0.025 generalist 0.980
+[  319.6s] step 240/300 | loss 3.1309 | mean lam experts 0.025 generalist 0.980
+[  332.1s] step 250/300 | loss 3.3392 | mean lam experts 0.026 generalist 0.981
+[  344.6s] step 260/300 | loss 3.0997 | mean lam experts 0.026 generalist 0.979
+[  357.0s] step 270/300 | loss 3.1991 | mean lam experts 0.025 generalist 0.978
+[  369.5s] step 280/300 | loss 3.1395 | mean lam experts 0.025 generalist 0.977
+[  381.9s] step 290/300 | loss 3.2590 | mean lam experts 0.026 generalist 0.978
+[  394.4s] step 300/300 | loss 3.0194 | mean lam experts 0.026 generalist 0.978
+[  399.1s] step 300: pool-val math 3.0351 | code 3.0931 | medicine 2.8349 | history 3.5259 | mean 3.1222
+[  399.5s] saved /home/ubuntu/mld/hz/runs/20261119-0527_merging_learned-lambda_hz/model.bin and model_def.py

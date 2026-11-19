@@ -1,13 +1,12 @@
 # Results summary
 
-Last updated: November 18, 2026 (evening). Runs by Hanmo on our EC2 machine.
+Last updated: November 19, 2026. Runs by Hanmo on our EC2 machine.
 
-> **Caveat: a bug in how we chose settings.** Every mixing method picked its settings on a slice of
-> training text we set aside. For math, that slice was mostly one long book: a GMAT reading guide, not
-> math. On it, the math expert is no better than the generalist, so every choice leaned toward "keep
-> the generalist". The scores in this file are correct, but the settings behind them may not be the
-> best ones. The bug is fixed; the mixing runs have not been re-run yet. Details are in
-> `error_analysis.md`, which also explains why mixing failed.
+> **A bug we found and fixed.** Every mixing method picks its settings on a slice of training text we
+> set aside. For math, that slice was mostly one long book: a GMAT reading guide, not math. We fixed it
+> and re-ran every affected method on November 19. **Every method chose the same settings and got the
+> same score**, so the results below stand. Details are in `error_analysis.md`, which also explains why
+> mixing failed.
 
 ## How to read the numbers
 
@@ -133,13 +132,13 @@ This is only a check, not a model we can submit. It tells us whether such a mode
 
 | What each kind of text gets | Score |
 |---|---|
-| The generalist, unchanged | 3.189 |
-| The expert's strongest changes (any rank we tried) | 3.44 to 3.62. Worse. |
-| The same, plus the expert's word list (its "embeddings") | Slightly better on code and history, worse on medicine |
-| The expert's full model | 2.915 |
+| The generalist, unchanged | 3.136 |
+| The expert's strongest changes (any rank we tried) | 3.40 to 3.56. Worse. |
+| The same, plus the expert's word list (its "embeddings") | 3.117 at best. Slightly better. |
+| The expert's full model | 2.747 |
 
-(These scores use our held-out text, so they differ a little from the other tables. The math part of this check was
-broken by a bug in our held-out text; see `error_analysis.md`. The rows above leave math out of the conclusions.)
+(These scores use our held-out text, so they differ a little from the other tables. They come from the
+re-run after the bug fix.)
 
 What this shows:
 
@@ -148,7 +147,7 @@ What this shows:
 - **The changes only work together with the expert's own word list.** Without it, they make things
   worse.
 - Even with perfect routing, the expert's word list and the largest rank the size limit allows, the
-  pieces win back only about a tenth of each expert's lead (on code and history), and lose on
+  pieces win back only about 5% of the gap. They help a little on math, code and history, and hurt
   medicine. A routed model would need training to make the pieces fit together.
 
 ## Things we did not test
@@ -156,12 +155,13 @@ What this shows:
 - Several methods picked a setting at the very edge of what we tried. In the second try, the best
   choice may simply be "add nothing." We did not try settings in between.
 - The learned mix always started from the generalist. We did not try other starting points.
-- We ran each method once.
+- We ran each mixing method once more after the bug fix. The learned mix, the only one that trains,
+  came out the same to within 0.00002. Each method still used one random seed.
 
 ## Cost
 
-All 17 runs took about half an hour of GPU time in total. The learned mix was the most expensive at 7
-minutes.
+All 30 runs, including the error analysis and the re-runs, took about an hour of GPU time in
+total. The learned mix was the most expensive at 7 minutes.
 
 ## Where to find more
 

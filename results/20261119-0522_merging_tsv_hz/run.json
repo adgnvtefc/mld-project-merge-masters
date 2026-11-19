@@ -1,0 +1,48 @@
+{
+  "run_id": "20261119-0522_merging_tsv_hz",
+  "method": "merging",
+  "variant": "tsv",
+  "owner": "hz",
+  "hypothesis": "Re-run of 20261118-2112_merging_tsv_hz after the pool-val fix (d725d3f: windows spread over the whole slice, not the first 64 in a row); same grid and settings. Original hypothesis: Orthogonalizing the experts' kept directions (TSV-M) reduces interference and beats the plain low-rank merge.",
+  "parents": [
+    "20261118-2112_merging_tsv_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/merging/low_rank.py",
+    "--orthogonalize",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-0522_merging_tsv_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "93ff3d81721783003672fe7cc402ea959b5b7844",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 6638,
+  "started": "2026-11-19T05:22:10Z",
+  "heartbeat": "2026-11-19T05:27:14Z",
+  "ended": "2026-11-19T05:27:14Z",
+  "exit_code": 0,
+  "train_seconds": 213,
+  "a10g_hours": 0.0592,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 3.1443013716489077,
+      "code": 3.1750714015215635,
+      "medicine": 2.7911708299070597,
+      "history": 3.5289501529186964
+    },
+    "mean": 3.159873438999057,
+    "parameters": 125226240,
+    "active_parameters": 123532032,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.7695128917694092e-07,
+    "evaluated_at": "2026-11-19T05:27:13Z"
+  },
+  "progress": {
+    "step": 39,
+    "elapsed_s": 211.3
+  }
+}

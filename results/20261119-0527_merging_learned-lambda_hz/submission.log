@@ -1,0 +1,7 @@
+submission  2026-11-19 05:34 UTC | /home/ubuntu/mld/hz/runs/20261119-0527_merging_learned-lambda_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.1003 | code 3.1447 | medicine 2.8125 | history 3.5067 | mean 3.1411
+valid
+RESULT {"data": "dev", "losses": {"math": 3.100308744236827, "code": 3.14469325914979, "medicine": 2.812538357451558, "history": 3.5067374128848314}, "mean": 3.1410694434307516, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}

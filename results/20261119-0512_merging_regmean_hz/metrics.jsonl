@@ -1,0 +1,4 @@
+{"elapsed_s": 88.2, "step": 0, "alpha": 0.5, "val_math": 3.237228035926819, "val_code": 3.348420649766922, "val_medicine": 3.295589357614517, "val_history": 3.844412088394165, "val_mean": 3.4314125329256058}
+{"elapsed_s": 97.6, "step": 1, "alpha": 0.7, "val_math": 3.8050813376903534, "val_code": 3.896307349205017, "val_medicine": 3.916084200143814, "val_history": 4.398498773574829, "val_mean": 4.003992915153503}
+{"elapsed_s": 107.0, "step": 2, "alpha": 0.9, "val_math": 6.443751692771912, "val_code": 6.436828076839447, "val_medicine": 6.799402117729187, "val_history": 7.055282890796661, "val_mean": 6.683816194534302}
+{"elapsed_s": 116.4, "step": 3, "alpha": 1.0, "val_math": 9.84069299697876, "val_code": 9.83934462070465, "val_medicine": 9.775345087051392, "val_history": 9.777558445930481, "val_mean": 9.80823528766632}

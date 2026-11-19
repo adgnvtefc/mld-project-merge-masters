@@ -1,0 +1,21 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-0512_merging_regmean_hz", "sources": "expert_math,expert_code,expert_medicine,expert_history,generalist", "tokens": 1000000, "alpha": "0.5,0.7,0.9,1.0", "micro_batch": 4, "val_windows": 64, "device": "cuda", "seed": 0}
+[   16.9s] expert_math: Grams of 48 Linear layers from 1,000,000 tokens of math
+[   32.0s] expert_code: Grams of 48 Linear layers from 1,000,000 tokens of code
+[   46.9s] expert_medicine: Grams of 48 Linear layers from 1,000,000 tokens of medicine
+[   61.7s] expert_history: Grams of 48 Linear layers from 1,000,000 tokens of history
+[   76.6s] generalist: Grams of 48 Linear layers from 1,000,000 tokens of math, code, medicine, history
+[   87.0s] alpha 0.5: pool-val math 3.2372 | code 3.3484 | medicine 3.2956 | history 3.8444 | mean 3.4314
+[   96.4s] alpha 0.7: pool-val math 3.8051 | code 3.8963 | medicine 3.9161 | history 4.3985 | mean 4.0040
+[  105.8s] alpha 0.9: pool-val math 6.4438 | code 6.4368 | medicine 6.7994 | history 7.0553 | mean 6.6838
+[  115.2s] alpha 1.0: pool-val math 9.8407 | code 9.8393 | medicine 9.7753 | history 9.7776 | mean 9.8082
+[  115.2s] best on pool-val: alpha 0.5 -> math 3.2372 | code 3.3484 | medicine 3.2956 | history 3.8444 | mean 3.4314
+[  120.2s] saved /home/ubuntu/mld/hz/runs/20261119-0512_merging_regmean_hz/model.bin and model_def.py
+submission  2026-11-19 05:15 UTC | /home/ubuntu/mld/hz/runs/20261119-0512_merging_regmean_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.2849 | code 3.4136 | medicine 3.2629 | history 3.8171 | mean 3.4446
+valid
+RESULT {"data": "dev", "losses": {"math": 3.284918688237667, "code": 3.4135617092251778, "medicine": 3.262898398563266, "history": 3.8171127568930387}, "mean": 3.4446228882297873, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261119-0512_merging_regmean_hz/submission.log
+per-window means match the official score within 1.66e-07

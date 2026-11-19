@@ -1,0 +1,7 @@
+submission  2026-11-19 05:11 UTC | /home/ubuntu/mld/hz/runs/20261119-0510_merging_ties_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.6217 | code 3.7320 | medicine 3.4382 | history 4.0864 | mean 3.7196
+valid
+RESULT {"data": "dev", "losses": {"math": 3.621690981090069, "code": 3.731964334845543, "medicine": 3.4382178597152233, "history": 4.086403036490083}, "mean": 3.7195690530352294, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}
