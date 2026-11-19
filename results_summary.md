@@ -1,5 +1,8 @@
 # Results summary
 
+> **Newer results:** this page covers our first method, mixing weights. A later method, pruned experts with
+> a router, scores 3.041 on dev. See `analysis.md`, sections 7 and 8.
+
 Last updated: November 19, 2026. Runs by Hanmo on our EC2 machine.
 
 > **A bug we found and fixed.** Every mixing method picks its settings on a slice of training text we

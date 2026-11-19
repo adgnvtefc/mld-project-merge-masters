@@ -1,0 +1,7 @@
+submission  2026-11-19 18:52 UTC | /home/ubuntu/mld/hz/runs/20261119-1850_routed_design-a-commit_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  299,995,804 (limit 300,000,000)
+active      about 148.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 2.9128 | code 2.9474 | medicine 2.8529 | history 3.4522 | mean 3.0413
+valid
+RESULT {"data": "dev", "losses": {"math": 2.9127821512520313, "code": 2.947434401139617, "medicine": 2.8528679721057415, "history": 3.4521932043135166}, "mean": 3.0413194322027266, "parameters": 299995804, "active_parameters": 148473832, "causal": true, "valid": true}

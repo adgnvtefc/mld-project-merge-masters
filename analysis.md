@@ -1,8 +1,8 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 39 runs, about 1.4 GPU-hours.
+November 19, 2026. Everything we have measured so far, in one place: 41 runs, about 1.5 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
-full detail behind section 5. Each number here comes from a run in `results/`; section 10 lists them.
+full detail behind section 5. Each number here comes from a run in `results/`; section 11 lists them.
 
 Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in this project.
 
@@ -20,12 +20,14 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   - Their changes are so large and so alike that adding them overshoots.
 - **What it points to** (our reading): a model needs different weights for different text, and pieces
   taken from the experts will need training to fit together.
-- **Pruning opens a new route** (section 7, held-out slice, no training, perfect routing).
+- **Pruning plus routing is our best model so far: 3.041 on dev, 0.114 better than the generalist**
+  (sections 7 and 8). It closes 30% of the gap, with no training at all.
   - Each expert can lose 35% of its FFN neurons at no cost on its own text.
-  - That frees room for 4 experts that keep their own attention and share only the word embeddings.
-  - With a small per-expert correction to the shared embeddings, this scores **2.999 vs 3.136** for the
-    generalist: 35% of the gap.
-  - It is not yet a real model: it needs a router, and probably a ruling on whether it is allowed.
+  - That frees room for 4 experts that keep their own attention and share only the word embeddings,
+    plus a small per-expert correction to those embeddings.
+  - A router with no parameters of its own picks the expert from the text so far.
+  - It passes the official checks: 300.0M parameters, 148.5M active, causal.
+  - It is worse than the generalist on medicine.
 
 ## 1. The task
 
@@ -197,16 +199,52 @@ text goes to its own expert's parts, as if a perfect router existed (`20261119-1
 - **Design B is worse than the generalist without training.** Method 2 would rely entirely on its
   training step to repair the shared attention.
 
-**Not yet a real model:**
+These numbers used the true label to route. Section 8 replaces it with a real router.
 
-- The routing used the true label. A real router guesses from the text so far and gets some early
-  tokens wrong.
-- There is no dev score, because the course's scoring script cannot run a routed model as is.
-- Design A keeps each expert nearly whole and shares only embeddings. The limit exists to stop "a
-  classifier which picks a provided expert model per document". This needs the same Piazza question as
-  Method 2, and more urgently.
+## 8. Design A as a real model, with a router
 
-## 8. What this means for the next methods
+`training_scripts/routed/build.py` builds design A from the provided models in about a minute and a
+half, with no training, as a solution the course's script can score (`20261119-1845`, `-1850`).
+
+**The router has no parameters.** It uses the experts themselves:
+
+- For the first *k* tokens of a text, all four experts run. The model's prediction mixes theirs,
+  weighted by how well each one predicted the text so far.
+- At token *k*, the text commits to the expert that predicted it best. That expert predicts the rest.
+- Every expert has its own attention, so the chosen expert re-reads the first *k* tokens. Running four
+  experts at the start costs extra compute: active parameters grow with *k*. The limit allows *k* up to
+  about 232.
+
+**How often it picks the right expert** (held-out slice, share of texts):
+
+| After this many tokens | 1 | 8 | 32 | 128 | 511 |
+|---|---|---|---|---|---|
+| math | 42% | 75% | 89% | 94% | 92% |
+| code | 58% | 86% | 86% | 92% | 98% |
+| medicine | 50% | 86% | 94% | 97% | 100% |
+| history | 48% | 80% | 92% | 98% | 100% |
+
+**Dev scores** (official script; *k* chosen on the held-out slice):
+
+| Model | Math | Code | Medicine | History | Mean | Active | vs generalist (95% range) |
+|---|---|---|---|---|---|---|---|
+| Generalist | 3.142 | 3.169 | 2.787 | 3.525 | 3.156 | 123.5M | |
+| Learned mix | 3.100 | 3.145 | 2.813 | 3.507 | 3.141 | 123.5M | −0.014 |
+| Design A, *k* = 128 | 2.915 | 2.954 | 2.859 | 3.458 | 3.047 | 129.1M | −0.109 (−0.116 to −0.102) |
+| **Design A, *k* = 224** | **2.913** | **2.947** | 2.853 | **3.452** | **3.041** | 148.5M | **−0.114 (−0.121 to −0.107)** |
+
+- **The real router costs about 0.013** against the true label on the held-out slice (3.012 vs 2.999).
+- **Better on 91 to 94% of math and code windows, 76% of history, but only 17% of medicine.** Medicine is
+  0.066 worse than the generalist.
+- **Both models pass the official checks:** 299,995,804 parameters, causal, and active parameters under
+  150M. At *k* = 224 the margin is only 1%.
+- **The choice of *k* is weak.** On the held-out slice, *k* = 128 to 224 differ by under 0.007. That is
+  about the size of the difference between two builds of the same model (0.002).
+- **On the rules:** each expert is pruned, refit and given new shared embeddings, so none is used as
+  provided. We read the 300M limit as stopping routing to the provided experts as they are, so we
+  consider this allowed.
+
+## 9. What this means for the next methods
 
 This section is our interpretation. The sections above are measured.
 
@@ -217,24 +255,29 @@ This section is our interpretation. The sections above are measured.
 - **Method 2 (mixture of experts built from expert parts) will depend on its training step.** Expert
   parts do not work without their own embeddings, and a shared model has one set of embeddings. That is
   the main tension. Section 7 shows a cheap partial answer: a small per-expert embedding correction.
-- **Pruned experts with their own attention (design A) start from a much better place than Method 2**
-  (2.999 vs 3.443 before any training). If the rules allow it, it is the strongest starting point we
-  have.
+- **Design A is now the model to beat: 3.041 on dev with no training.** Training is the obvious next
+  lever: the embedding corrections, the pruned layers and the shared embeddings were never trained
+  together. Method 2 as planned starts far behind it (3.443 vs 2.999 before training, held-out slice).
+- **Medicine is design A's weak spot.** A route for medicine that leans on the generalist may help: with
+  the generalist's embeddings, medicine beat the generalist in the check of section 7.
 - **Method 3 (teaching one model from the experts) avoids the compatibility problem.** It copies the
   experts' predictions, not their weights. The open question is room: the experts' skill is broad, and a
   124M model may not hold all four.
 - **Watch medicine.** It is the domain every method so far has hurt.
 
-## 9. How sure we are
+## 10. How sure we are
 
 - **A bug, fixed and checked.**
   - For math, our held-out slice was mostly one GMAT reading guide, not math.
   - We fixed it on November 18 and re-ran all 12 affected runs on November 19.
   - Every merge chose the same setting and scored the same on dev.
   - The diagnostics' conclusions held. One detail changed: the gain is not flat across the window.
-- **Dev differences are solid.** The 95% ranges above are narrow, about ±0.001 or less.
+- **Dev differences are solid.** The 95% ranges above are narrow: about ±0.001 for the mixes and
+  ±0.007 for design A.
 - **Reproducible.** The learned mix scored the same to within 0.00002 when re-run. It is not
-  bit-identical, because GPU arithmetic varies slightly between runs.
+  bit-identical, because GPU arithmetic varies slightly between runs. Two builds of design A differed by
+  0.002 on the held-out slice, likely from a few texts where two experts are nearly tied. The final
+  recipe must reproduce within 0.005, so this needs pinning down.
 - **Not yet tested:**
   - Several searches chose the smallest amount we tried, so settings below it are untested.
   - The learned mix always started from the generalist.
@@ -242,7 +285,7 @@ This section is our interpretation. The sections above are measured.
   - The diagnostics used 16 to 32 held-out windows per domain: enough for the large effects here, not
     for small ones.
 
-## 10. Where the numbers come from
+## 11. Where the numbers come from
 
 | What | Run in `results/` |
 |---|---|
@@ -254,7 +297,8 @@ This section is our interpretation. The sections above are measured.
 | Training files are not ordered | `20261118-2129_analysis_slices_hz` |
 | Pruning sweeps | `20261119-1610_pruning_sweep_hz`, `20261119-1623_pruning_sweep-fine_hz` |
 | Designs A and B with perfect routing | `20261119-1702_pruning_assemble-oracle_hz`, `20261119-1707_pruning_assemble-oracle-ranks_hz` |
+| Design A with the router, dev scores | `20261119-1845_routed_design-a_hz`, `20261119-1850_routed_design-a-commit_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
-The code is in `training_scripts/merging/`, `training_scripts/pruning/` and `training_scripts/analysis/`. Each run's `notes.md` says
+The code is in `training_scripts/merging/`, `training_scripts/pruning/`, `training_scripts/routed/` and `training_scripts/analysis/`. Each run's `notes.md` says
 what it showed. `./lab dashboard` shows all runs with charts.

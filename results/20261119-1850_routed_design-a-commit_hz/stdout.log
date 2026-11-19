@@ -1,0 +1,31 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-1850_routed_design-a-commit_hz", "rank": 128, "source": "expert-avg", "commits": "128,160,192,224", "calib_windows": 128, "val_windows": 64, "batch_size": 4, "store_dtype": "fp32", "seed": 0, "device": "cuda"}
+[    2.0s] budget: 19,303 FFN neurons per expert (52.4%), total 299,995,804, one expert's active 103.19M
+[   13.8s] math: FFN widths [1410, 154, 269, 452, 2124, 2785, 2743, 2506, 2171, 2183, 2244, 262] (19,303 neurons)
+[   23.7s] code: FFN widths [1464, 154, 272, 456, 2175, 2851, 2799, 2528, 2117, 2052, 2191, 244] (19,303 neurons)
+[   33.6s] medicine: FFN widths [1483, 154, 267, 446, 2116, 2709, 2752, 2326, 2148, 2185, 2430, 287] (19,303 neurons)
+[   43.5s] history: FFN widths [1455, 154, 268, 443, 2105, 2787, 2758, 2407, 2171, 2179, 2307, 269] (19,303 neurons)
+[   46.1s] parameters: 299,995,804 (budget 299,995,804; limit 300,000,000)
+[   51.3s] pool-val, oracle routing: math 2.7979 | code 2.8936 | medicine 2.8614 | history 3.4425 | mean 2.9988
+[   59.7s] router accuracy on pool-val by position (share of windows whose lowest-loss expert is the true domain):
+[   59.7s]   position        1      2      4      8     16     32     64    128    256    511
+[   59.7s]   math         0.42   0.52   0.59   0.75   0.80   0.89   0.91   0.94   0.94   0.92
+[   59.7s]   code         0.58   0.55   0.67   0.86   0.84   0.86   0.91   0.92   0.97   0.98
+[   59.7s]   medicine     0.50   0.55   0.64   0.86   0.92   0.94   0.97   0.97   1.00   1.00
+[   59.7s]   history      0.48   0.61   0.70   0.80   0.92   0.92   0.95   0.98   0.98   1.00
+[   68.0s] commit  128: pool-val math 2.8080 | code 2.9193 | medicine 2.8838 | history 3.4486 | mean 3.0149 | active 129.1M
+[   76.8s] commit  160: pool-val math 2.8185 | code 2.9170 | medicine 2.8838 | history 3.4602 | mean 3.0199 | active 135.6M
+[   86.0s] commit  192: pool-val math 2.8186 | code 2.9121 | medicine 2.8621 | history 3.4602 | mean 3.0132 | active 142.0M
+[   95.7s] commit  224: pool-val math 2.8185 | code 2.9121 | medicine 2.8621 | history 3.4548 | mean 3.0119 | active 148.5M
+[   95.7s] chosen commit point: 224 (pool-val mean 3.0119)
+[   96.2s] causal check (official test, cuts (112, 225, 512, 1024, 1536), including inside the mixed prefix): yes
+[   96.8s] saved /home/ubuntu/mld/hz/runs/20261119-1850_routed_design-a-commit_hz/model.pt, config.json and model_def.py
+[   96.8s] json {"oracle": {"math": 2.7978701889514923, "code": 2.893595702946186, "medicine": 2.8613734245300293, "history": 3.442507028579712, "mean": 2.998836586251855}, "accuracy": {"math": [0.421875, 0.515625, 0.59375, 0.75, 0.796875, 0.890625, 0.90625, 0.9375, 0.9375, 0.921875], "code": [0.578125, 0.546875, 0.671875, 0.859375, 0.84375, 0.859375, 0.90625, 0.921875, 0.96875, 0.984375], "medicine": [0.5, 0.546875, 0.640625, 0.859375, 0.921875, 0.9375, 0.96875, 0.96875, 1.0, 1.0], "history": [0.484375, 0.609375, 0.703125, 0.796875, 0.921875, 0.921875, 0.953125, 0.984375, 0.984375, 1.0]}, "positions": [1, 2, 4, 8, 16, 32, 64, 128, 256, 511], "commits": {"128": {"losses": {"math": 2.807981103658676, "code": 2.9193185120821, "medicine": 2.8837850391864777, "history": 3.448607236146927, "mean": 3.014922972768545}, "active": 129107680.0}, "160": {"losses": {"math": 2.818545699119568, "code": 2.917005017399788, "medicine": 2.8838063925504684, "history": 3.4602303206920624, "mean": 3.0198968574404716}, "active": 135563064.0}, "192": {"losses": {"math": 2.8185528814792633, "code": 2.912114605307579, "medicine": 2.8620793372392654, "history": 3.460231602191925, "mean": 3.013244606554508}, "active": 142018448.0}, "224": {"losses": {"math": 2.8185184448957443, "code": 2.912095993757248, "medicine": 2.862082466483116, "history": 3.454819232225418, "mean": 3.0118790343403816}, "active": 148473832.0}}, "chosen": 224, "parameters": 299995804}
+submission  2026-11-19 18:52 UTC | /home/ubuntu/mld/hz/runs/20261119-1850_routed_design-a-commit_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  299,995,804 (limit 300,000,000)
+active      about 148.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 2.9128 | code 2.9474 | medicine 2.8529 | history 3.4522 | mean 3.0413
+valid
+RESULT {"data": "dev", "losses": {"math": 2.9127821512520313, "code": 2.947434401139617, "medicine": 2.8528679721057415, "history": 3.4521932043135166}, "mean": 3.0413194322027266, "parameters": 299995804, "active_parameters": 148473832, "causal": true, "valid": true}
+wrote /home/ubuntu/mld/hz/runs/20261119-1850_routed_design-a-commit_hz/submission.log
+per-window means match the official score within 1.83e-07
