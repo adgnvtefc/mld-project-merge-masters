@@ -1,0 +1,31 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-1706_pruning_assemble-oracle-ranks_hz", "learned": "runs/20261119-0527_merging_learned-lambda_hz/model.bin", "sources": "expert-avg,learned,generalist", "ranks": "64,96,128,192,256", "b_sources": "", "calib_windows": 128, "val_windows": 64, "batch_size": 4, "seed": 0, "device": "cuda"}
+[    4.6s] design A, embedding correction rank 64: 21,545 FFN neurons per expert (58.4%), total 300.00M, active 103.32M
+[    4.6s] design A, embedding correction rank 96: 20,424 FFN neurons per expert (55.4%), total 300.00M, active 103.25M
+[    4.6s] design A, embedding correction rank 128: 19,303 FFN neurons per expert (52.4%), total 300.00M, active 103.19M
+[    4.6s] design A, embedding correction rank 192: 17,061 FFN neurons per expert (46.3%), total 300.00M, active 103.06M
+[    4.6s] design A, embedding correction rank 256: 14,819 FFN neurons per expert (40.2%), total 299.99M, active 102.93M
+[    4.6s] design B: total 295.24M, active 123.53M
+[   14.6s] math: rank 64: kept 21,545 neurons
+[   15.4s] math: rank 96: kept 20,424 neurons
+[   16.1s] math: rank 128: kept 19,303 neurons
+[   16.7s] math: rank 192: kept 17,061 neurons
+[   17.2s] math: rank 256: kept 14,819 neurons
+[   27.0s] code: rank 64: kept 21,545 neurons
+[   27.8s] code: rank 96: kept 20,424 neurons
+[   28.6s] code: rank 128: kept 19,303 neurons
+[   29.2s] code: rank 192: kept 17,061 neurons
+[   29.7s] code: rank 256: kept 14,819 neurons
+[   39.4s] medicine: rank 64: kept 21,545 neurons
+[   40.2s] medicine: rank 96: kept 20,424 neurons
+[   41.0s] medicine: rank 128: kept 19,303 neurons
+[   41.6s] medicine: rank 192: kept 17,061 neurons
+[   42.1s] medicine: rank 256: kept 14,819 neurons
+[   51.9s] history: rank 64: kept 21,545 neurons
+[   52.7s] history: rank 96: kept 20,424 neurons
+[   53.4s] history: rank 128: kept 19,303 neurons
+[   54.0s] history: rank 192: kept 17,061 neurons
+[   54.5s] history: rank 256: kept 14,819 neurons
+[   54.5s] pool-val, each domain routed to its own route         math   code medicine history   mean
+[   59.3s] reference: generalist                               3.0769 3.1156 2.8073 3.5445 3.1361
+[   64.0s] reference: learned mix                              3.0352 3.0930 2.8345 3.5259 3.1222
+[   68.6s] ceiling: each domain's own expert                   2.5719 2.6759 2.5973 3.1422 2.7468

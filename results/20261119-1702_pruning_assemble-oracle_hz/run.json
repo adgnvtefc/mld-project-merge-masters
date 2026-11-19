@@ -1,0 +1,34 @@
+{
+  "run_id": "20261119-1702_pruning_assemble-oracle_hz",
+  "method": "pruning",
+  "variant": "assemble-oracle",
+  "owner": "hz",
+  "hypothesis": "With label routing and no training, design A (shared embeddings, each expert's own attention and 65% of its FFN) beats design B (shared attention, full FFNs), but shared embeddings cost most of the experts' lead; a small per-expert embedding correction recovers part of it.",
+  "parents": [
+    "20261119-1623_pruning_sweep-fine_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/pruning/assemble_oracle.py",
+    "--learned",
+    "runs/20261119-0527_merging_learned-lambda_hz/model.bin",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1702_pruning_assemble-oracle_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "c1d0b2169b85f321864b4694da656bcc1ee51b82",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1359,
+  "started": "2026-11-19T17:02:52Z",
+  "heartbeat": "2026-11-19T17:05:51Z",
+  "ended": "2026-11-19T17:05:51Z",
+  "exit_code": 0,
+  "train_seconds": 179,
+  "a10g_hours": 0.0498,
+  "eval": null,
+  "progress": {
+    "step": 21,
+    "elapsed_s": 175.4
+  }
+}

@@ -1,8 +1,8 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 34 runs, about 1 GPU-hour.
+November 19, 2026. Everything we have measured so far, in one place: 39 runs, about 1.4 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
-full detail behind section 5. Each number here comes from a run in `results/`; section 9 lists them.
+full detail behind section 5. Each number here comes from a run in `results/`; section 10 lists them.
 
 Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in this project.
 
@@ -20,6 +20,12 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   - Their changes are so large and so alike that adding them overshoots.
 - **What it points to** (our reading): a model needs different weights for different text, and pieces
   taken from the experts will need training to fit together.
+- **Pruning opens a new route** (section 7, held-out slice, no training, perfect routing).
+  - Each expert can lose 35% of its FFN neurons at no cost on its own text.
+  - That frees room for 4 experts that keep their own attention and share only the word embeddings.
+  - With a small per-expert correction to the shared embeddings, this scores **2.999 vs 3.136** for the
+    generalist: 35% of the gap.
+  - It is not yet a real model: it needs a router, and probably a ruling on whether it is allowed.
 
 ## 1. The task
 
@@ -149,7 +155,58 @@ submit. Held-out slice:
 - **They help only with their own word embeddings.**
 - **Medicine gets worse again.**
 
-## 7. What this means for the next methods
+## 7. Pruning the experts (first results)
+
+Each expert has 3,072 FFN neurons in each of its 12 layers. We tested whether some can be removed while
+the expert stays as good on its own kind of text. All numbers here are on the held-out slice. None
+involve training.
+
+**How much can be removed** (`20261119-1610`, `-1623`):
+
+- Rank all of an expert's neurons together, by how much each one affects the loss on its own text.
+  Remove the lowest, then refit each layer's output to make up for them.
+- **Keeping 65%** of the neurons costs under 0.001 on the expert's own text. 60% costs about 0.012; 50%
+  costs 0.08 to 0.09.
+- The removed neurons sit mostly in layers 1, 2, 3 and 11, which keep only 5 to 18% of theirs. Removing
+  the same share from every layer instead is much worse.
+- The four experts tend to keep the same neurons.
+
+**What that buys.** Under the 300M limit, removing 35% of each expert's FFN neurons leaves room for four
+experts that each keep their own attention. They share only the word embeddings. We call this design A.
+We compared it with Method 2 as planned (design B: four full FFNs, one shared attention). Each kind of
+text goes to its own expert's parts, as if a perfect router existed (`20261119-1702`, `-1707`):
+
+| Each kind of text gets | Math | Code | Medicine | History | Mean |
+|---|---|---|---|---|---|
+| The generalist | 3.077 | 3.116 | 2.807 | 3.545 | 3.136 |
+| The learned mix | 3.035 | 3.093 | 2.835 | 3.526 | 3.122 |
+| B: shared attention, own full FFN | 3.388 | 3.540 | 2.986 | 3.860 | 3.443 |
+| A: shared embeddings, nothing else | 3.121 | 3.441 | 3.730 | 4.631 | 3.731 |
+| **A: shared embeddings + a rank-128 correction per expert** | **2.798** | **2.894** | 2.861 | **3.442** | **2.999** |
+| The full expert | 2.572 | 2.676 | 2.597 | 3.142 | 2.747 |
+
+- **Shared embeddings are the whole problem.** Without a correction, design A is far worse than the
+  generalist. Pruning is not the cause: the unpruned version scores the same.
+- **A small correction fixes most of it.** Each expert gets its own low-rank change to the shared
+  embeddings (the average of the experts'), paid for with more FFN neurons. Rank 96 to 128 is best: at
+  rank 128 each expert keeps 52% of its neurons. Higher ranks cost too many neurons.
+- **It recovers 35% of the gap**, against 4% for the learned mix. Of the 0.25 that remains, about 0.07
+  comes from pruning and 0.19 from sharing the embeddings.
+- **Medicine is still worse than the generalist** (2.861 vs 2.807). With the generalist's embeddings
+  instead, medicine edges past it, but the other three get worse.
+- **Design B is worse than the generalist without training.** Method 2 would rely entirely on its
+  training step to repair the shared attention.
+
+**Not yet a real model:**
+
+- The routing used the true label. A real router guesses from the text so far and gets some early
+  tokens wrong.
+- There is no dev score, because the course's scoring script cannot run a routed model as is.
+- Design A keeps each expert nearly whole and shares only embeddings. The limit exists to stop "a
+  classifier which picks a provided expert model per document". This needs the same Piazza question as
+  Method 2, and more urgently.
+
+## 8. What this means for the next methods
 
 This section is our interpretation. The sections above are measured.
 
@@ -159,13 +216,16 @@ This section is our interpretation. The sections above are measured.
   and shows from a window's first tokens, so a router has early signal to act on.
 - **Method 2 (mixture of experts built from expert parts) will depend on its training step.** Expert
   parts do not work without their own embeddings, and a shared model has one set of embeddings. That is
-  the main tension.
+  the main tension. Section 7 shows a cheap partial answer: a small per-expert embedding correction.
+- **Pruned experts with their own attention (design A) start from a much better place than Method 2**
+  (2.999 vs 3.443 before any training). If the rules allow it, it is the strongest starting point we
+  have.
 - **Method 3 (teaching one model from the experts) avoids the compatibility problem.** It copies the
   experts' predictions, not their weights. The open question is room: the experts' skill is broad, and a
   124M model may not hold all four.
 - **Watch medicine.** It is the domain every method so far has hurt.
 
-## 8. How sure we are
+## 9. How sure we are
 
 - **A bug, fixed and checked.**
   - For math, our held-out slice was mostly one GMAT reading guide, not math.
@@ -182,7 +242,7 @@ This section is our interpretation. The sections above are measured.
   - The diagnostics used 16 to 32 held-out windows per domain: enough for the large effects here, not
     for small ones.
 
-## 9. Where the numbers come from
+## 10. Where the numbers come from
 
 | What | Run in `results/` |
 |---|---|
@@ -192,7 +252,9 @@ This section is our interpretation. The sections above are measured.
 | Perfect-router check | `20261119-0535_merging_routed-oracle_hz` |
 | Swapping parts, calibration, token gains, straight-line blends | `20261119-1535` to `-1538` (`analysis_*`) |
 | Training files are not ordered | `20261118-2129_analysis_slices_hz` |
+| Pruning sweeps | `20261119-1610_pruning_sweep_hz`, `20261119-1623_pruning_sweep-fine_hz` |
+| Designs A and B with perfect routing | `20261119-1702_pruning_assemble-oracle_hz`, `20261119-1707_pruning_assemble-oracle-ranks_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
-The code is in `training_scripts/merging/` and `training_scripts/analysis/`. Each run's `notes.md` says
+The code is in `training_scripts/merging/`, `training_scripts/pruning/` and `training_scripts/analysis/`. Each run's `notes.md` says
 what it showed. `./lab dashboard` shows all runs with charts.
