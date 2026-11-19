@@ -94,6 +94,15 @@ def scores(criterion, params, stats, L, seed):
     return out
 
 
+def silent(stats, params, L, threshold):
+    """Per layer: boolean mask of neurons whose output contribution (activation RMS x c_proj column norm) is below
+    `threshold` times the layer's median contribution."""
+    out = []
+    for i, s in enumerate(scores("activation", params, stats, L, 0)):
+        out.append(s < threshold * s.median())
+    return out
+
+
 def keep_masks(layer_scores, keep, allocation):
     H = layer_scores[0].numel()
     if allocation == "layer":
@@ -150,6 +159,10 @@ def main():
     parser.add_argument("--calib-windows", type=int, default=128, help="own-domain pool train windows per expert")
     parser.add_argument("--val-windows", type=int, default=64, help="pool-val windows per domain")
     parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--reference-models", default="",
+                        help="also measure silent neurons of these models (e.g. seed,generalist) on each domain")
+    parser.add_argument("--silent-threshold", type=float, default=0.01,
+                        help="a neuron is silent below this share of its layer's median contribution")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--device", default="cuda")
     args = parser.parse_args()
@@ -172,7 +185,25 @@ def main():
                                                                    1.0, "layer"), "lstsq", stats),
                         args.val_windows, domains=[d])[d]
         log(f"{d}: sanity, keep 1.0 + lstsq refit {check:.4f} (expert {full:.4f})")
-        res = {"generalist": base, "expert": full, "curves": {}}
+        quiet = {f"expert_{d}": silent(stats, expert, L, args.silent_threshold)}
+        for ref in [x for x in args.reference_models.split(",") if x]:
+            _, ref_params = m.load_checkpoint(ref, args.device)
+            ref_stats = calibration_stats(model, ref_params, d, args.calib_windows, args.batch_size, args.seed,
+                                          args.device)
+            quiet[ref] = silent(ref_stats, ref_params, L, args.silent_threshold)
+            del ref_params, ref_stats
+        log(f"{d}: share of neurons silent on {d} text (contribution < {args.silent_threshold} x layer median), "
+            "by layer:")
+        for name, masks in quiet.items():
+            log(f"  {name:<18}" + "".join(f"{float(q.float().mean()):>6.2f}" for q in masks)
+                + f"  | all {float(torch.cat(masks).float().mean()):.3f}")
+        for name, masks in quiet.items():
+            if name != f"expert_{d}":
+                mine = quiet[f"expert_{d}"]
+                both = sum(int((a & b).sum()) for a, b in zip(mine, masks))
+                log(f"  silent in expert_{d} and in {name}: {both:,} of {sum(int(a.sum()) for a in mine):,}")
+        res_silent = {name: [float(q.float().mean()) for q in masks] for name, masks in quiet.items()}
+        res = {"generalist": base, "expert": full, "curves": {}, "silent": res_silent}
         for criterion in [c for c in args.criteria.split(",") if c]:
             s = scores(criterion, expert, stats, L, args.seed)
             for allocation in [a for a in args.allocations.split(",") if a]:

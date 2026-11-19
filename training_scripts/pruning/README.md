@@ -29,3 +29,7 @@ Fixes (after removing neurons):
 
 Allocations: `layer` keeps the same share in every layer; `global` ranks neurons across all layers (only for
 `activation` and `taylor`, whose scores are comparable across layers), with at least 5% kept per layer.
+
+`--reference-models seed,generalist` also reports, per layer, the share of neurons that are silent (output
+contribution below `--silent-threshold` x the layer median) in each expert and in those models on the same text,
+and how many of an expert's silent neurons are silent in them too.
