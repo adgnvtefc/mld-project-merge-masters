@@ -149,7 +149,8 @@ def main():
     if "learned" in sources:
         evaluate("reference: learned mix", lambda d: sources["learned"], step); step += 1
     evaluate("ceiling: each domain's own expert", lambda d: experts[d], step); step += 1
-    evaluate("ceiling: own expert, pruned to the A budget", lambda d: pruned[d, 0], step); step += 1
+    for r in ranks:
+        evaluate(f"ceiling: own expert, pruned to the rank-{r} budget", lambda d, r=r: pruned[d, r], step); step += 1
     for name in [x for x in args.sources.split(",") if x in sources]:
         evaluate(f"A unpruned (over 300M): {name} embeddings",
                  lambda d, n=name: with_embeddings(experts[d], n, d, 0), step); step += 1
