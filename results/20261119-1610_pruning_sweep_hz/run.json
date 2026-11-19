@@ -1,0 +1,30 @@
+{
+  "run_id": "20261119-1610_pruning_sweep_hz",
+  "method": "pruning",
+  "variant": "sweep",
+  "owner": "hz",
+  "hypothesis": "Each expert can lose a large share of its FFN neurons (35% or more) and keep most of its own-domain lead over the generalist, if neurons are chosen by own-domain importance and the layer output is repaired; this decides whether pruned experts with their own attention fit the 300M limit.",
+  "parents": [],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/pruning/prune_sweep.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1610_pruning_sweep_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "505023f127647e9a45acdc3ecfe91b5e5588946f",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1336,
+  "started": "2026-11-19T16:10:24Z",
+  "heartbeat": "2026-11-19T16:22:02Z",
+  "ended": "2026-11-19T16:22:02Z",
+  "exit_code": 0,
+  "train_seconds": 699,
+  "a10g_hours": 0.1941,
+  "eval": null,
+  "progress": {
+    "step": 431,
+    "elapsed_s": 695.3
+  }
+}

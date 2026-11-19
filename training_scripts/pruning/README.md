@@ -9,7 +9,7 @@ them. Everything is scored on pool-val (lib/data.py), never on dev. Calibration 
 
 | Script | Variant | What it does |
 |---|---|---|
-| `prune_sweep.py` | `sweep` | own-domain pool-val loss of each expert with a share of its FFN neurons removed, over criteria, output fixes, allocations and keep fractions (no model; --no-eval) |
+| `prune_sweep.py` | `sweep`, `sweep-fine` | own-domain pool-val loss of each expert with a share of its FFN neurons removed, over criteria, output fixes, allocations and keep fractions (no model; --no-eval) |
 
 Criteria (score per neuron; low scores are pruned):
 

@@ -1,0 +1,40 @@
+{
+  "run_id": "20261119-1623_pruning_sweep-fine_hz",
+  "method": "pruning",
+  "variant": "sweep-fine",
+  "owner": "hz",
+  "hypothesis": "The near-free 35% of global pruning comes from neurons that are silent on the expert's own text, mostly in layers 1-3 and 11, inherited from the seed; and the loss stays near the expert's until close to 55-60% kept.",
+  "parents": [
+    "20261119-1610_pruning_sweep_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/pruning/prune_sweep.py",
+    "--keeps",
+    "0.65,0.6,0.55,0.5",
+    "--criteria",
+    "activation,taylor",
+    "--allocations",
+    "global",
+    "--reference-models",
+    "seed,generalist",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1623_pruning_sweep-fine_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "ccbc4c83d2565536e96e3e5f4d3d9afd088af264",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 4051,
+  "started": "2026-11-19T16:23:21Z",
+  "heartbeat": "2026-11-19T16:27:57Z",
+  "ended": "2026-11-19T16:27:57Z",
+  "exit_code": 0,
+  "train_seconds": 276,
+  "a10g_hours": 0.0767,
+  "eval": null,
+  "progress": {
+    "step": 95,
+    "elapsed_s": 275.1
+  }
+}
