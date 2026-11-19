@@ -54,8 +54,12 @@ def calibration_stats(model, params, domain, windows, batch_size, seed, device, 
         torch.use_deterministic_algorithms(previous)
 
 
+TAYLOR_GROUP = 4  # windows per |sum h*g| term, fixed so the statistic does not depend on the batch size
+
+
 def _calibration_stats(model, params, domain, windows, batch_size, seed, device):
-    """Per layer: Gram E[h h^T] (fp64), mean E[h], and taylor |sum h*g| over own-domain pool train windows."""
+    """Per layer: Gram E[h h^T] (fp64), mean E[h], and taylor: the sum over consecutive groups of TAYLOR_GROUP
+    own-domain pool train windows of |sum of h*g over the group|."""
     m.set_params(model, params)
     for p in model.parameters():
         p.requires_grad_(False)
@@ -67,6 +71,7 @@ def _calibration_stats(model, params, domain, windows, batch_size, seed, device)
     gram = [torch.zeros(H, H, dtype=torch.float64, device=device) for _ in range(L)]
     total = [torch.zeros(H, dtype=torch.float64, device=device) for _ in range(L)]
     taylor = [torch.zeros(H, dtype=torch.float64, device=device) for _ in range(L)]
+    group = [torch.zeros(H, dtype=torch.float64, device=device) for _ in range(L)]
     captured = {}
     hooks = [block.mlp.c_proj.register_forward_hook(lambda _m, inp, _o, i=i: captured.__setitem__(i, inp[0]))
              for i, block in enumerate(model.transformer.h)]
@@ -84,7 +89,12 @@ def _calibration_stats(model, params, domain, windows, batch_size, seed, device)
             h2 = h.detach().reshape(-1, H).float()
             gram[i] += (h2.T @ h2).double()
             total[i] += h2.sum(0).double()
-            taylor[i] += (h.detach().float() * g.float()).reshape(-1, H).sum(0).abs().to(torch.float64)
+            per_window = (h.detach().float() * g.float()).sum(1).to(torch.float64)  # [windows in batch, H]
+            for w, row in enumerate(per_window):
+                group[i] += row
+                if (b + w + 1) % TAYLOR_GROUP == 0 or b + w + 1 == windows:
+                    taylor[i] += group[i].abs()
+                    group[i].zero_()
         n += h2.shape[0]
         captured.clear()
     for hook in hooks:
