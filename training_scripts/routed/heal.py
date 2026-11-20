@@ -40,6 +40,7 @@ def parse_args():
     parser.add_argument("--out", required=True)
     parser.add_argument("--train", default="frozen-ffn", choices=["all", "frozen-ffn"])
     parser.add_argument("--rank", type=int, default=128)
+    parser.add_argument("--top-rows", type=int, default=0, help="own word-embedding rows for each expert's top tokens")
     parser.add_argument("--source", default="expert-avg", choices=["expert-avg", "generalist"])
     parser.add_argument("--commit", type=int, default=224, help="prefix router commit point (build.py's choice)")
     parser.add_argument("--calib-windows", type=int, default=128)
@@ -71,7 +72,7 @@ def param_groups(model, weight_decay):
             continue
         if p.dim() < 2:
             kind = "vector"
-        elif name in ("wte.weight", "wpe.weight") or name.endswith(("_u", "_v")):
+        elif name in ("wte.weight", "wpe.weight") or name.endswith(("_u", "_v", "row_emb")):
             kind = "embedding"
         else:
             kind = "hidden"
@@ -109,7 +110,7 @@ def main():
 
     # ---- 1. Model: build.py's deterministic Stacks -------------------------------------------------------
     model, config, state, digest, _ = b.build_design_a(args.rank, args.source, args.calib_windows, 1, args.seed,
-                                                       "fp32", device, log)
+                                                       "fp32", device, log, rows=args.top_rows)
     model.commit = config["commit"] = args.commit
     del state
     if args.train == "frozen-ffn":

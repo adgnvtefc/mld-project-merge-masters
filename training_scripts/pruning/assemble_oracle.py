@@ -41,13 +41,14 @@ def sizes(header):
             "ffn": L * (2 * C * H + H + C), "neuron": 2 * C + 1, "ln_f": 2 * C}
 
 
-def budget_a(s, rank):
-    """Kept FFN neurons per expert (all layers) for Pruned Expert Stacks, and its total and active parameters."""
-    correction = rank * (s["V"] + s["C"]) + rank * (s["P"] + s["C"])
+def budget_a(s, rank, rows=0):
+    """Kept FFN neurons per expert (all layers) for Pruned Expert Stacks, and its total and active parameters. rows:
+    the expert's own word-embedding rows for its `rows` most frequent tokens (each row C weights + its token id)."""
+    correction = rank * (s["V"] + s["C"]) + rank * (s["P"] + s["C"]) + rows * (s["C"] + 1)
     fixed = s["attn_ln"] + s["ln_f"] + s["L"] * s["C"] + correction  # c_proj biases stay whole
     kept = min((LIMIT_TOTAL - s["emb"] - 4 * fixed) // (4 * s["neuron"]), s["L"] * s["H"])
     total = s["emb"] + 4 * (fixed + kept * s["neuron"])
-    active = s["V"] * s["C"] + rank * (s["V"] + 2 * s["C"]) + s["L"] * 4 * s["C"] ** 2 + kept * 2 * s["C"]
+    active = s["V"] * s["C"] + rank * (s["V"] + 2 * s["C"]) + rows * s["C"] + s["L"] * 4 * s["C"] ** 2 + kept * 2 * s["C"]
     return kept, total, active
 
 

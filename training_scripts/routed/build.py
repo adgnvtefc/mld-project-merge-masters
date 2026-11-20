@@ -76,13 +76,22 @@ def routing_accuracy(model, windows, device):
     return acc
 
 
-def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dtype, dev, log):
+_STATS = {}  # calibration statistics per (domain, windows, seed): they do not depend on the budget
+
+
+def top_tokens(domain, k, count_tokens=20_000_000):
+    """The domain's k most frequent tokens in its first `count_tokens` pool train tokens (ties by token id)."""
+    counts = np.bincount(np.asarray(m.data.pool(domain, "train")[:count_tokens], dtype=np.int64), minlength=m.gpt.VOCAB)
+    return torch.from_numpy(np.argsort(-counts[:m.gpt.VOCAB], kind="stable")[:k].copy())
+
+
+def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dtype, dev, log, rows=0):
     """Pruned Expert Stacks from the provided checkpoints, deterministically. Returns (model on dev in eval mode, config dict,
     saved-state dict on CPU, weights fingerprint, total parameter budget). config["commit"] is 0; set it."""
     header, gen = m.load_checkpoint("generalist", dev)
     s = ao.sizes(header)
     L, H, V = s["L"], s["H"], s["V"]
-    kept, total, active = ao.budget_a(s, rank)
+    kept, total, active = ao.budget_a(s, rank, rows)
     log(f"budget: {kept:,} FFN neurons per expert ({kept / (L * H):.1%}), total {total:,}, one expert's active "
         f"{active / 1e6:.2f}M")
     experts = {d: m.load_checkpoint(f"expert_{d}", dev)[1] for d in m.DOMAINS}
@@ -96,8 +105,11 @@ def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dt
     state = {"wte.weight": shared["transformer.wte.weight"][:V], "wpe.weight": shared["transformer.wpe.weight"]}
     widths = []
     for e, d in enumerate(m.DOMAINS):
-        stats = ps.calibration_stats(work, experts[d], d, calib_windows, calib_batch_size, seed, dev,
-                                     deterministic=True)
+        key = (d, calib_windows, seed)
+        if key not in _STATS:
+            _STATS[key] = ps.calibration_stats(work, experts[d], d, calib_windows, calib_batch_size, seed, dev,
+                                               deterministic=True)
+        stats = _STATS[key]
         masks = ps.keep_masks(ps.scores("taylor", experts[d], stats, L, seed), kept / (L * H), "global")
         params = ps.pruned_params(experts[d], masks, "lstsq", stats)
         widths.append([int(k.sum()) for k in masks])
@@ -109,6 +121,10 @@ def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dt
                 u, v = factors(shared[key], experts[d][key], rank)
                 state[f"experts.{e}.{name}_u"] = u[:V] if name == "wte" else u
                 state[f"experts.{e}.{name}_v"] = v
+        if rows:
+            ids = top_tokens(d, rows)
+            state[f"experts.{e}.row_ids"] = ids.to(dev)
+            state[f"experts.{e}.row_emb"] = experts[d]["transformer.wte.weight"][ids.to(dev)]
         del stats, params
         torch.cuda.empty_cache()
     del work, experts
@@ -117,13 +133,13 @@ def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dt
     config = {"gpt_config": {"block_size": cfg.block_size, "vocab_size": cfg.vocab_size, "n_layer": cfg.n_layer,
                              "n_head": cfg.n_head, "n_embd": cfg.n_embd, "width_mult": cfg.width_mult,
                              "attn_mult": cfg.attn_mult},
-              "widths": widths, "rank": rank, "commit": 0, "domains": m.DOMAINS,
+              "widths": widths, "rank": rank, "rows": rows, "commit": 0, "domains": m.DOMAINS,
               "source": source}
     model = rmd.build(config)
     # evaluate exactly what is saved
     store = torch.bfloat16 if store_dtype == "bf16" else torch.float32
     state = {k: (v.to(store) if v.dim() >= 2 else v).cpu() for k, v in state.items()}
-    model.load_state_dict({k: v.float() for k, v in state.items()})
+    model.load_state_dict({k: (v if k.endswith("row_ids") else v.float()) for k, v in state.items()})
     model = model.to(dev).eval()
     digest = hashlib.sha256()
     for k in sorted(state):
@@ -137,6 +153,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", required=True)
     parser.add_argument("--rank", type=int, default=128, help="embedding correction rank per expert")
+    parser.add_argument("--top-rows", type=int, default=0, help="own word-embedding rows for each expert's top tokens")
     parser.add_argument("--source", default="expert-avg", choices=["expert-avg", "generalist"],
                         help="shared embeddings")
     parser.add_argument("--commits", default="32,64,128", help="commit points to compare on pool-val")
@@ -157,7 +174,8 @@ def main():
     torch.manual_seed(args.seed)
 
     model, config, state, digest, total = build_design_a(args.rank, args.source, args.calib_windows,
-                                                         args.calib_batch_size, args.seed, args.store_dtype, dev, log)
+                                                         args.calib_batch_size, args.seed, args.store_dtype, dev, log,
+                                                         rows=args.top_rows)
     n_params = official.count_parameters(model)
     log(f"parameters: {n_params:,} (budget {total:,}; limit {official.MAX_PARAMETERS:,})")
     assert n_params <= official.MAX_PARAMETERS

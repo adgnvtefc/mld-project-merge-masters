@@ -9,7 +9,8 @@ models with no training, and writes a solution directory whose `model_def.py` is
 The model:
 
 - **Shared:** word and position embeddings (the average of the four experts').
-- **Per expert:** its own attention and LayerNorms; its FFN neurons pruned to fit the 300M total (global taylor
+- **Per expert:** its own attention and LayerNorms; optionally (`--top-rows K`) its own word-embedding rows for its K
+  most frequent tokens, replacing the shared rows on the input and in the tied output layer; its FFN neurons pruned to fit the 300M total (global taylor
   ranking on its own pool train text, least-squares refit of each layer's output); a rank-r correction of the
   shared word and position embeddings toward its own (truncated SVD of the difference; also used by the tied
   output layer).
@@ -33,6 +34,7 @@ domain (with 64, one misrouted window moves the mean by about 0.002); rank and e
 | `heal.py --train all` | `heal-all` | the same with every weight trained |
 | `heal.py --steps 2400` | `heal-frozen-ffn-2400`, `heal-all-2400` | the same two, 3x longer (about 90 minutes) |
 | `embed_check.py` | `embed-check` | no training: each untrained stack scored with different embeddings (own, input only, output only, own positions, own rows for its top-K tokens) to find where sharing costs (--no-eval) |
+| `embed_grid.py` | `embed-grid` | no training: splits of each expert's budget between the low-rank fix (rank r) and own rows for its K most frequent tokens, FFN neurons filling the rest of 300M; oracle and router pool-val loss (--no-eval) |
 
 Results: dev 3.0466 at commit 128 (`20261119-1845`), 3.0413 at commit 224 (`20261119-1850`, 148.5M active),
 against 3.1555 for the generalist. See analysis.md section 8.

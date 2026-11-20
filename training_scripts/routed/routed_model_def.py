@@ -45,7 +45,7 @@ class Block(nn.Module):
 
 
 class Expert(nn.Module):
-    def __init__(self, config, widths, rank):
+    def __init__(self, config, widths, rank, rows=0):
         super().__init__()
         self.h = nn.ModuleList(Block(config, w) for w in widths)
         self.ln_f = nn.LayerNorm(config.n_embd)
@@ -55,15 +55,25 @@ class Expert(nn.Module):
             self.wte_v = nn.Parameter(torch.zeros(rank, config.n_embd))
             self.wpe_u = nn.Parameter(torch.zeros(config.block_size, rank))
             self.wpe_v = nn.Parameter(torch.zeros(rank, config.n_embd))
+        self.rows = rows
+        if rows:  # own word-embedding rows for this expert's `rows` most frequent tokens (input and output)
+            self.register_buffer("row_ids", torch.zeros(rows, dtype=torch.long))
+            self.row_emb = nn.Parameter(torch.zeros(rows, config.n_embd))
+
+    def row_slot(self, vocab):
+        """[vocab] index into row_emb, -1 for tokens without an own row."""
+        slot = torch.full((vocab,), -1, dtype=torch.long, device=self.row_ids.device)
+        slot[self.row_ids] = torch.arange(self.rows, device=self.row_ids.device)
+        return slot
 
 
 class RoutedExperts(nn.Module):
-    def __init__(self, config, widths, rank, commit):
+    def __init__(self, config, widths, rank, commit, rows=0):
         super().__init__()
         self.config = config
         self.wte = nn.Embedding(config.vocab_size, config.n_embd)
         self.wpe = nn.Embedding(config.block_size, config.n_embd)
-        self.experts = nn.ModuleList(Expert(config, w, rank) for w in widths)
+        self.experts = nn.ModuleList(Expert(config, w, rank, rows) for w in widths)
         self.commit = commit
         self.force = None  # an expert index: that expert predicts every token (oracle routing, for analysis)
         self.last_nll = self.last_choice = None
@@ -71,15 +81,23 @@ class RoutedExperts(nn.Module):
     def expert_logits(self, e, idx):
         ex, T = self.experts[e], idx.shape[1]
         pos = torch.arange(T, device=idx.device)
-        x = self.wte(idx) + self.wpe(pos)
+        word = self.wte(idx)
         if ex.rank:
-            x = x + F.embedding(idx, ex.wte_u) @ ex.wte_v + ex.wpe_u[:T] @ ex.wpe_v
+            word = word + F.embedding(idx, ex.wte_u) @ ex.wte_v
+        if ex.rows:
+            slot = ex.row_slot(self.wte.num_embeddings)[idx]
+            word = torch.where((slot >= 0)[..., None], F.embedding(slot.clamp(min=0), ex.row_emb).to(word.dtype), word)
+        x = word + self.wpe(pos)
+        if ex.rank:
+            x = x + ex.wpe_u[:T] @ ex.wpe_v
         for block in ex.h:
             x = block(x)
         h = ex.ln_f(x) / self.config.width_mult
         logits = F.linear(h, self.wte.weight)
         if ex.rank:
             logits = logits + F.linear(F.linear(h, ex.wte_v), ex.wte_u)
+        if ex.rows:
+            logits = logits.index_copy(-1, ex.row_ids, F.linear(h, ex.row_emb).to(logits.dtype))
         return logits
 
     def forward(self, idx, route=None):
@@ -121,7 +139,8 @@ class RoutedExperts(nn.Module):
 
 def build(config_dict):
     config = gpt.Config(**config_dict["gpt_config"])
-    return RoutedExperts(config, config_dict["widths"], config_dict["rank"], config_dict["commit"])
+    return RoutedExperts(config, config_dict["widths"], config_dict["rank"], config_dict["commit"],
+                         config_dict.get("rows", 0))
 
 
 def load_model(directory, device):
@@ -129,5 +148,5 @@ def load_model(directory, device):
         config_dict = json.load(f)
     model = build(config_dict)
     state = torch.load(os.path.join(directory, "model.pt"), map_location="cpu")
-    model.load_state_dict({k: v.float() for k, v in state.items()})
+    model.load_state_dict({k: (v if k.endswith("row_ids") else v.float()) for k, v in state.items()})
     return model.to(device).eval()
