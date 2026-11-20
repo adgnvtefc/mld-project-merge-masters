@@ -2,7 +2,8 @@
 
 > **Newer results:** this page covers our first method, mixing weights. Two later methods route each text to
 > one expert. Pruned Expert Stacks scores 3.042 with no training, 2.973 after 30 minutes of
-> training, and 2.963 after 90 minutes, our best so far. Ayush's trained Shared-Attention MoE scores 2.989. See `analysis.md`, sections 7
+> training, 2.963 after 90 minutes, and 2.957 with better
+> embeddings after 30 minutes, our best so far. Ayush's trained Shared-Attention MoE scores 2.989. See `analysis.md`, sections 7
 > to 9.
 
 Last updated: November 19, 2026. Runs by Hanmo on our EC2 machine.

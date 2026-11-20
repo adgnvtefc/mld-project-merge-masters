@@ -1,9 +1,9 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 53 runs (48 by Hanmo, 5 by Ayush),
-about 7.3 GPU-hours.
+November 19, 2026. Everything we have measured so far, in one place: 56 runs (51 by Hanmo, 5 by Ayush),
+about 8.1 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
-full detail behind section 5. Each number here comes from a run in `results/`; section 12 lists them.
+full detail behind section 5. Each number here comes from a run in `results/`; section 13 lists them.
 
 Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in this project.
 
@@ -23,9 +23,9 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   taken from the experts will need training to fit together.
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
-  - **Best so far: Pruned Expert Stacks, trained 90 minutes with FFNs frozen, 2.963 on dev** (section
-    9). It is 0.193 better than the generalist and closes 51% of the gap. After 30 minutes it scored
-    2.973 (48%). Each expert keeps its own
+  - **Best so far: Pruned Expert Stacks with own rows for each expert's top 8,192 tokens, trained 30
+    minutes with FFNs frozen, 2.957 on dev** (sections 9 and 10). It is 0.199 better than the generalist
+    and closes 53% of the gap. The same training with the earlier embeddings scored 2.973. Each expert keeps its own
     attention (sections 7 and 8).
   - **Close behind: Ayush's Shared-Attention MoE, trained the same way, 2.989.** Its experts share
     attention. It closes 44% of the gap.
@@ -313,7 +313,35 @@ about 90 minutes), with the same warmup and the decay stretched to match.
 - **Routing costs both designs about the same:** 0.012 to 0.013 over the true label, on the held-out
   slice.
 
-## 10. What this means for the next methods
+## 10. Fixing the shared embeddings in Stacks
+
+Where sharing the embeddings costs, before training (`20261120-0618`, held-out, perfect routing):
+
+| Each stack's embeddings | Mean | Recovered |
+|---|---|---|
+| Shared + rank-128 fix (as built) | 3.019 | |
+| Own tables, input side only | 3.000 | 0.018 |
+| Own word table, output side only | 2.863 | 0.156 |
+| Own tables, both sides (ceiling, over budget) | 2.832 | 0.187 |
+| Own rows for the top 4,096 / 16,384 tokens | 2.928 / 2.859 | 0.090 / 0.160 |
+
+- **The cost is on the output side,** where the tied embedding table scores every next token.
+- **Own rows for frequent tokens are the cheap fix.** The top 4,096 tokens cover 80 to 88% of the text.
+
+Splitting the same 300M differently (`20261120-0628`, before training, with the router):
+
+| Fix rank : own rows | FFN kept | Held-out |
+|---|---|---|
+| 128 : 0 (before) | 52.4% | 3.025 |
+| 64 : 4,096 | 52.9% | 2.969 |
+| **32 : 8,192** | 50.4% | **2.963** |
+| 0 : 8,192 | 53.4% | 3.043 |
+
+A small fix is still needed for rare tokens. Trained the same 30 minutes (`20261120-0750`), the 32 : 8,192
+split scores **2.957** on dev: 0.016 better than the rank-128 split (95% range 0.014 to 0.018) and 0.006
+better than that split trained 90 minutes. Training kept about a quarter of the untrained lead.
+
+## 11. What this means for the next methods
 
 This section is our interpretation. The sections above are measured.
 
@@ -336,7 +364,7 @@ This section is our interpretation. The sections above are measured.
 - **Watch medicine.** Every untrained method hurt it. Training brought it level with the generalist
   (MoE) or just past it (Stacks, by 0.015).
 
-## 11. How sure we are
+## 12. How sure we are
 
 - **A bug, fixed and checked.**
   - For math, our held-out slice was mostly one GMAT reading guide, not math.
@@ -357,7 +385,7 @@ This section is our interpretation. The sections above are measured.
   - The diagnostics used 16 to 32 held-out windows per domain: enough for the large effects here, not
     for small ones.
 
-## 12. Where the numbers come from
+## 13. Where the numbers come from
 
 | What | Run in `results/` |
 |---|---|
@@ -375,6 +403,7 @@ This section is our interpretation. The sections above are measured.
 | Trained Generalist (control) and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
 | Stacks trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
 | Stacks trained 3× longer | `20261120-0033_routed_heal-frozen-ffn-2400_hz`, `20261120-0205_routed_heal-all-2400_hz` |
+| Stacks embeddings: where sharing costs, budget splits, trained best split | `20261120-0618_routed_embed-check_hz`, `20261120-0628_routed_embed-grid_hz`, `20261120-0750_routed_heal-frozen-ffn-rows8k_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
 The code is in `training_scripts/`: `merging/`, `pruning/`, `routed/`, `moe/`, `dense/` and `analysis/`.

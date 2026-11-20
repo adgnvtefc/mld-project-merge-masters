@@ -32,6 +32,7 @@ domain (with 64, one misrouted window moves the mean by about 0.002); rank and e
 | `build.py` | `design-a-det` | the same, deterministic (calibration in deterministic mode; prints a weights fingerprint) |
 | `heal.py --train frozen-ffn` | `heal-frozen-ffn` | trains Stacks with the next-token loss, matched to `moe/heal.py` (same data stream, steps, schedule); each expert's FFN frozen |
 | `heal.py --train all` | `heal-all` | the same with every weight trained |
+| `heal.py --rank 32 --top-rows 8192` | `heal-frozen-ffn-rows8k` | FFNs frozen, 800 steps, with the best embedding split from `embed-grid` |
 | `heal.py --steps 2400` | `heal-frozen-ffn-2400`, `heal-all-2400` | the same two, 3x longer (about 90 minutes) |
 | `embed_check.py` | `embed-check` | no training: each untrained stack scored with different embeddings (own, input only, output only, own positions, own rows for its top-K tokens) to find where sharing costs (--no-eval) |
 | `embed_grid.py` | `embed-grid` | no training: splits of each expert's budget between the low-rank fix (rank r) and own rows for its K most frequent tokens, FFN neurons filling the rest of 300M; oracle and router pool-val loss (--no-eval) |
