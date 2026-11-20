@@ -1,9 +1,9 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 56 runs (51 by Hanmo, 5 by Ayush),
-about 8.1 GPU-hours.
+November 19, 2026. Everything we have measured so far, in one place: 58 runs (53 by Hanmo, 5 by Ayush),
+about 9.3 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
-full detail behind section 5. Each number here comes from a run in `results/`; section 13 lists them.
+full detail behind section 5. Each number here comes from a run in `results/`; section 14 lists them.
 
 Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in this project.
 
@@ -24,8 +24,8 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
   - **Best so far: Pruned Expert Stacks with own rows for each expert's top 8,192 tokens, trained 30
-    minutes with FFNs frozen, 2.957 on dev** (sections 9 and 10). It is 0.199 better than the generalist
-    and closes 53% of the gap. The same training with the earlier embeddings scored 2.973. Each expert keeps its own
+    minutes at a lower learning rate, 2.927 on dev** (sections 9 to 11). It is 0.229 better than the
+    generalist and closes 61% of the gap. Each expert keeps its own
     attention (sections 7 and 8).
   - **Close behind: Ayush's Shared-Attention MoE, trained the same way, 2.989.** Its experts share
     attention. It closes 44% of the gap.
@@ -341,7 +341,26 @@ A small fix is still needed for rare tokens. Trained the same 30 minutes (`20261
 split scores **2.957** on dev: 0.016 better than the rank-128 split (95% range 0.014 to 0.018) and 0.006
 better than that split trained 90 minutes. Training kept about a quarter of the untrained lead.
 
-## 11. What this means for the next methods
+## 11. The learning rate was too high
+
+Every training run first got worse, then recovered: Stacks + own rows by 0.038, Stacks all trained by
+0.11, and even the plain generalist control by 0.083. These models are already trained, and a 3e-4 peak
+after a 30-step warmup knocks them off their solution. Same model, same data and steps, peak 1e-4 after
+a 200-step warmup (`20261120-1715`, `-1753`):
+
+| Stacks + own rows, 30 min | Learning rate | Dev | vs 3e-4 (95% range) |
+|---|---|---|---|
+| FFNs frozen | 3e-4 | 2.957 | |
+| FFNs frozen | 1e-4 | 2.929 | −0.028 (−0.030 to −0.027) |
+| **All trained** | **1e-4** | **2.927** | **−0.030 (−0.031 to −0.029)** |
+
+- **The early damage is gone with FFNs frozen.** Held-out loss falls at every validation.
+- **All trained now wins, narrowly** (by 0.0018, 95% range 0.0012 to 0.0025). It still rises a little
+  as the learning rate reaches its peak, so the FFNs may want an even lower rate.
+- **This changes earlier conclusions.** "FFNs frozen beats all trained" and "3× longer buys only 0.010"
+  were measured at the too-high learning rate.
+
+## 12. What this means for the next methods
 
 This section is our interpretation. The sections above are measured.
 
@@ -354,8 +373,8 @@ This section is our interpretation. The sections above are measured.
   generalist to the best model we have.
 - **Trained Stacks is the front-runner, but narrowly.** Its lead over the trained MoE
   (0.016) is a fraction of its untrained lead. Either design could win with a different training plan.
-- **Longer training is answered: it helps, but little.** 90 minutes instead of 30 gained 0.010, and FFNs
-  frozen stayed ahead. More of the same training is not where the remaining 0.18 is.
+- **Longer training needs re-testing at the lower learning rate.** At 3e-4, 90 minutes gained only 0.010,
+  but about a quarter of that run was spent recovering from the early damage.
 - **Stacks' active parameters are 1% under the limit** (148.5M, from its commit point of 224
   tokens). A final recipe should either keep that margin checked or commit earlier (128: 129.1M).
 - **Distillation (teaching one model from the experts) avoids the compatibility problem.** It copies the
@@ -364,7 +383,7 @@ This section is our interpretation. The sections above are measured.
 - **Watch medicine.** Every untrained method hurt it. Training brought it level with the generalist
   (MoE) or just past it (Stacks, by 0.015).
 
-## 12. How sure we are
+## 13. How sure we are
 
 - **A bug, fixed and checked.**
   - For math, our held-out slice was mostly one GMAT reading guide, not math.
@@ -385,7 +404,7 @@ This section is our interpretation. The sections above are measured.
   - The diagnostics used 16 to 32 held-out windows per domain: enough for the large effects here, not
     for small ones.
 
-## 13. Where the numbers come from
+## 14. Where the numbers come from
 
 | What | Run in `results/` |
 |---|---|
@@ -403,6 +422,7 @@ This section is our interpretation. The sections above are measured.
 | Trained Generalist (control) and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
 | Stacks trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
 | Stacks trained 3× longer | `20261120-0033_routed_heal-frozen-ffn-2400_hz`, `20261120-0205_routed_heal-all-2400_hz` |
+| Stacks at a lower learning rate | `20261120-1715_routed_heal-frozen-ffn-rows8k-lr1e-4_hz`, `20261120-1753_routed_heal-all-rows8k-lr1e-4_hz` |
 | Stacks embeddings: where sharing costs, budget splits, trained best split | `20261120-0618_routed_embed-check_hz`, `20261120-0628_routed_embed-grid_hz`, `20261120-0750_routed_heal-frozen-ffn-rows8k_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
