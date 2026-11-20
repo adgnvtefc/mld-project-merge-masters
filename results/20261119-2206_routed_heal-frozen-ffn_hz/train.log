@@ -1,0 +1,108 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-2206_routed_heal-frozen-ffn_hz", "train": "frozen-ffn", "rank": 128, "source": "expert-avg", "commit": 224, "calib_windows": 128, "steps": 800, "batch_size": 32, "micro_batch": 4, "lr": 0.0003, "warmup": 30, "weight_decay": 0.3816, "val_every": 100, "val_windows": 32, "log_every": 10, "seed": 0, "device": "cuda"}
+[    3.1s] budget: 19,303 FFN neurons per expert (52.4%), total 299,995,804, one expert's active 103.19M
+[   41.9s] math: FFN widths [1404, 154, 270, 453, 2125, 2783, 2746, 2510, 2171, 2179, 2246, 262] (19,303 neurons)
+[   70.3s] code: FFN widths [1462, 154, 272, 456, 2176, 2853, 2798, 2523, 2116, 2053, 2190, 250] (19,303 neurons)
+[   98.5s] medicine: FFN widths [1480, 154, 267, 446, 2112, 2713, 2750, 2323, 2144, 2191, 2433, 290] (19,303 neurons)
+[  126.8s] history: FFN widths [1458, 154, 269, 443, 2108, 2782, 2758, 2411, 2169, 2172, 2308, 271] (19,303 neurons)
+[  130.2s] weights fingerprint (sha256 of every saved tensor): 46ae47f84a72da85
+[  130.3s] design A: 299,995,804 parameters, 181,284,096 trained (frozen-ffn)
+[  130.5s] optimizer groups: hidden (113,246,208, lr x0.25), embedding (67,736,832, lr x1), vector (301,056, lr x1)
+[  138.2s] step 0: pool-val oracle math 2.9182 | code 2.7538 | medicine 2.7909 | history 3.5457 | mean 3.0021
+[  138.2s] step 0: pool-val router math 2.9257 | code 2.7708 | medicine 2.7916 | history 3.5555 | mean 3.0109
+[  159.7s] step 10/800 | loss 2.9767 | math 2.650 code 3.030 medicine 2.741 history 3.485 | lr 1.00e-04 | 30.5K tok/s | eta 28.3 min
+[  181.2s] step 20/800 | loss 2.9306 | math 2.689 code 2.906 medicine 2.784 history 3.344 | lr 2.00e-04 | 30.5K tok/s | eta 28.0 min
+[  202.7s] step 30/800 | loss 3.0816 | math 3.075 code 2.915 medicine 2.955 history 3.381 | lr 3.00e-04 | 30.5K tok/s | eta 27.6 min
+[  224.1s] step 40/800 | loss 3.1952 | math 3.343 code 3.038 medicine 2.866 history 3.533 | lr 2.96e-04 | 30.5K tok/s | eta 27.2 min
+[  245.6s] step 50/800 | loss 3.1019 | math 3.007 code 3.097 medicine 2.825 history 3.478 | lr 2.93e-04 | 30.5K tok/s | eta 26.8 min
+[  267.0s] step 60/800 | loss 3.0323 | math 2.964 code 2.828 medicine 2.910 history 3.428 | lr 2.89e-04 | 30.5K tok/s | eta 26.5 min
+[  288.4s] step 70/800 | loss 3.1358 | math 3.060 code 2.895 medicine 3.103 history 3.485 | lr 2.85e-04 | 30.5K tok/s | eta 26.1 min
+[  309.8s] step 80/800 | loss 2.9296 | math 3.038 code 2.730 medicine 2.849 history 3.102 | lr 2.81e-04 | 30.6K tok/s | eta 25.7 min
+[  331.2s] step 90/800 | loss 3.1237 | math 3.132 code 3.082 medicine 2.867 history 3.413 | lr 2.77e-04 | 30.6K tok/s | eta 25.4 min
+[  352.6s] step 100/800 | loss 3.0606 | math 3.034 code 2.766 medicine 3.029 history 3.414 | lr 2.73e-04 | 30.6K tok/s | eta 25.0 min
+[  360.2s] step 100: pool-val oracle math 2.9314 | code 2.7645 | medicine 2.7736 | history 3.5435 | mean 3.0032
+[  360.2s] step 100: pool-val router math 2.9415 | code 2.7826 | medicine 2.7743 | history 3.5561 | mean 3.0136
+[  381.5s] step 110/800 | loss 3.0830 | math 2.945 code 2.941 medicine 2.755 history 3.691 | lr 2.69e-04 | 29.6K tok/s | eta 25.4 min
+[  402.9s] step 120/800 | loss 3.1765 | math 3.102 code 3.111 medicine 2.841 history 3.651 | lr 2.65e-04 | 29.7K tok/s | eta 25.0 min
+[  424.3s] step 130/800 | loss 3.0117 | math 2.584 code 3.031 medicine 2.898 history 3.533 | lr 2.61e-04 | 29.8K tok/s | eta 24.6 min
+[  445.6s] step 140/800 | loss 3.0685 | math 2.766 code 3.039 medicine 2.890 history 3.580 | lr 2.58e-04 | 29.8K tok/s | eta 24.2 min
+[  467.0s] step 150/800 | loss 2.9305 | math 2.770 code 2.905 medicine 2.634 history 3.413 | lr 2.54e-04 | 29.9K tok/s | eta 23.7 min
+[  488.3s] step 160/800 | loss 3.1294 | math 3.249 code 2.911 medicine 3.095 history 3.263 | lr 2.50e-04 | 30.0K tok/s | eta 23.3 min
+[  509.6s] step 170/800 | loss 3.0063 | math 2.799 code 3.020 medicine 2.825 history 3.381 | lr 2.46e-04 | 30.0K tok/s | eta 22.9 min
+[  531.0s] step 180/800 | loss 3.0019 | math 2.880 code 2.793 medicine 2.864 history 3.471 | lr 2.42e-04 | 30.0K tok/s | eta 22.5 min
+[  552.3s] step 190/800 | loss 3.0634 | math 2.924 code 2.824 medicine 3.026 history 3.479 | lr 2.38e-04 | 30.1K tok/s | eta 22.2 min
+[  573.6s] step 200/800 | loss 3.0242 | math 2.689 code 3.041 medicine 2.793 history 3.575 | lr 2.34e-04 | 30.1K tok/s | eta 21.8 min
+[  581.2s] step 200: pool-val oracle math 2.9265 | code 2.7527 | medicine 2.7660 | history 3.5365 | mean 2.9954
+[  581.2s] step 200: pool-val router math 2.9380 | code 2.7819 | medicine 2.7667 | history 3.5497 | mean 3.0091
+[  602.5s] step 210/800 | loss 3.0158 | math 2.944 code 3.026 medicine 2.755 history 3.338 | lr 2.30e-04 | 29.6K tok/s | eta 21.7 min
+[  623.8s] step 220/800 | loss 3.0104 | math 2.699 code 2.994 medicine 2.809 history 3.540 | lr 2.26e-04 | 29.7K tok/s | eta 21.3 min
+[  645.1s] step 230/800 | loss 2.9497 | math 2.871 code 2.827 medicine 2.647 history 3.455 | lr 2.22e-04 | 29.7K tok/s | eta 20.9 min
+[  666.5s] step 240/800 | loss 2.9186 | math 2.913 code 2.583 medicine 2.877 history 3.302 | lr 2.19e-04 | 29.8K tok/s | eta 20.5 min
+[  687.7s] step 250/800 | loss 3.0539 | math 2.807 code 2.907 medicine 3.001 history 3.500 | lr 2.15e-04 | 29.8K tok/s | eta 20.1 min
+[  709.1s] step 260/800 | loss 2.9739 | math 2.957 code 2.942 medicine 2.841 history 3.155 | lr 2.11e-04 | 29.8K tok/s | eta 19.8 min
+[  730.3s] step 270/800 | loss 3.1121 | math 2.981 code 3.157 medicine 2.815 history 3.496 | lr 2.07e-04 | 29.9K tok/s | eta 19.4 min
+[  751.6s] step 280/800 | loss 2.9197 | math 2.736 code 2.929 medicine 2.662 history 3.352 | lr 2.03e-04 | 29.9K tok/s | eta 19.0 min
+[  772.9s] step 290/800 | loss 2.9942 | math 3.038 code 2.832 medicine 2.816 history 3.291 | lr 1.99e-04 | 29.9K tok/s | eta 18.6 min
+[  794.2s] step 300/800 | loss 3.0061 | math 3.119 code 2.688 medicine 2.920 history 3.297 | lr 1.95e-04 | 30.0K tok/s | eta 18.2 min
+[  801.9s] step 300: pool-val oracle math 2.9196 | code 2.7423 | medicine 2.7552 | history 3.5224 | mean 2.9849
+[  801.9s] step 300: pool-val router math 2.9308 | code 2.7612 | medicine 2.7559 | history 3.5350 | mean 2.9957
+[  823.1s] step 310/800 | loss 3.0432 | math 2.977 code 3.074 medicine 2.823 history 3.299 | lr 1.91e-04 | 29.7K tok/s | eta 18.0 min
+[  844.4s] step 320/800 | loss 3.0448 | math 3.007 code 2.890 medicine 2.912 history 3.370 | lr 1.87e-04 | 29.7K tok/s | eta 17.7 min
+[  865.7s] step 330/800 | loss 2.8527 | math 2.657 code 2.614 medicine 2.762 history 3.378 | lr 1.84e-04 | 29.7K tok/s | eta 17.3 min
+[  887.0s] step 340/800 | loss 2.9671 | math 2.964 code 2.911 medicine 2.832 history 3.162 | lr 1.80e-04 | 29.8K tok/s | eta 16.9 min
+[  908.3s] step 350/800 | loss 2.9384 | math 2.984 code 2.908 medicine 2.627 history 3.235 | lr 1.76e-04 | 29.8K tok/s | eta 16.5 min
+[  929.5s] step 360/800 | loss 3.0017 | math 2.910 code 2.914 medicine 2.907 history 3.275 | lr 1.72e-04 | 29.8K tok/s | eta 16.1 min
+[  950.8s] step 370/800 | loss 3.1180 | math 2.889 code 3.126 medicine 2.954 history 3.502 | lr 1.68e-04 | 29.8K tok/s | eta 15.7 min
+[  972.1s] step 380/800 | loss 3.0345 | math 2.830 code 2.981 medicine 2.784 history 3.543 | lr 1.64e-04 | 29.9K tok/s | eta 15.4 min
+[  993.4s] step 390/800 | loss 3.0161 | math 2.673 code 2.949 medicine 2.890 history 3.552 | lr 1.60e-04 | 29.9K tok/s | eta 15.0 min
+[ 1014.7s] step 400/800 | loss 2.9583 | math 2.818 code 2.939 medicine 2.826 history 3.250 | lr 1.56e-04 | 29.9K tok/s | eta 14.6 min
+[ 1022.3s] step 400: pool-val oracle math 2.9103 | code 2.7310 | medicine 2.7418 | history 3.5070 | mean 2.9725
+[ 1022.3s] step 400: pool-val router math 2.9201 | code 2.7506 | medicine 2.7425 | history 3.5199 | mean 2.9833
+[ 1043.5s] step 410/800 | loss 2.9874 | math 2.598 code 2.965 medicine 3.010 history 3.376 | lr 1.52e-04 | 29.7K tok/s | eta 14.4 min
+[ 1064.8s] step 420/800 | loss 3.0583 | math 2.896 code 3.011 medicine 3.021 history 3.305 | lr 1.48e-04 | 29.7K tok/s | eta 14.0 min
+[ 1086.1s] step 430/800 | loss 3.0742 | math 2.661 code 2.991 medicine 3.231 history 3.415 | lr 1.45e-04 | 29.7K tok/s | eta 13.6 min
+[ 1107.3s] step 440/800 | loss 3.1468 | math 3.274 code 3.118 medicine 2.865 history 3.330 | lr 1.41e-04 | 29.8K tok/s | eta 13.2 min
+[ 1128.6s] step 450/800 | loss 3.0355 | math 2.952 code 3.117 medicine 2.749 history 3.324 | lr 1.37e-04 | 29.8K tok/s | eta 12.8 min
+[ 1149.9s] step 460/800 | loss 3.0830 | math 3.072 code 3.171 medicine 2.757 history 3.332 | lr 1.33e-04 | 29.8K tok/s | eta 12.5 min
+[ 1171.1s] step 470/800 | loss 2.9503 | math 2.951 code 2.823 medicine 2.724 history 3.303 | lr 1.29e-04 | 29.8K tok/s | eta 12.1 min
+[ 1192.4s] step 480/800 | loss 2.8113 | math 2.164 code 3.039 medicine 2.579 history 3.463 | lr 1.25e-04 | 29.8K tok/s | eta 11.7 min
+[ 1213.7s] step 490/800 | loss 3.2020 | math 3.116 code 3.130 medicine 3.097 history 3.465 | lr 1.21e-04 | 29.9K tok/s | eta 11.3 min
+[ 1234.9s] step 500/800 | loss 3.0352 | math 2.576 code 2.940 medicine 2.848 history 3.776 | lr 1.17e-04 | 29.9K tok/s | eta 11.0 min
+[ 1242.6s] step 500: pool-val oracle math 2.8977 | code 2.7170 | medicine 2.7285 | history 3.4932 | mean 2.9591
+[ 1242.6s] step 500: pool-val router math 2.9076 | code 2.7373 | medicine 2.7292 | history 3.5064 | mean 2.9701
+[ 1263.8s] step 510/800 | loss 2.9309 | math 2.750 code 3.048 medicine 2.695 history 3.231 | lr 1.13e-04 | 29.7K tok/s | eta 10.7 min
+[ 1285.1s] step 520/800 | loss 2.9088 | math 2.768 code 2.800 medicine 2.746 history 3.320 | lr 1.09e-04 | 29.7K tok/s | eta 10.3 min
+[ 1306.3s] step 530/800 | loss 3.1674 | math 3.129 code 3.243 medicine 2.830 history 3.468 | lr 1.06e-04 | 29.7K tok/s | eta 9.9 min
+[ 1327.6s] step 540/800 | loss 2.7863 | math 2.741 code 2.734 medicine 2.625 history 3.045 | lr 1.02e-04 | 29.8K tok/s | eta 9.5 min
+[ 1348.9s] step 550/800 | loss 2.9904 | math 2.869 code 3.144 medicine 2.751 history 3.197 | lr 9.78e-05 | 29.8K tok/s | eta 9.2 min
+[ 1370.1s] step 560/800 | loss 2.8997 | math 2.414 code 2.992 medicine 2.701 history 3.493 | lr 9.39e-05 | 29.8K tok/s | eta 8.8 min
+[ 1391.4s] step 570/800 | loss 2.9902 | math 2.864 code 3.000 medicine 2.727 history 3.369 | lr 9.00e-05 | 29.8K tok/s | eta 8.4 min
+[ 1412.7s] step 580/800 | loss 3.0040 | math 2.993 code 2.994 medicine 2.831 history 3.198 | lr 8.61e-05 | 29.8K tok/s | eta 8.1 min
+[ 1433.9s] step 590/800 | loss 3.0299 | math 3.023 code 2.919 medicine 2.706 history 3.472 | lr 8.22e-05 | 29.8K tok/s | eta 7.7 min
+[ 1455.2s] step 600/800 | loss 2.8821 | math 2.716 code 2.793 medicine 2.733 history 3.286 | lr 7.83e-05 | 29.9K tok/s | eta 7.3 min
+[ 1462.8s] step 600: pool-val oracle math 2.8855 | code 2.7055 | medicine 2.7187 | history 3.4796 | mean 2.9473
+[ 1462.8s] step 600: pool-val router math 2.8962 | code 2.7366 | medicine 2.7194 | history 3.4930 | mean 2.9613
+[ 1484.1s] step 610/800 | loss 2.9809 | math 2.900 code 2.683 medicine 2.890 history 3.451 | lr 7.44e-05 | 29.7K tok/s | eta 7.0 min
+[ 1505.3s] step 620/800 | loss 3.0147 | math 3.001 code 2.671 medicine 2.896 history 3.491 | lr 7.05e-05 | 29.7K tok/s | eta 6.6 min
+[ 1526.6s] step 630/800 | loss 2.8164 | math 2.597 code 2.676 medicine 2.744 history 3.249 | lr 6.66e-05 | 29.7K tok/s | eta 6.2 min
+[ 1547.9s] step 640/800 | loss 2.9232 | math 2.913 code 2.618 medicine 2.818 history 3.344 | lr 6.27e-05 | 29.8K tok/s | eta 5.9 min
+[ 1569.1s] step 650/800 | loss 2.9950 | math 2.641 code 3.030 medicine 2.839 history 3.470 | lr 5.88e-05 | 29.8K tok/s | eta 5.5 min
+[ 1590.4s] step 660/800 | loss 2.8035 | math 2.523 code 2.667 medicine 2.639 history 3.386 | lr 5.49e-05 | 29.8K tok/s | eta 5.1 min
+[ 1611.6s] step 670/800 | loss 2.9137 | math 2.613 code 3.031 medicine 2.656 history 3.354 | lr 5.10e-05 | 29.8K tok/s | eta 4.8 min
+[ 1632.9s] step 680/800 | loss 3.0167 | math 2.809 code 3.052 medicine 2.805 history 3.401 | lr 4.71e-05 | 29.8K tok/s | eta 4.4 min
+[ 1654.1s] step 690/800 | loss 2.9686 | math 2.823 code 3.057 medicine 2.809 history 3.185 | lr 4.32e-05 | 29.8K tok/s | eta 4.0 min
+[ 1675.4s] step 700/800 | loss 3.0247 | math 3.021 code 3.070 medicine 2.834 history 3.174 | lr 3.94e-05 | 29.8K tok/s | eta 3.7 min
+[ 1683.0s] step 700: pool-val oracle math 2.8764 | code 2.6962 | medicine 2.7084 | history 3.4675 | mean 2.9371
+[ 1683.0s] step 700: pool-val router math 2.8873 | code 2.7166 | medicine 2.7091 | history 3.4806 | mean 2.9484
+[ 1704.3s] step 710/800 | loss 2.9611 | math 2.772 code 2.857 medicine 2.960 history 3.255 | lr 3.55e-05 | 29.7K tok/s | eta 3.3 min
+[ 1725.5s] step 720/800 | loss 2.7564 | math 2.751 code 2.591 medicine 2.817 history 2.867 | lr 3.16e-05 | 29.7K tok/s | eta 2.9 min
+[ 1746.8s] step 730/800 | loss 2.8826 | math 2.804 code 2.830 medicine 2.629 history 3.268 | lr 2.77e-05 | 29.7K tok/s | eta 2.6 min
+[ 1768.0s] step 740/800 | loss 2.9859 | math 2.669 code 2.700 medicine 3.205 history 3.370 | lr 2.38e-05 | 29.8K tok/s | eta 2.2 min
+[ 1789.3s] step 750/800 | loss 2.9406 | math 2.793 code 3.014 medicine 2.777 history 3.178 | lr 1.99e-05 | 29.8K tok/s | eta 1.8 min
+[ 1810.5s] step 760/800 | loss 3.0405 | math 2.729 code 3.123 medicine 2.857 history 3.453 | lr 1.60e-05 | 29.8K tok/s | eta 1.5 min
+[ 1831.8s] step 770/800 | loss 2.8334 | math 2.755 code 2.565 medicine 2.864 history 3.150 | lr 1.21e-05 | 29.8K tok/s | eta 1.1 min
+[ 1853.0s] step 780/800 | loss 2.8323 | math 2.599 code 2.959 medicine 2.416 history 3.355 | lr 8.18e-06 | 29.8K tok/s | eta 0.7 min
+[ 1874.3s] step 790/800 | loss 2.8853 | math 3.034 code 2.734 medicine 2.539 history 3.234 | lr 4.29e-06 | 29.8K tok/s | eta 0.4 min
+[ 1895.5s] step 800/800 | loss 2.9370 | math 3.069 code 2.583 medicine 2.784 history 3.311 | lr 3.90e-07 | 29.8K tok/s | eta 0.0 min
+[ 1903.2s] step 800: pool-val oracle math 2.8712 | code 2.6911 | medicine 2.7029 | history 3.4613 | mean 2.9316
+[ 1903.2s] step 800: pool-val router math 2.8824 | code 2.7221 | medicine 2.7036 | history 3.4744 | mean 2.9456
+[ 1904.2s] saved /home/ubuntu/mld/hz/runs/20261119-2206_routed_heal-frozen-ffn_hz (52.4M training tokens, 29.4 min)

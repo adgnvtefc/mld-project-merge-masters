@@ -1,0 +1,7 @@
+{"elapsed_s": 225.2, "step": 0, "config": "128:0", "ffn_kept": 0.5236273871527778, "oracle_mean": 3.0186719447374344, "router_mean": 3.024754060432315, "commit": 224, "active": 148473832.0}
+{"elapsed_s": 327.1, "step": 1, "config": "64:4096", "ffn_kept": 0.5288628472222222, "oracle_mean": 2.9646439533680677, "router_mean": 2.9693741891533136, "commit": 192, "active": 142126072.0}
+{"elapsed_s": 428.8, "step": 2, "config": "32:6144", "ffn_kept": 0.5314670138888888, "oracle_mean": 2.9612973229959607, "router_mean": 2.965029207058251, "commit": 224, "active": 148641502.0}
+{"elapsed_s": 529.6, "step": 3, "config": "32:8192", "ffn_kept": 0.503662109375, "oracle_mean": 2.9580931589007378, "router_mean": 2.963224871084094, "commit": 224, "active": 148639294.0}
+{"elapsed_s": 624.3, "step": 4, "config": "0:8192", "ffn_kept": 0.5340711805555556, "oracle_mean": 3.035983469337225, "router_mean": 3.0429000267758965, "commit": 224, "active": 148696656.0}
+{"elapsed_s": 724.9, "step": 5, "config": "64:8192", "ffn_kept": 0.4732530381944444, "oracle_mean": 2.967003321275115, "router_mean": 2.9712401442229748, "commit": 224, "active": 148581932.0}
+{"elapsed_s": 818.4, "step": 6, "config": "0:16384", "ffn_kept": 0.4229058159722222, "oracle_mean": 3.0381478052586317, "router_mean": 3.041547393426299, "commit": 224, "active": 148692240.0}

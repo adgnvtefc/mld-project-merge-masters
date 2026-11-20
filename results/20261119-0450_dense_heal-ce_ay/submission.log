@@ -1,0 +1,7 @@
+submission  2026-11-19 05:14 UTC | /home/ubuntu/mld/ay/runs/20261119-0450_dense_heal-ce_ay | NVIDIA A10G | torch 2.10.0+cu128
+parameters  125,226,240 (limit 300,000,000)
+active      about 123.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 3.0558 | code 3.0865 | medicine 2.8219 | history 3.5103 | mean 3.1186
+valid
+RESULT {"data": "dev", "losses": {"math": 3.055795144289732, "code": 3.0865078698843718, "medicine": 2.8218527548015118, "history": 3.5102912206202745}, "mean": 3.1186117473989725, "parameters": 125226240, "active_parameters": 123532032, "causal": true, "valid": true}

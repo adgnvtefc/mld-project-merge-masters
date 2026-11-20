@@ -1,0 +1,34 @@
+{
+  "run_id": "20261120-0628_routed_embed-grid_hz",
+  "method": "routed",
+  "variant": "embed-grid",
+  "owner": "hz",
+  "hypothesis": "At a fixed 300M, moving each expert's embedding budget from the low-rank fix into its own rows for its most frequent tokens lowers the untrained Stacks' loss, despite the FFN neurons it costs.",
+  "parents": [
+    "20261120-0618_routed_embed-check_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/embed_grid.py",
+    "--commits",
+    "128,160,192,224",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261120-0628_routed_embed-grid_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "7257525452a04dd7501c65ed2742484f479fd8f4",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1367,
+  "started": "2026-11-20T06:28:57Z",
+  "heartbeat": "2026-11-20T06:42:39Z",
+  "ended": "2026-11-20T06:42:39Z",
+  "exit_code": 0,
+  "train_seconds": 822,
+  "a10g_hours": 0.2285,
+  "eval": null,
+  "progress": {
+    "step": 6,
+    "elapsed_s": 818.4
+  }
+}

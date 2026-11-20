@@ -1,0 +1,55 @@
+{
+  "run_id": "20261120-0750_routed_heal-frozen-ffn-rows8k_hz",
+  "method": "routed",
+  "variant": "heal-frozen-ffn-rows8k",
+  "owner": "hz",
+  "hypothesis": "Stacks with a rank-32 fix plus own rows for each expert's top 8,192 tokens (0.062 better untrained) keeps most of that lead after the same 30-minute training, beating 2.973 on dev.",
+  "parents": [
+    "20261119-2206_routed_heal-frozen-ffn_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "frozen-ffn",
+    "--rank",
+    "32",
+    "--top-rows",
+    "8192",
+    "--commit",
+    "224",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261120-0750_routed_heal-frozen-ffn-rows8k_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "0e969e90910f3562d17ad0773e0e73ad43d4c681",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 2708,
+  "started": "2026-11-20T07:50:21Z",
+  "heartbeat": "2026-11-20T08:27:31Z",
+  "ended": "2026-11-20T08:27:31Z",
+  "exit_code": 0,
+  "train_seconds": 2052,
+  "a10g_hours": 0.5699,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.8453439585864544,
+      "code": 2.8675630316138268,
+      "medicine": 2.7532792408019304,
+      "history": 3.361507423222065
+    },
+    "mean": 2.956923413556069,
+    "parameters": 299994524,
+    "active_parameters": 148639294,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.0803341865539551e-07,
+    "evaluated_at": "2026-11-20T08:27:30Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 2048.9
+  }
+}

@@ -1,0 +1,5 @@
+{"elapsed_s": 158.1, "step": 0, "config": "oracle", "val_math": 2.9208839498460293, "val_code": 2.88320985250175, "val_medicine": 2.8860055916011333, "val_history": 3.465785674750805, "val_mean": 3.0389712671749294}
+{"elapsed_s": 229.9, "step": 1, "commit": 128, "active": 129107680.0, "val_math": 2.9316714219748974, "val_code": 2.900769170373678, "val_medicine": 2.897956196218729, "val_history": 3.488876596093178, "val_mean": 3.0548183461651206}
+{"elapsed_s": 268.6, "step": 2, "commit": 160, "active": 135563064.0, "val_math": 2.931450456380844, "val_code": 2.893138375133276, "val_medicine": 2.8958467207849026, "val_history": 3.4830655604600906, "val_mean": 3.0508752781897783}
+{"elapsed_s": 308.2, "step": 3, "commit": 192, "active": 142018448.0, "val_math": 2.9268991351127625, "val_code": 2.8934885896742344, "val_medicine": 2.8890210576355457, "val_history": 3.4809096418321133, "val_mean": 3.047579606063664}
+{"elapsed_s": 348.7, "step": 4, "commit": 224, "active": 148473832.0, "val_math": 2.9297622442245483, "val_code": 2.893395494669676, "val_medicine": 2.886181805282831, "val_history": 3.4781562834978104, "val_mean": 3.0468739569187164}

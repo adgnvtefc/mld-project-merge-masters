@@ -1,0 +1,41 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261119-1702_pruning_assemble-oracle_hz", "learned": "runs/20261119-0527_merging_learned-lambda_hz/model.bin", "sources": "generalist,learned,seed,expert-avg", "ranks": "0,16,64", "b_sources": "generalist,learned", "calib_windows": 128, "val_windows": 64, "batch_size": 4, "seed": 0, "device": "cuda"}
+[   14.7s] design A, embedding correction rank 0: 23,787 FFN neurons per expert (64.5%), total 300.00M, active 103.45M
+[   14.7s] design A, embedding correction rank 16: 23,227 FFN neurons per expert (63.0%), total 300.00M, active 103.41M
+[   14.7s] design A, embedding correction rank 64: 21,545 FFN neurons per expert (58.4%), total 300.00M, active 103.32M
+[   14.7s] design B: total 295.24M, active 123.53M
+[   25.4s] math: rank 0: kept 23,787 neurons
+[   26.4s] math: rank 16: kept 23,227 neurons
+[   27.3s] math: rank 64: kept 21,545 neurons
+[   37.3s] code: rank 0: kept 23,787 neurons
+[   38.3s] code: rank 16: kept 23,227 neurons
+[   39.1s] code: rank 64: kept 21,545 neurons
+[   49.1s] medicine: rank 0: kept 23,787 neurons
+[   50.1s] medicine: rank 16: kept 23,227 neurons
+[   51.0s] medicine: rank 64: kept 21,545 neurons
+[   60.9s] history: rank 0: kept 23,787 neurons
+[   61.9s] history: rank 16: kept 23,227 neurons
+[   62.8s] history: rank 64: kept 21,545 neurons
+[   62.8s] pool-val, each domain routed to its own route         math   code medicine history   mean
+[   67.7s] reference: generalist                               3.0769 3.1156 2.8073 3.5445 3.1361
+[   72.4s] reference: learned mix                              3.0352 3.0930 2.8345 3.5259 3.1222
+[   77.0s] ceiling: each domain's own expert                   2.5719 2.6759 2.5973 3.1422 2.7468
+[   81.7s] ceiling: own expert, pruned to the A budget         2.5727 2.6767 2.5977 3.1432 2.7476
+[   86.4s] A unpruned (over 300M): generalist embeddings       4.1723 4.8115 3.2034 5.1502 4.3343
+[   91.1s] A: generalist embeddings, correction rank 0         4.1705 4.8103 3.2038 5.1417 4.3316
+[   96.5s] A: generalist embeddings, correction rank 16        2.9342 3.0740 2.8081 3.5106 3.0817
+[  101.2s] A: generalist embeddings, correction rank 64        2.8766 2.9982 2.7934 3.4652 3.0333
+[  105.8s] A unpruned (over 300M): learned embeddings          3.8893 4.6588 3.3532 4.8703 4.1929
+[  110.5s] A: learned embeddings, correction rank 0            3.8880 4.6581 3.3532 4.8643 4.1909
+[  115.9s] A: learned embeddings, correction rank 16           2.8995 3.0677 2.8550 3.4916 3.0784
+[  120.5s] A: learned embeddings, correction rank 64           2.8468 2.9898 2.8282 3.4475 3.0281
+[  125.2s] A unpruned (over 300M): seed embeddings             4.7608 5.0663 4.2789 5.3979 4.8760
+[  129.9s] A: seed embeddings, correction rank 0               4.7631 5.0711 4.2829 5.4075 4.8812
+[  135.3s] A: seed embeddings, correction rank 16              3.3385 3.5365 3.2567 4.0613 3.5483
+[  139.9s] A: seed embeddings, correction rank 64              3.1662 3.3170 3.1046 3.8419 3.3574
+[  144.6s] A unpruned (over 300M): expert-avg embeddings       3.1198 3.4399 3.7295 4.6340 3.7308
+[  149.3s] A: expert-avg embeddings, correction rank 0         3.1205 3.4410 3.7301 4.6314 3.7308
+[  154.7s] A: expert-avg embeddings, correction rank 16        2.8811 3.0292 3.0425 3.6595 3.1531
+[  159.3s] A: expert-avg embeddings, correction rank 64        2.7991 2.9141 2.8884 3.4852 3.0217
+[  164.0s] B (Method 2): generalist embeddings, attention, LNs 3.3877 3.5395 2.9858 3.8597 3.4432
+[  168.7s] B (Method 2): learned embeddings, attention, LNs    3.3355 3.5665 3.0862 3.8370 3.4563
+[  168.7s] json {"rows": {"reference: generalist": {"math": 3.0769090354442596, "code": 3.1155546605587006, "medicine": 2.807344526052475, "history": 3.544468104839325, "mean": 3.13606908172369}, "reference: learned mix": {"math": 3.0351908206939697, "code": 3.093023806810379, "medicine": 2.834533929824829, "history": 3.525923639535904, "mean": 3.1221680492162704}, "ceiling: each domain's own expert": {"math": 2.5719332695007324, "code": 2.6758543848991394, "medicine": 2.5972906947135925, "history": 3.1421523988246918, "mean": 2.746807686984539}, "ceiling: own expert, pruned to the A budget": {"math": 2.5726730823516846, "code": 2.6766817569732666, "medicine": 2.597748965024948, "history": 3.143158197402954, "mean": 2.7475655004382133}, "A unpruned (over 300M): generalist embeddings": {"math": 4.172311574220657, "code": 4.8115347027778625, "medicine": 3.2033881843090057, "history": 5.150163114070892, "mean": 4.3343493938446045}, "A: generalist embeddings, correction rank 0": {"math": 4.1704795360565186, "code": 4.810334622859955, "medicine": 3.203799843788147, "history": 5.141672730445862, "mean": 4.3315716832876205}, "A: generalist embeddings, correction rank 16": {"math": 2.9342299699783325, "code": 3.0739940106868744, "medicine": 2.8081210553646088, "history": 3.5106269121170044, "mean": 3.081742987036705}, "A: generalist embeddings, correction rank 64": {"math": 2.876552015542984, "code": 2.9981529712677, "medicine": 2.793361246585846, "history": 3.465248316526413, "mean": 3.033328637480736}, "A unpruned (over 300M): learned embeddings": {"math": 3.889268845319748, "code": 4.658757716417313, "medicine": 3.3531688153743744, "history": 4.870290517807007, "mean": 4.19287147372961}, "A: learned embeddings, correction rank 0": {"math": 3.8879829943180084, "code": 4.658075392246246, "medicine": 3.3532123267650604, "history": 4.864338576793671, "mean": 4.1909023225307465}, "A: learned embeddings, correction rank 16": {"math": 2.8995310962200165, "code": 3.0676724016666412, "medicine": 2.8549671173095703, "history": 3.49160635471344, "mean": 3.078444242477417}, "A: learned embeddings, correction rank 64": {"math": 2.8467877209186554, "code": 2.9898247122764587, "medicine": 2.828247308731079, "history": 3.4475163519382477, "mean": 3.0280940234661102}, "A unpruned (over 300M): seed embeddings": {"math": 4.760762512683868, "code": 5.066337823867798, "medicine": 4.278895676136017, "history": 5.397910296916962, "mean": 4.875976577401161}, "A: seed embeddings, correction rank 0": {"math": 4.763136208057404, "code": 5.07114964723587, "medicine": 4.282948583364487, "history": 5.40745335817337, "mean": 4.881171949207783}, "A: seed embeddings, correction rank 16": {"math": 3.338501453399658, "code": 3.536538690328598, "medicine": 3.256743311882019, "history": 4.061282932758331, "mean": 3.5482665970921516}, "A: seed embeddings, correction rank 64": {"math": 3.1662109196186066, "code": 3.316953271627426, "medicine": 3.104550927877426, "history": 3.8419450521469116, "mean": 3.3574150428175926}, "A unpruned (over 300M): expert-avg embeddings": {"math": 3.1197516918182373, "code": 3.4399087727069855, "medicine": 3.7295164465904236, "history": 4.634041845798492, "mean": 3.7308046892285347}, "A: expert-avg embeddings, correction rank 0": {"math": 3.1205243170261383, "code": 3.4409707486629486, "medicine": 3.7301484644412994, "history": 4.631373345851898, "mean": 3.730754218995571}, "A: expert-avg embeddings, correction rank 16": {"math": 2.8810924887657166, "code": 3.029210865497589, "medicine": 3.042515069246292, "history": 3.6595326364040375, "mean": 3.153087764978409}, "A: expert-avg embeddings, correction rank 64": {"math": 2.7991281747817993, "code": 2.914093852043152, "medicine": 2.8884097039699554, "history": 3.4851667284965515, "mean": 3.0216996148228645}, "B (Method 2): generalist embeddings, attention, LNs": {"math": 3.38769394159317, "code": 3.539496958255768, "medicine": 2.9858178794384003, "history": 3.859714090824127, "mean": 3.4431807175278664}, "B (Method 2): learned embeddings, attention, LNs": {"math": 3.335496336221695, "code": 3.566451847553253, "medicine": 3.0862233340740204, "history": 3.837018221616745, "mean": 3.4562974348664284}}, "budgets": {"0": [23787, 299996844, 103445760], "16": [23227, 299999788, 103414288], "64": [21545, 299996324, 103316800]}, "budget_b": [295238400, 123532032]}

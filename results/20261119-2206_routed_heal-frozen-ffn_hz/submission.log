@@ -1,0 +1,7 @@
+submission  2026-11-19 22:38 UTC | /home/ubuntu/mld/hz/runs/20261119-2206_routed_heal-frozen-ffn_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  299,995,804 (limit 300,000,000)
+active      about 148.5M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 2.8576 | code 2.8875 | medicine 2.7717 | history 3.3747 | mean 2.9729
+valid
+RESULT {"data": "dev", "losses": {"math": 2.857627620920539, "code": 2.887481542304158, "medicine": 2.7716928580775857, "history": 3.37474718503654}, "mean": 2.9728873015847057, "parameters": 299995804, "active_parameters": 148473832, "causal": true, "valid": true}

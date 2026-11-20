@@ -1,0 +1,47 @@
+{
+  "run_id": "20261119-1845_routed_design-a_hz",
+  "method": "routed",
+  "variant": "design-a",
+  "owner": "hz",
+  "hypothesis": "Design A with a real causal router (mix all experts for the first k tokens, then commit to the expert with the lowest prefix loss) loses little against oracle routing, and beats the generalist on dev (3.156) by a wide margin with no training.",
+  "parents": [
+    "20261119-1707_pruning_assemble-oracle-ranks_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/build.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1845_routed_design-a_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "2d3c6a642374e888903ecc5ad67e23ecc82ed8c1",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1359,
+  "started": "2026-11-19T18:45:43Z",
+  "heartbeat": "2026-11-19T18:49:48Z",
+  "ended": "2026-11-19T18:49:48Z",
+  "exit_code": 0,
+  "train_seconds": 101,
+  "a10g_hours": 0.0282,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.915034567937255,
+      "code": 2.954242693260312,
+      "medicine": 2.8587099760770798,
+      "history": 3.458424750715494
+    },
+    "mean": 3.0466029969975352,
+    "parameters": 299995804,
+    "active_parameters": 129107680,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 7.450580596923828e-08,
+    "evaluated_at": "2026-11-19T18:49:47Z"
+  },
+  "progress": {
+    "step": 3,
+    "elapsed_s": 97.0
+  }
+}

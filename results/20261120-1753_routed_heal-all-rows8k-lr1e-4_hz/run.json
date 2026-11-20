@@ -1,0 +1,59 @@
+{
+  "run_id": "20261120-1753_routed_heal-all-rows8k-lr1e-4_hz",
+  "method": "routed",
+  "variant": "heal-all-rows8k-lr1e-4",
+  "owner": "hz",
+  "hypothesis": "At the lower learning rate, training every weight no longer loses ground early (+0.11 at 3e-4), so letting the pruned FFNs adapt makes all trained beat FFNs frozen.",
+  "parents": [
+    "20261120-0750_routed_heal-frozen-ffn-rows8k_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "all",
+    "--rank",
+    "32",
+    "--top-rows",
+    "8192",
+    "--commit",
+    "224",
+    "--lr",
+    "1e-4",
+    "--warmup",
+    "200",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261120-1753_routed_heal-all-rows8k-lr1e-4_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "21f822019fc847c697ce33152b44668d8e28b379",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 7907,
+  "started": "2026-11-20T17:53:47Z",
+  "heartbeat": "2026-11-20T18:33:09Z",
+  "ended": "2026-11-20T18:33:09Z",
+  "exit_code": 0,
+  "train_seconds": 2183,
+  "a10g_hours": 0.6065,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.8157194051891565,
+      "code": 2.838584234006703,
+      "medicine": 2.7239048620685935,
+      "history": 3.329288626089692
+    },
+    "mean": 2.9268742818385363,
+    "parameters": 299994524,
+    "active_parameters": 148639294,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.993030309677124e-07,
+    "evaluated_at": "2026-11-20T18:33:08Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 2180.6
+  }
+}

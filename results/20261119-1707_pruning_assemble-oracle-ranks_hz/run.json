@@ -1,0 +1,40 @@
+{
+  "run_id": "20261119-1707_pruning_assemble-oracle-ranks_hz",
+  "method": "pruning",
+  "variant": "assemble-oracle-ranks",
+  "owner": "hz",
+  "hypothesis": "Design A's best embedding-correction rank is above 64: more rank keeps helping until the FFN neurons it costs (58% kept at rank 64, about 40% at rank 256) start to hurt.",
+  "parents": [
+    "20261119-1702_pruning_assemble-oracle_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/pruning/assemble_oracle.py",
+    "--learned",
+    "runs/20261119-0527_merging_learned-lambda_hz/model.bin",
+    "--sources",
+    "expert-avg,learned,generalist",
+    "--ranks",
+    "64,96,128,192,256",
+    "--b-sources",
+    "",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261119-1707_pruning_assemble-oracle-ranks_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "d37290c2c602ddb75decb224a62c6dc1b2b76164",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 3263,
+  "started": "2026-11-19T17:08:03Z",
+  "heartbeat": "2026-11-19T17:11:03Z",
+  "ended": "2026-11-19T17:11:03Z",
+  "exit_code": 0,
+  "train_seconds": 181,
+  "a10g_hours": 0.0503,
+  "eval": null,
+  "progress": {
+    "step": 25,
+    "elapsed_s": 179.5
+  }
+}

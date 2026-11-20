@@ -1,0 +1,53 @@
+{
+  "run_id": "20261120-0033_routed_heal-frozen-ffn-2400_hz",
+  "method": "routed",
+  "variant": "heal-frozen-ffn-2400",
+  "owner": "hz",
+  "hypothesis": "Stacks with FFNs frozen keeps improving with 3x the training (2,400 steps, about 90 minutes, same schedule shape) and beats its 800-step dev score of 2.973.",
+  "parents": [
+    "20261119-2206_routed_heal-frozen-ffn_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "frozen-ffn",
+    "--steps",
+    "2400",
+    "--val-every",
+    "200",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261120-0033_routed_heal-frozen-ffn-2400_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "66404a2888b989766cd7887f3a06f4c580c0b878",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1361,
+  "started": "2026-11-20T00:33:13Z",
+  "heartbeat": "2026-11-20T02:05:00Z",
+  "ended": "2026-11-20T02:05:00Z",
+  "exit_code": 0,
+  "train_seconds": 5341,
+  "a10g_hours": 1.4835,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.8491845596581697,
+      "code": 2.878056338056922,
+      "medicine": 2.7610956402495503,
+      "history": 3.363500453531742
+    },
+    "mean": 2.962959247874096,
+    "parameters": 299995804,
+    "active_parameters": 148473832,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.4156103134155273e-07,
+    "evaluated_at": "2026-11-20T02:04:59Z"
+  },
+  "progress": {
+    "step": 2400,
+    "elapsed_s": 5335.6
+  }
+}

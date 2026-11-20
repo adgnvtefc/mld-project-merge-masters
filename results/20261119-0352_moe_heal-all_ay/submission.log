@@ -1,0 +1,7 @@
+submission  2026-11-19 04:21 UTC | /home/ubuntu/mld/ay/runs/20261119-0352_moe_heal-all_ay | NVIDIA A10G | torch 2.10.0+cu128
+parameters  297,596,164 (limit 300,000,000)
+active      about 124.7M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 2.8873 | code 2.9324 | medicine 2.8013 | history 3.4148 | mean 3.0089
+valid
+RESULT {"data": "dev", "losses": {"math": 2.8872511368244886, "code": 2.93237532582134, "medicine": 2.801281062886119, "history": 3.4147620871663094}, "mean": 3.0089174031745642, "parameters": 297596164, "active_parameters": 124714752, "causal": true, "valid": true}
