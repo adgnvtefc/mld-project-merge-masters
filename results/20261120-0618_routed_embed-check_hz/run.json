@@ -1,0 +1,32 @@
+{
+  "run_id": "20261120-0618_routed_embed-check_hz",
+  "method": "routed",
+  "variant": "embed-check",
+  "owner": "hz",
+  "hypothesis": "Most of what sharing the embeddings costs the untrained Stacks is in each expert's most frequent tokens, so its own rows for its top few thousand tokens recover most of it, and the input side (free in active parameters) recovers more than the output side.",
+  "parents": [
+    "20261119-1936_routed_design-a-det_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/embed_check.py",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261120-0618_routed_embed-check_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "196374a6d42e99f741a8e5088439835484ee8836",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 1355,
+  "started": "2026-11-20T06:18:26Z",
+  "heartbeat": "2026-11-20T06:22:27Z",
+  "ended": "2026-11-20T06:22:27Z",
+  "exit_code": 0,
+  "train_seconds": 241,
+  "a10g_hours": 0.0669,
+  "eval": null,
+  "progress": {
+    "step": 310,
+    "elapsed_s": 237.6
+  }
+}
