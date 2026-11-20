@@ -1,0 +1,53 @@
+{
+  "run_id": "20261120-0205_routed_heal-all-2400_hz",
+  "method": "routed",
+  "variant": "heal-all-2400",
+  "owner": "hz",
+  "hypothesis": "Stacks with all weights trained gains more from 3x the training than FFNs frozen does (it was still improving 5x faster at step 800), and may overtake it at 2,400 steps.",
+  "parents": [
+    "20261119-2241_routed_heal-all_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "all",
+    "--steps",
+    "2400",
+    "--val-every",
+    "200",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261120-0205_routed_heal-all-2400_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "66404a2888b989766cd7887f3a06f4c580c0b878",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 9622,
+  "started": "2026-11-20T02:05:19Z",
+  "heartbeat": "2026-11-20T03:43:24Z",
+  "ended": "2026-11-20T03:43:24Z",
+  "exit_code": 0,
+  "train_seconds": 5719,
+  "a10g_hours": 1.5886,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.870360990986228,
+      "code": 2.896998337469995,
+      "medicine": 2.7800033101812005,
+      "history": 3.3800806552171707
+    },
+    "mean": 2.9818608234636486,
+    "parameters": 299995804,
+    "active_parameters": 148473832,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 9.872019290924072e-08,
+    "evaluated_at": "2026-11-20T03:43:23Z"
+  },
+  "progress": {
+    "step": 2400,
+    "elapsed_s": 5716.4
+  }
+}

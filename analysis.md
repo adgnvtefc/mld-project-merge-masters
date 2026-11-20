@@ -1,7 +1,7 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 51 runs (46 by Hanmo, 5 by Ayush),
-about 4.2 GPU-hours.
+November 19, 2026. Everything we have measured so far, in one place: 53 runs (48 by Hanmo, 5 by Ayush),
+about 7.3 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
 full detail behind section 5. Each number here comes from a run in `results/`; section 12 lists them.
 
@@ -23,8 +23,9 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   taken from the experts will need training to fit together.
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
-  - **Best so far: Pruned Expert Stacks, trained 30 minutes with FFNs frozen, 2.973 on dev** (section
-    9). It is 0.183 better than the generalist and closes 48% of the gap. Each expert keeps its own
+  - **Best so far: Pruned Expert Stacks, trained 90 minutes with FFNs frozen, 2.963 on dev** (section
+    9). It is 0.193 better than the generalist and closes 51% of the gap. After 30 minutes it scored
+    2.973 (48%). Each expert keeps its own
     attention (sections 7 and 8).
   - **Close behind: Ayush's Shared-Attention MoE, trained the same way, 2.989.** Its experts share
     attention. It closes 44% of the gap.
@@ -283,9 +284,12 @@ frozen" means the experts' FFN layers do not train; everything else does.
 | MoE, all trained | 0.47 GPU-h | 2.887 | 2.932 | 2.801 | 3.415 | 3.009 | −0.147 (−0.153 to −0.141) |
 | Stacks, all trained | 0.56 GPU-h | 2.879 | 2.906 | 2.791 | 3.392 | 2.992 | −0.164 (−0.171 to −0.156) |
 | MoE, FFNs frozen | 0.42 GPU-h | 2.865 | 2.916 | 2.781 | 3.395 | 2.989 | −0.166 (−0.172 to −0.160) |
-| **Stacks, FFNs frozen** | 0.53 GPU-h | **2.858** | **2.887** | **2.772** | **3.375** | **2.973** | **−0.183 (−0.190 to −0.175)** |
+| Stacks, FFNs frozen | 0.53 GPU-h | 2.858 | 2.887 | 2.772 | 3.375 | 2.973 | −0.183 (−0.190 to −0.175) |
+| Stacks, all trained, 3× longer | 1.59 GPU-h | 2.870 | 2.897 | 2.780 | 3.380 | 2.982 | −0.174 (−0.181 to −0.166) |
+| **Stacks, FFNs frozen, 3× longer** | 1.48 GPU-h | **2.849** | **2.878** | **2.761** | **3.364** | **2.963** | **−0.193 (−0.200 to −0.185)** |
 
-GPU-hours include building the model and scoring it on dev.
+GPU-hours include building the model and scoring it on dev. "3× longer" = 2,400 steps (157M tokens,
+about 90 minutes), with the same warmup and the decay stretched to match.
 
 - **Training does most of the work.** It takes the MoE from 3.207 to 2.989. The same
   training on the generalist gains only 0.037, and medicine gets worse for it.
@@ -303,6 +307,9 @@ GPU-hours include building the model and scoring it on dev.
 - **The same pattern in both designs:** freezing the FFN layers wins at 800 steps. Training everything
   first makes the model worse (Stacks' held-out loss rose by 0.09 in the first 100 steps), then
   improves faster. At the end it was still gaining 0.014 per 100 steps, against 0.003 to 0.005 frozen.
+- **Three times the training buys only 0.010,** for both variants (95% ranges 0.008 to 0.012 frozen,
+  0.007 to 0.013 all trained). FFNs frozen still wins by 0.019. All trained lost 0.11 early and only
+  recovered its starting loss after about 1,700 of 2,400 steps.
 - **Routing costs both designs about the same:** 0.012 to 0.013 over the true label, on the held-out
   slice.
 
@@ -319,9 +326,8 @@ This section is our interpretation. The sections above are measured.
   generalist to the best model we have.
 - **Trained Stacks is the front-runner, but narrowly.** Its lead over the trained MoE
   (0.016) is a fraction of its untrained lead. Either design could win with a different training plan.
-- **Longer training is the main open question.** Every training run so far used 25 to 30 of the 120
-  minutes the final recipe allows, and all were still improving. Training everything improves fastest
-  at the end, so the frozen-versus-everything choice needs re-checking at full length.
+- **Longer training is answered: it helps, but little.** 90 minutes instead of 30 gained 0.010, and FFNs
+  frozen stayed ahead. More of the same training is not where the remaining 0.18 is.
 - **Stacks' active parameters are 1% under the limit** (148.5M, from its commit point of 224
   tokens). A final recipe should either keep that margin checked or commit earlier (128: 129.1M).
 - **Distillation (teaching one model from the experts) avoids the compatibility problem.** It copies the
@@ -368,6 +374,7 @@ This section is our interpretation. The sections above are measured.
 | Shared-Attention MoE (Ayush) | `20261119-0302_moe_init-check_ay`, `20261119-0352_moe_heal-all_ay`, `20261119-0423_moe_heal-shared_ay` |
 | Trained Generalist (control) and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
 | Stacks trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
+| Stacks trained 3× longer | `20261120-0033_routed_heal-frozen-ffn-2400_hz`, `20261120-0205_routed_heal-all-2400_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
 The code is in `training_scripts/`: `merging/`, `pruning/`, `routed/`, `moe/`, `dense/` and `analysis/`.

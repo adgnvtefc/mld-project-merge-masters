@@ -31,6 +31,7 @@ domain (with 64, one misrouted window moves the mean by about 0.002); rank and e
 | `build.py` | `design-a-det` | the same, deterministic (calibration in deterministic mode; prints a weights fingerprint) |
 | `heal.py --train frozen-ffn` | `heal-frozen-ffn` | trains Stacks with the next-token loss, matched to `moe/heal.py` (same data stream, steps, schedule); each expert's FFN frozen |
 | `heal.py --train all` | `heal-all` | the same with every weight trained |
+| `heal.py --steps 2400` | `heal-frozen-ffn-2400`, `heal-all-2400` | the same two, 3x longer (about 90 minutes) |
 
 Results: dev 3.0466 at commit 128 (`20261119-1845`), 3.0413 at commit 224 (`20261119-1850`, 148.5M active),
 against 3.1555 for the generalist. See analysis.md section 8.
