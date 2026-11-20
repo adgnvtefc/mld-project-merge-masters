@@ -1,5 +1,5 @@
 """
-Train ("heal") design A with the next-token loss, matched to Ayush's MoE healing runs (training_scripts/moe/heal.py):
+Train Pruned Expert Stacks with the next-token loss, matched to Ayush's MoE healing runs (training_scripts/moe/heal.py):
 the same data stream (seeded pool train windows, one per domain per micro-batch, each routed to its own domain's
 expert by label), steps, batch, learning-rate schedule, AdamW settings, gradient clipping and validation cadence.
 So its dense control (20261119-0450_dense_heal-ce_ay) controls this run too.
@@ -8,7 +8,7 @@ So its dense control (20261119-0450_dense_heal-ce_ay) controls this run too.
     --train frozen-ffn  each expert's pruned FFN frozen; embeddings, corrections, attention and LayerNorms train
                         (the analogue of heal.py --train shared, which froze the experts' MLPs)
 
-The starting model is build.py's deterministic design A. Validation on pool-val every --val-every steps: oracle
+The starting model is build.py's deterministic Pruned Expert Stacks. Validation on pool-val every --val-every steps: oracle
 routing (label) and the prefix router at --commit. The saved solution routes with the prefix router; it has no
 router parameters, so nothing needs refitting. dev is never read.
 
@@ -107,7 +107,7 @@ def main():
     rng = np.random.default_rng(args.seed)
     device = args.device
 
-    # ---- 1. Model: build.py's deterministic design A ---------------------------------------------------
+    # ---- 1. Model: build.py's deterministic Stacks -------------------------------------------------------
     model, config, state, digest, _ = b.build_design_a(args.rank, args.source, args.calib_windows, 1, args.seed,
                                                        "fp32", device, log)
     model.commit = config["commit"] = args.commit
@@ -119,7 +119,7 @@ def main():
     model.train()
     trainable = [p for p in model.parameters() if p.requires_grad]
     total = sum(p.numel() for p in model.parameters())
-    log(f"design A: {total:,} parameters, {sum(p.numel() for p in trainable):,} trained ({args.train})")
+    log(f"Stacks: {total:,} parameters, {sum(p.numel() for p in trainable):,} trained ({args.train})")
 
     # ---- 2. Validation on pool-val: oracle routing (label) and the prefix router --------------------------
     val = {d: m.data.val_windows(d, args.val_windows) for d in DOMAINS}

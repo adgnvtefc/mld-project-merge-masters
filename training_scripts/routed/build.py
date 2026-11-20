@@ -1,5 +1,5 @@
 """
-Build a routed design-A model from the provided checkpoints, with no training (see README.md), and save it as a
+Build a routed Pruned Expert Stacks model from the provided checkpoints, with no training (see README.md), and save it as a
 solution directory: model.pt, config.json, model_def.py.
 
 Steps: prune each expert's FFN to the budget left by the embedding corrections (global taylor ranking on its own
@@ -77,7 +77,7 @@ def routing_accuracy(model, windows, device):
 
 
 def build_design_a(rank, source, calib_windows, calib_batch_size, seed, store_dtype, dev, log):
-    """Design A from the provided checkpoints, deterministically. Returns (model on dev in eval mode, config dict,
+    """Pruned Expert Stacks from the provided checkpoints, deterministically. Returns (model on dev in eval mode, config dict,
     saved-state dict on CPU, weights fingerprint, total parameter budget). config["commit"] is 0; set it."""
     header, gen = m.load_checkpoint("generalist", dev)
     s = ao.sizes(header)
@@ -162,7 +162,7 @@ def main():
     log(f"parameters: {n_params:,} (budget {total:,}; limit {official.MAX_PARAMETERS:,})")
     assert n_params <= official.MAX_PARAMETERS
 
-    # oracle routing: each domain forced to its own expert (should match the Phase 2 number)
+    # oracle routing: each domain forced to its own expert (should match the pruning check's number)
     oracle = {}
     for e, d in enumerate(m.DOMAINS):
         model.force = e

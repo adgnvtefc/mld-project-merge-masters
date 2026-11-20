@@ -1,5 +1,5 @@
 """
-Phase 3, healing: train the starting MoE (common.build_initial: shared parts + the experts' MLPs, embedding
+Training: train the starting Shared-Attention MoE (common.build_initial: shared parts + the experts' MLPs, embedding
 maps and router fitted in closed form) on pool train with the ordinary next-token loss, so the shared parts
 and the copied expert MLPs fit together again.
 
@@ -40,8 +40,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", required=True)
     parser.add_argument("--arch", default="moe", choices=["moe", "dense"])
-    parser.add_argument("--shared", default="mean5", help="moe: source of the shared parts (Phase 1's best)")
-    parser.add_argument("--maps", type=int, default=1, help="moe: 1 = embedding maps (Phase 1's best)")
+    parser.add_argument("--shared", default="mean5", help="moe: source of the shared parts (the untrained check's best)")
+    parser.add_argument("--maps", type=int, default=1, help="moe: 1 = embedding maps (the untrained check's best)")
     parser.add_argument("--lambda-settings", default="", help="moe, --shared learned: merge_settings.json")
     parser.add_argument("--train", default="all", choices=["all", "shared"], help="moe: which weights train")
     parser.add_argument("--expert-lr-mult", type=float, default=1.0, help="moe, --train all: experts' lr factor")

@@ -10,7 +10,7 @@ them. Everything is scored on pool-val (lib/data.py), never on dev. Calibration 
 | Script | Variant | What it does |
 |---|---|---|
 | `prune_sweep.py` | `sweep`, `sweep-fine` | own-domain pool-val loss of each expert with a share of its FFN neurons removed, over criteria, output fixes, allocations and keep fractions (no model; --no-eval) |
-| `assemble_oracle.py` | `assemble-oracle` | design A (shared embeddings, each expert's own attention + pruned FFN, optional rank-r embedding correction) and design B (Method 2: shared attention) scored with routing by domain label, no training (no model; --no-eval) |
+| `assemble_oracle.py` | `assemble-oracle` | Pruned Expert Stacks (shared embeddings, each expert's own attention + pruned FFN, optional rank-r embedding fix) and an untrained Shared-Attention MoE without maps scored with routing by domain label, no training (no model; --no-eval) |
 
 Criteria (score per neuron; low scores are pruned):
 

@@ -1,13 +1,13 @@
 """
-Phase 2 check, no training: how well do routed designs built from pruned experts do when every text is routed to its
+Check, no training: how well do routed designs built from pruned experts do when every text is routed to its
 own domain's parts (oracle routing by the domain label)?
 
-Design A: shared word and position embeddings; each expert keeps its own attention, LayerNorms and final LayerNorm,
+Pruned Expert Stacks: shared word and position embeddings; each expert keeps its own attention, LayerNorms and final LayerNorm,
 plus the share of its FFN neurons that fits the 300M total (global taylor ranking on its own pool train text,
 least-squares refit; see prune_sweep.py). Optionally each expert also gets a rank-r correction of the shared
 embeddings toward its own (truncated SVD of the difference), paid for with FFN neurons.
 
-Design B (Method 2 in the plan, for comparison): shared embeddings, attention and block LayerNorms from one source;
+Shared-Attention MoE without maps (for comparison): shared embeddings, attention and block LayerNorms from one source;
 each expert keeps its full FFN and its own final LayerNorm.
 
 Routing by label means domain d is scored with the parameters of its own expert's route, so each route is a plain
@@ -42,7 +42,7 @@ def sizes(header):
 
 
 def budget_a(s, rank):
-    """Kept FFN neurons per expert (all layers) for design A, and its total and active parameters."""
+    """Kept FFN neurons per expert (all layers) for Pruned Expert Stacks, and its total and active parameters."""
     correction = rank * (s["V"] + s["C"]) + rank * (s["P"] + s["C"])
     fixed = s["attn_ln"] + s["ln_f"] + s["L"] * s["C"] + correction  # c_proj biases stay whole
     kept = min((LIMIT_TOTAL - s["emb"] - 4 * fixed) // (4 * s["neuron"]), s["L"] * s["H"])
@@ -77,7 +77,7 @@ def main():
     parser.add_argument("--learned", default="", help="a learned-lambda model.bin, used as a shared source")
     parser.add_argument("--sources", default="generalist,learned,seed,expert-avg",
                         help="where the shared embeddings come from")
-    parser.add_argument("--ranks", default="0,16,64", help="per-expert embedding correction ranks for design A")
+    parser.add_argument("--ranks", default="0,16,64", help="per-expert embedding correction ranks for Pruned Expert Stacks")
     parser.add_argument("--b-sources", default="generalist,learned", help="design B shared-part sources")
     parser.add_argument("--calib-windows", type=int, default=128)
     parser.add_argument("--val-windows", type=int, default=64)
@@ -103,7 +103,7 @@ def main():
     ranks = [int(r) for r in args.ranks.split(",") if r]
     budgets = {r: budget_a(s, r) for r in ranks}
     for r, (kept, total, active) in budgets.items():
-        log(f"design A, embedding correction rank {r}: {kept:,} FFN neurons per expert "
+        log(f"Stacks, embedding correction rank {r}: {kept:,} FFN neurons per expert "
             f"({kept / (L * H):.1%}), total {total / 1e6:.2f}M, active {active / 1e6:.2f}M")
         assert total <= LIMIT_TOTAL and active <= LIMIT_ACTIVE
     total_b, active_b = budget_b(s)
@@ -160,7 +160,7 @@ def main():
     for name in [x for x in args.b_sources.split(",") if x in sources]:
         if not all(k in sources[name] for k in gen):
             continue
-        evaluate(f"B (Method 2): {name} embeddings, attention, LNs", design_b(sources[name]), step); step += 1
+        evaluate(f"MoE, untrained, no maps: {name} embeddings, attention, LNs", design_b(sources[name]), step); step += 1
     log("json " + json.dumps({"rows": rows, "budgets": {str(r): b for r, b in budgets.items()},
                               "budget_b": [total_b, active_b]}))
 

@@ -47,7 +47,7 @@ English prose, not math, and the math expert is barely better than the generalis
   On the fixed windows the merges are still worse than the generalist in every domain, so fixing math
   did not flip any choice. The learned mix's training never reads pool-val; it reproduced to within
   0.00002 on dev (not bit-identical: individual windows differ by up to 0.005, from GPU arithmetic).
-  **Every Method 1 result stands.**
+  **Every Weight Mixing result stands.**
 - **Diagnostics re-run too.** The four diagnostics that read pool-val (`swaps`, `scale`, `tokens`,
   `paths`) were repeated with the fix. All their conclusions held, and now include math.
 - **Two findings changed:**
@@ -213,8 +213,8 @@ The facts above are measured. This section is our reading of them.
   far has something to act on early.
 - **Pieces taken from the experts will need training to fit together.** Their skill depends on their own
   embeddings and on attention and MLP working together. So a mixture-of-experts built from expert parts
-  (the plan's Method 2) will lean on its training step, and shared embeddings will be the tension point.
-- **Teaching one model from the experts (distillation, the plan's Method 3)** avoids the compatibility
+  (the Shared-Attention MoE) will lean on its training step, and shared embeddings will be the tension point.
+- **Teaching one model from the experts (Distillation)** avoids the compatibility
   problem entirely: it copies the experts' predictions, not their weights. The token analysis says what
   it has to learn is broad, so a 124M dense model may run out of room. That is the capacity question the
   plan already raises.

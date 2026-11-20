@@ -11,7 +11,7 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
 
 - **The bar is 3.156**: the generalist's dev score. The best we could hope for is **2.779**, if every
   text could use its own expert. The gap between them is 0.377.
-- **We tried seven ways to mix the models' weights without training on new text** (Method 1).
+- **We tried seven ways to mix the models' weights without training on new text** (Weight Mixing).
 - **One worked**: the learned mix scores **3.141**, 0.014 better than the generalist. That closes 4% of
   the gap.
 - **The others were worse than the generalist**, most of them by a lot.
@@ -23,12 +23,12 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   taken from the experts will need training to fit together.
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
-  - **Best so far: design A trained for 30 minutes with its FFN layers frozen, 2.973 on dev** (section
-    9). It is 0.183 better than the generalist and closes 48% of the gap. Design A is pruned experts that
-    keep their own attention (sections 7 and 8).
-  - **Close behind: Ayush's trained mixture of experts, 2.989.** Its experts share attention. Trained
-    the same way, it closes 44% of the gap.
-  - **Untrained, design A was far ahead** (3.042 against 3.207). Training closed most of that difference.
+  - **Best so far: Pruned Expert Stacks, trained 30 minutes with FFNs frozen, 2.973 on dev** (section
+    9). It is 0.183 better than the generalist and closes 48% of the gap. Each expert keeps its own
+    attention (sections 7 and 8).
+  - **Close behind: Ayush's Shared-Attention MoE, trained the same way, 2.989.** Its experts share
+    attention. It closes 44% of the gap.
+  - **Untrained, Stacks was far ahead** (3.042 against 3.207). Training closed most of that difference.
   - **Training the generalist the same way gains only 0.037.** So the gain comes from routing to
     experts, not from extra training alone.
 
@@ -83,7 +83,7 @@ Two more reference points:
 - **The course's example** (the generalist trained 6 more minutes on a mix): 3.163. It is better on
   math and code, worse on medicine and history, and worse overall by 0.007.
 
-## 4. Method 1: mixing the weights
+## 4. Weight Mixing
 
 Every method here builds one model of the same size as the inputs (125M parameters). None trains on new
 text, except the learned mix, which trains only its mixing amounts. Each picked its setting on the
@@ -177,20 +177,21 @@ involve training.
 - The four experts tend to keep the same neurons.
 
 **What that buys.** Under the 300M limit, removing 35% of each expert's FFN neurons leaves room for four
-experts that each keep their own attention. They share only the word embeddings. We call this design A.
-We compared it with Method 2 as planned (design B: four full FFNs, one shared attention). Each kind of
+experts that each keep their own attention. They share only the word embeddings. This is **Pruned Expert
+Stacks** (Stacks for short). We compared it with an untrained Shared-Attention MoE without embedding maps
+(four full FFNs, one shared attention). Each kind of
 text goes to its own expert's parts, as if a perfect router existed (`20261119-1702`, `-1707`):
 
 | Each kind of text gets | Math | Code | Medicine | History | Mean |
 |---|---|---|---|---|---|
 | The generalist | 3.077 | 3.116 | 2.807 | 3.545 | 3.136 |
 | The learned mix | 3.035 | 3.093 | 2.835 | 3.526 | 3.122 |
-| B: shared attention, own full FFN | 3.388 | 3.540 | 2.986 | 3.860 | 3.443 |
-| A: shared embeddings, nothing else | 3.121 | 3.441 | 3.730 | 4.631 | 3.731 |
-| **A: shared embeddings + a rank-128 correction per expert** | **2.798** | **2.894** | 2.861 | **3.442** | **2.999** |
+| MoE (untrained, no maps): shared attention, own full FFN | 3.388 | 3.540 | 2.986 | 3.860 | 3.443 |
+| Stacks: shared embeddings, nothing else | 3.121 | 3.441 | 3.730 | 4.631 | 3.731 |
+| **Stacks: shared embeddings + a rank-128 fix per expert** | **2.798** | **2.894** | 2.861 | **3.442** | **2.999** |
 | The full expert | 2.572 | 2.676 | 2.597 | 3.142 | 2.747 |
 
-- **Shared embeddings are the whole problem.** Without a correction, design A is far worse than the
+- **Shared embeddings are the whole problem.** Without a correction, Stacks is far worse than the
   generalist. Pruning is not the cause: the unpruned version scores the same.
 - **A small correction fixes most of it.** Each expert gets its own low-rank change to the shared
   embeddings (the average of the experts'), paid for with more FFN neurons. Rank 96 to 128 is best: at
@@ -199,14 +200,14 @@ text goes to its own expert's parts, as if a perfect router existed (`20261119-1
   comes from pruning and 0.19 from sharing the embeddings.
 - **Medicine is still worse than the generalist** (2.861 vs 2.807). With the generalist's embeddings
   instead, medicine edges past it, but the other three get worse.
-- **Design B is worse than the generalist without training.** Method 2 would rely entirely on its
-  training step to repair the shared attention.
+- **The MoE is worse than the generalist without training.** It relies entirely on training to repair
+  the shared attention.
 
 These numbers used the true label to route. Section 8 replaces it with a real router.
 
-## 8. Design A as a real model, with a router
+## 8. Stacks as a real model, with a router
 
-`training_scripts/routed/build.py` builds design A from the provided models in about a minute and a
+`training_scripts/routed/build.py` builds Stacks from the provided models in about a minute and a
 half, with no training, as a solution the course's script can score (`20261119-1845`, `-1850`; the
 deterministic reference build is `20261119-1936`).
 
@@ -234,9 +235,9 @@ deterministic reference build is `20261119-1936`).
 |---|---|---|---|---|---|---|---|
 | Generalist | 3.142 | 3.169 | 2.787 | 3.525 | 3.156 | 123.5M | |
 | Learned mix | 3.100 | 3.145 | 2.813 | 3.507 | 3.141 | 123.5M | −0.014 |
-| Design A, *k* = 128 | 2.915 | 2.954 | 2.859 | 3.458 | 3.047 | 129.1M | −0.109 (−0.116 to −0.102) |
-| **Design A, *k* = 224** | **2.913** | **2.947** | 2.853 | **3.452** | **3.041** | 148.5M | **−0.114 (−0.121 to −0.107)** |
-| Design A, *k* = 224, deterministic build | 2.913 | 2.948 | 2.853 | 3.453 | 3.042 | 148.5M | −0.114 (−0.121 to −0.107) |
+| Stacks, *k* = 128 | 2.915 | 2.954 | 2.859 | 3.458 | 3.047 | 129.1M | −0.109 (−0.116 to −0.102) |
+| **Stacks, *k* = 224** | **2.913** | **2.947** | 2.853 | **3.452** | **3.041** | 148.5M | **−0.114 (−0.121 to −0.107)** |
+| Stacks, *k* = 224, deterministic build | 2.913 | 2.948 | 2.853 | 3.453 | 3.042 | 148.5M | −0.114 (−0.121 to −0.107) |
 
 - **The real router costs about 0.013** against the true label on the held-out slice (3.012 vs 2.999).
 - **Better on 91 to 94% of math and code windows, 76% of history, but only 17% of medicine.** Medicine is
@@ -251,9 +252,9 @@ deterministic reference build is `20261119-1936`).
   provided. We read the 300M limit as stopping routing to the provided experts as they are, so we
   consider this allowed.
 
-## 9. Training the routed models (Method 2 and design A)
+## 9. Training the routed models (Stacks and MoE)
 
-Ayush built Method 2 from the plan and trained it (`training_scripts/moe/`).
+Ayush built the Shared-Attention MoE and trained it (`training_scripts/moe/`).
 
 - **Shared parts:** word and position embeddings, attention and layer norms, all starting from the
   average of the five models.
@@ -261,46 +262,46 @@ Ayush built Method 2 from the plan and trained it (`training_scripts/moe/`).
 - **Router:** a linear classifier on the average of the word embeddings read so far. It picks an expert
   for each token. It is fitted in a closed form, using no gradient training, on training text.
 - **Embedding maps:** a small map per expert (768 × 768) translates the shared embeddings into that
-  expert's own. It is his answer to the embedding problem, where design A uses low-rank corrections.
+  expert's own. It is his answer to the embedding problem, where Stacks uses low-rank fixes.
 - **Active parameters:** each expert's matrices run only on the tokens sent to it, so the official
   counter sees 124.7M.
-- **Training ("healing"):** next-token loss on the training text, 800 steps of 32 texts. That is 52M
+- **Training:** next-token loss on the training text, 800 steps of 32 texts. That is 52M
   tokens, equal across domains, with each text sent to its own expert, in about 25 minutes.
 
-We then trained design A the same way (`training_scripts/routed/heal.py`): the same data, in the same
-order, the same steps and the same schedule. So Ayush's dense control applies to it too. "Frozen" means
-the experts' FFN layers do not train; everything else does.
+We then trained Stacks the same way (`training_scripts/routed/heal.py`): the same data, in the same
+order, the same steps and the same schedule. So the Trained Generalist control applies to it too. "FFNs
+frozen" means the experts' FFN layers do not train; everything else does.
 
 **Dev scores** (`20261119-0302`, `-0352`, `-0423`, `-0450`, `-2206`, `-2241`):
 
 | Model | Training | Math | Code | Medicine | History | Mean | vs generalist (95% range) |
 |---|---|---|---|---|---|---|---|
 | Generalist | none | 3.142 | 3.169 | 2.787 | 3.525 | 3.156 | |
-| Mixture of experts, untrained | none | 3.051 | 3.168 | 2.968 | 3.640 | 3.207 | +0.051 (+0.047 to +0.056) |
-| Generalist trained the same way (control) | 0.40 GPU-h | 3.056 | 3.087 | 2.822 | 3.510 | 3.119 | −0.037 (−0.039 to −0.035) |
-| Design A (ours) | none | 2.913 | 2.948 | 2.853 | 3.453 | 3.042 | −0.114 (−0.121 to −0.107) |
-| Mixture of experts, everything trained | 0.47 GPU-h | 2.887 | 2.932 | 2.801 | 3.415 | 3.009 | −0.147 (−0.153 to −0.141) |
-| Design A, everything trained | 0.56 GPU-h | 2.879 | 2.906 | 2.791 | 3.392 | 2.992 | −0.164 (−0.171 to −0.156) |
-| Mixture of experts, experts frozen | 0.42 GPU-h | 2.865 | 2.916 | 2.781 | 3.395 | 2.989 | −0.166 (−0.172 to −0.160) |
-| **Design A, FFN frozen** | 0.53 GPU-h | **2.858** | **2.887** | **2.772** | **3.375** | **2.973** | **−0.183 (−0.190 to −0.175)** |
+| MoE, untrained | none | 3.051 | 3.168 | 2.968 | 3.640 | 3.207 | +0.051 (+0.047 to +0.056) |
+| Trained Generalist (control) | 0.40 GPU-h | 3.056 | 3.087 | 2.822 | 3.510 | 3.119 | −0.037 (−0.039 to −0.035) |
+| Stacks, untrained | none | 2.913 | 2.948 | 2.853 | 3.453 | 3.042 | −0.114 (−0.121 to −0.107) |
+| MoE, all trained | 0.47 GPU-h | 2.887 | 2.932 | 2.801 | 3.415 | 3.009 | −0.147 (−0.153 to −0.141) |
+| Stacks, all trained | 0.56 GPU-h | 2.879 | 2.906 | 2.791 | 3.392 | 2.992 | −0.164 (−0.171 to −0.156) |
+| MoE, FFNs frozen | 0.42 GPU-h | 2.865 | 2.916 | 2.781 | 3.395 | 2.989 | −0.166 (−0.172 to −0.160) |
+| **Stacks, FFNs frozen** | 0.53 GPU-h | **2.858** | **2.887** | **2.772** | **3.375** | **2.973** | **−0.183 (−0.190 to −0.175)** |
 
 GPU-hours include building the model and scoring it on dev.
 
-- **Training does most of the work.** It takes the mixture of experts from 3.207 to 2.989. The same
+- **Training does most of the work.** It takes the MoE from 3.207 to 2.989. The same
   training on the generalist gains only 0.037, and medicine gets worse for it.
-- **Freezing the experts beat training everything,** by 0.020 on every domain. Only the shared parts
+- **For the MoE, freezing the FFNs beat training everything,** by 0.020 on every domain. Only the shared parts
   trained (71M of 298M parameters). These runs used 25 to 30 minutes of the 2-hour budget, so the order
   could flip with longer training.
 - **Training fixes medicine.** With the experts frozen, medicine is level with the generalist (−0.006,
   range −0.014 to +0.003). Untrained, it was 0.181 worse.
-- **Trained design A is the best model,** 0.016 better than the trained mixture of experts (95% range
+- **Trained Stacks is the best model,** 0.016 better than the trained MoE (95% range
   0.013 to 0.020). It is better on 72% of math windows, 87% of code, 63% of medicine and 81% of history.
-- **Its head start mostly disappeared.** Untrained, design A led by 0.165; trained, by 0.016. Training
-  gained design A 0.069 and the mixture of experts 0.218. Shared attention, trained on all four domains,
-  seems to learn much of what design A's separate attention already had.
-- **Medicine finally beats the generalist** with trained design A (−0.015, on 65% of windows).
+- **Its head start mostly disappeared.** Untrained, Stacks led by 0.165; trained, by 0.016. Training
+  gained Stacks 0.069 and the MoE 0.218. Shared attention, trained on all four domains,
+  seems to learn much of what Stacks' separate attention already had.
+- **Medicine finally beats the generalist** with trained Stacks (−0.015, on 65% of windows).
 - **The same pattern in both designs:** freezing the FFN layers wins at 800 steps. Training everything
-  first makes the model worse (design A's held-out loss rose by 0.09 in the first 100 steps), then
+  first makes the model worse (Stacks' held-out loss rose by 0.09 in the first 100 steps), then
   improves faster. At the end it was still gaining 0.014 per 100 steps, against 0.003 to 0.005 frozen.
 - **Routing costs both designs about the same:** 0.012 to 0.013 over the true label, on the held-out
   slice.
@@ -314,20 +315,20 @@ This section is our interpretation. The sections above are measured.
 - **Recovering more of the 0.377 gap needs different weights for different text.** The gap is broad
   and shows from a window's first tokens, so a router has early signal to act on.
 - **Training is what makes routed experts work.** Section 9 confirms what the error analysis
-  predicted: expert parts need training to fit together. 25 minutes took Method 2 from worse than the
+  predicted: expert parts need training to fit together. 25 minutes took the MoE from worse than the
   generalist to the best model we have.
-- **Trained design A is the front-runner, but narrowly.** Its lead over the trained mixture of experts
+- **Trained Stacks is the front-runner, but narrowly.** Its lead over the trained MoE
   (0.016) is a fraction of its untrained lead. Either design could win with a different training plan.
 - **Longer training is the main open question.** Every training run so far used 25 to 30 of the 120
   minutes the final recipe allows, and all were still improving. Training everything improves fastest
   at the end, so the frozen-versus-everything choice needs re-checking at full length.
-- **Design A's active parameters are 1% under the limit** (148.5M, from its commit point of 224
+- **Stacks' active parameters are 1% under the limit** (148.5M, from its commit point of 224
   tokens). A final recipe should either keep that margin checked or commit earlier (128: 129.1M).
-- **Method 3 (teaching one model from the experts) avoids the compatibility problem.** It copies the
+- **Distillation (teaching one model from the experts) avoids the compatibility problem.** It copies the
   experts' predictions, not their weights. The open question is room: the experts' skill is broad, and a
   124M model may not hold all four.
 - **Watch medicine.** Every untrained method hurt it. Training brought it level with the generalist
-  (mixture of experts) or just past it (design A, by 0.015).
+  (MoE) or just past it (Stacks, by 0.015).
 
 ## 11. How sure we are
 
@@ -340,7 +341,7 @@ This section is our interpretation. The sections above are measured.
   ±0.006 to ±0.007 for the routed models.
 - **Our two hosts agree.** Ayush's machine scores the generalist identically, window for window.
 - **Reproducible.** The learned mix scored the same to within 0.00002 when re-run. It is not
-  bit-identical, because GPU arithmetic varies slightly between runs. Design A's build is now
+  bit-identical, because GPU arithmetic varies slightly between runs. Stacks' build is now
   bit-identical from run to run. The training runs in section 9 have not been repeated yet, and GPU
   training is not bit-identical; the final recipe must reproduce within 0.005.
 - **Not yet tested:**
@@ -361,12 +362,12 @@ This section is our interpretation. The sections above are measured.
 | Swapping parts, calibration, token gains, straight-line blends | `20261119-1535` to `-1538` (`analysis_*`) |
 | Training files are not ordered | `20261118-2129_analysis_slices_hz` |
 | Pruning sweeps | `20261119-1610_pruning_sweep_hz`, `20261119-1623_pruning_sweep-fine_hz` |
-| Designs A and B with perfect routing | `20261119-1702_pruning_assemble-oracle_hz`, `20261119-1707_pruning_assemble-oracle-ranks_hz` |
-| Design A with the router, dev scores | `20261119-1845_routed_design-a_hz`, `20261119-1850_routed_design-a-commit_hz` |
-| Design A, deterministic builds | `20261119-1912`, `-1921` (bit-identical twins), `-1936` (reference) (`routed_design-a-det_hz`) |
-| Mixture of experts (Ayush) | `20261119-0302_moe_init-check_ay`, `20261119-0352_moe_heal-all_ay`, `20261119-0423_moe_heal-shared_ay` |
-| Dense control and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
-| Design A trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
+| Stacks and the untrained MoE with perfect routing | `20261119-1702_pruning_assemble-oracle_hz`, `20261119-1707_pruning_assemble-oracle-ranks_hz` |
+| Stacks with the router, dev scores | `20261119-1845_routed_design-a_hz`, `20261119-1850_routed_design-a-commit_hz` |
+| Stacks, deterministic builds | `20261119-1912`, `-1921` (bit-identical twins), `-1936` (reference) (`routed_design-a-det_hz`) |
+| Shared-Attention MoE (Ayush) | `20261119-0302_moe_init-check_ay`, `20261119-0352_moe_heal-all_ay`, `20261119-0423_moe_heal-shared_ay` |
+| Trained Generalist (control) and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
+| Stacks trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
 The code is in `training_scripts/`: `merging/`, `pruning/`, `routed/`, `moe/`, `dense/` and `analysis/`.

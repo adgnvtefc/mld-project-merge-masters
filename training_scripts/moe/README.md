@@ -10,7 +10,7 @@ embedding-map fits, and save/load. It is also every MoE solution's `model_def.py
 | Script | Variant | What it does |
 |---|---|---|
 | `init_check.py` | `init-check` | no training: for each source of the shared parts, with and without embedding maps, scores the MoE on pool-val with perfect routing and with the prefix router; saves the best as a solution (scored on dev) |
-| `heal.py` | `heal-all` | Phase 3: train the starting MoE (mean5 + maps) with the next-token loss, every weight trained, routed by the domain label; router refitted before scoring and saving |
+| `heal.py` | `heal-all` | train the starting MoE (mean5 + maps) with the next-token loss, every weight trained, routed by the domain label; router refitted before scoring and saving |
 | `heal.py --train shared` | `heal-shared` | the same with the experts' MLPs frozen: only embeddings, attention, LayerNorms and maps train |
 | `heal.py --expert-lr-mult 0.1` | `heal-all-elr0.1` | every weight trained, experts at a tenth of the learning rate |
 | `common.py` | (not a run) | shared loading, shared-part sources, `build_initial()` (the starting MoE) and pool-val scoring |

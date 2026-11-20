@@ -3,7 +3,7 @@ Description: pruned experts with their own attention, shared embeddings plus per
 Owner: hz
 Status: active
 
-Design A from `training_scripts/pruning/` turned into a submittable model. `build.py` makes it from the provided
+Pruned Expert Stacks (see CLAUDE.md, Names): the model from `training_scripts/pruning/`, made submittable. `build.py` makes it from the provided
 models with no training, and writes a solution directory whose `model_def.py` is `routed_model_def.py`.
 
 The model:
@@ -22,14 +22,14 @@ The model:
 The build is deterministic: calibration runs in PyTorch's deterministic mode with the plain-math attention kernel
 (the fused kernels' backward accumulates in a varying order), and the log prints a fingerprint of the saved
 weights, so two builds can be compared. `commit` is chosen on pool-val among `--commits`, on 256 windows per
-domain (with 64, one misrouted window moves the mean by about 0.002); rank and embedding source come from the Phase 2 runs
+domain (with 64, one misrouted window moves the mean by about 0.002); rank and embedding source come from the pruning runs
 (`20261119-1707_pruning_assemble-oracle-ranks_hz`).
 
 | Script | Variant | What it does |
 |---|---|---|
 | `build.py` | `design-a`, `design-a-commit` | builds the model, reports routing accuracy by position and pool-val loss for each commit point, saves the best |
 | `build.py` | `design-a-det` | the same, deterministic (calibration in deterministic mode; prints a weights fingerprint) |
-| `heal.py --train frozen-ffn` | `heal-frozen-ffn` | trains design A with the next-token loss, matched to `moe/heal.py` (same data stream, steps, schedule); each expert's FFN frozen |
+| `heal.py --train frozen-ffn` | `heal-frozen-ffn` | trains Stacks with the next-token loss, matched to `moe/heal.py` (same data stream, steps, schedule); each expert's FFN frozen |
 | `heal.py --train all` | `heal-all` | the same with every weight trained |
 
 Results: dev 3.0466 at commit 128 (`20261119-1845`), 3.0413 at commit 224 (`20261119-1850`, 148.5M active),

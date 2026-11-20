@@ -9,7 +9,7 @@ validation are the same as the MoE run it controls. Use the same `--steps`, `--b
 
 | Script | Variant | Controls for |
 |---|---|---|
-| `../moe/heal.py --arch dense` | `heal-ce` | `moe` `heal-*` runs (Phase 3, next-token loss) |
+| `../moe/heal.py --arch dense` | `heal-ce` | `moe` `heal-*` runs (training, next-token loss) |
 
     ./lab run --method dense --variant heal-ce --hypothesis "..." --parent <moe run id> \
         -- python training_scripts/moe/heal.py --arch dense --out '$LAB_OUT'
