@@ -87,6 +87,32 @@ def param_groups(model, weight_decay, ffn_lr_mult=1.0):
             for k, ps in groups.items() if ps]
 
 
+def kd_backward(logits, x, y, teachers, kd, accum):
+    """Backward pass for (1 - kd) * next-token CE + kd * KL(own unpruned expert || stack), one sequence at a time so
+    that only one sequence's [T, VOCAB] float tensors exist at once. The gradient of both terms with respect to the
+    student's logits is (softmax(student) - target) / N, with target = (1 - kd) * one-hot(y) + kd * softmax(teacher),
+    so it is formed directly and pushed through the network with one backward call. Returns (per-token CE, loss)."""
+    n = y.numel()
+    grad = torch.zeros_like(logits)
+    ce_all, loss = [], 0.0
+    with torch.no_grad():
+        for j in range(len(x)):
+            with torch.autocast(logits.device.type, dtype=torch.bfloat16):
+                t_logits = teachers[j % len(teachers)](x[j:j + 1])[0, :, :VOCAB]
+            t_logp = F.log_softmax(t_logits.float(), -1)
+            s_logp = F.log_softmax(logits[j, :, :VOCAB].float(), -1)
+            ce = -s_logp.gather(-1, y[j][:, None]).squeeze(-1)
+            kl = (t_logp.exp() * (t_logp - s_logp)).sum(-1)
+            loss += ((1 - kd) * ce.sum() + kd * kl.sum()).item() / n
+            g = s_logp.exp() - kd * t_logp.exp()
+            g[torch.arange(len(y[j]), device=g.device), y[j]] -= 1 - kd
+            grad[j, :, :VOCAB] = (g / (n * accum)).to(grad.dtype)
+            ce_all.append(ce)
+            del t_logits, t_logp, s_logp, g
+    logits.backward(grad)
+    return torch.cat(ce_all), loss
+
+
 @torch.no_grad()
 def domain_loss(model, windows, route=None, batch=4):
     device = next(model.parameters()).device
@@ -176,18 +202,14 @@ def main():
             x, y = m.data.batch(domains, m.data.T, rng, "train", device)
             with torch.autocast(device, dtype=torch.bfloat16):
                 logits = model(x, route=route)
-            ce = F.cross_entropy(logits.float().reshape(-1, logits.size(-1)), y.reshape(-1), reduction="none")
-            loss = ce.mean()
             if teachers:
-                with torch.no_grad(), torch.autocast(device, dtype=torch.bfloat16):
-                    t_logits = torch.cat([teachers[j % len(DOMAINS)](x[j:j + 1]) for j in range(len(x))])
-                t_logp = F.log_softmax(t_logits[..., :VOCAB].float(), -1)
-                s_logp = F.log_softmax(logits[..., :VOCAB].float(), -1)
-                kl = (t_logp.exp() * (t_logp - s_logp)).sum(-1).mean()
-                loss = (1 - args.kd) * loss + args.kd * kl
-                del t_logits, t_logp
-            (loss / accum).backward()
-            step_loss += loss.item() / accum
+                ce, loss = kd_backward(logits, x, y, teachers, args.kd, accum)
+            else:
+                ce = F.cross_entropy(logits.float().reshape(-1, logits.size(-1)), y.reshape(-1), reduction="none")
+                loss = ce.mean()
+                (loss / accum).backward()
+                loss = loss.item()
+            step_loss += loss / accum
             rows = ce.detach().view(len(x), -1).mean(dim=1).cpu()
             for j in range(len(x)):
                 per_domain[j % len(DOMAINS)] += rows[j] / (accum * args.micro_batch / len(DOMAINS))
