@@ -1,0 +1,20 @@
+[    0.0s] settings: {"out": "/home/ubuntu/mld/hz/runs/20261121-0423_routed_heal-all-rows8k-kd05_hz", "train": "all", "rank": 32, "top_rows": 8192, "source": "expert-avg", "commit": 224, "calib_windows": 128, "steps": 800, "batch_size": 32, "micro_batch": 4, "lr": 0.0001, "warmup": 200, "kd": 0.5, "ffn_lr_mult": 1.0, "weight_decay": 0.3816, "val_every": 100, "val_windows": 32, "log_every": 10, "seed": 0, "device": "cuda"}
+[    3.0s] budget: 18,567 FFN neurons per expert (50.4%), total 299,994,524, one expert's active 103.38M
+[   41.5s] math: FFN widths [1380, 154, 269, 447, 2073, 2697, 2705, 2373, 2020, 2052, 2143, 254] (18,567 neurons)
+[   70.0s] code: FFN widths [1431, 154, 270, 450, 2142, 2784, 2768, 2392, 1950, 1912, 2074, 240] (18,567 neurons)
+[   98.4s] medicine: FFN widths [1458, 154, 264, 441, 2064, 2612, 2710, 2183, 1985, 2067, 2348, 281] (18,567 neurons)
+[  126.8s] history: FFN widths [1430, 154, 267, 442, 2049, 2711, 2722, 2283, 1992, 2064, 2185, 268] (18,567 neurons)
+[  130.4s] weights fingerprint (sha256 of every saved tensor): c8125bbd2bbcc065
+[  134.1s] distillation: weight 0.5 on KL(own unpruned expert || stack)
+[  134.1s] Stacks: 299,961,756 parameters, 299,961,756 trained (all)
+[  134.2s] optimizer groups: hidden (113,246,208, lr x0.25), embedding (72,227,712, lr x1), vector (301,056, lr x1), ffn_hidden (114,075,648, lr x0.25), ffn_vector (111,132, lr x1)
+[  142.5s] step 0: pool-val oracle math 2.8535 | code 2.6843 | medicine 2.7149 | history 3.5276 | mean 2.9451
+[  142.5s] step 0: pool-val router math 2.8642 | code 2.7147 | medicine 2.7157 | history 3.5372 | mean 2.9579
+Traceback (most recent call last):
+  File "/home/ubuntu/mld/hz/training_scripts/routed/heal.py", line 225, in <module>
+    main()
+    ~~~~^^
+  File "/home/ubuntu/mld/hz/training_scripts/routed/heal.py", line 186, in main
+    kl = (t_logp.exp() * (t_logp - s_logp)).sum(-1).mean()
+          ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.54 GiB. GPU 0 has a total capacity of 22.06 GiB of which 983.38 MiB is free. Including non-PyTorch memory, this process has 21.09 GiB memory in use. Of the allocated memory 19.75 GiB is allocated by PyTorch, and 867.84 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
