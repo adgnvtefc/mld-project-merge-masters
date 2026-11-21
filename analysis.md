@@ -1,7 +1,7 @@
 # Analysis: where we stand
 
-November 19, 2026. Everything we have measured so far, in one place: 62 runs (57 by Hanmo, 5 by Ayush),
-about 12.0 GPU-hours.
+November 19, 2026. Everything we have measured so far, in one place: 63 runs (58 by Hanmo, 5 by Ayush),
+about 13.6 GPU-hours.
 `results_summary.md` is the short version for readers new to the project. `error_analysis.md` has the
 full detail behind section 5. Each number here comes from a run in `results/`; section 14 lists them.
 
@@ -23,9 +23,10 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
   taken from the experts will need training to fit together.
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
-  - **Best so far: Pruned Expert Stacks with own rows for each expert's top 8,192 tokens, trained 50
-    minutes at a lower learning rate with distillation from each stack's own expert, 2.899 on dev**
-    (sections 9 to 11). It is 0.256 better than the generalist and closes 68% of the gap. Each expert
+  - **Best so far: Pruned Expert Stacks with own rows for each expert's top 8,192 tokens, trained 97
+    minutes at a lower learning rate with distillation from each stack's own expert, 2.888 on dev**
+    (sections 9 to 11). It is 0.268 better than the generalist and closes 71% of the gap. The whole
+    script (build and training) takes 99 minutes, inside the 2-hour limit. Each expert
     keeps its own attention (sections 7 and 8).
   - **Close behind: Ayush's Shared-Attention MoE, trained the same way, 2.989.** Its experts share
     attention. It closes 44% of the gap.
@@ -355,7 +356,8 @@ a 200-step warmup (`20261120-1715`, `-1753`):
 | All trained | 1e-4 | 2.927 | −0.030 (−0.031 to −0.029) |
 | All trained, FFNs at 0.3× the rate | 1e-4 | 2.924 | −0.033 |
 | The same, 2× longer (1,600 steps, ~70 min) | 1e-4 | 2.918 | −0.039 |
-| **The same, 800 steps, with distillation (~50 min)** | **1e-4** | **2.899** | **−0.058** |
+| The same, 800 steps, with distillation (~50 min) | 1e-4 | 2.899 | −0.058 |
+| **The same with distillation, 1,600 steps (~97 min)** | **1e-4** | **2.888** | **−0.069** |
 
 - **The early damage is gone with FFNs frozen.** Held-out loss falls at every validation.
 - **All trained now wins, narrowly** (by 0.0018, 95% range 0.0012 to 0.0025). It still rose a little as
@@ -365,6 +367,10 @@ a 200-step warmup (`20261120-1715`, `-1753`):
   Loss = half next-token, half matching the expert's full prediction. It gains 0.025 over the same recipe
   without it (95% range 0.024 to 0.025) and beats twice the training without it by 0.018. It trains about
   30% slower.
+- **Distillation gains more from longer training.** Twice the steps (1,600, `20261121-0736`) gain 0.0115
+  with distillation (95% range 0.010 to 0.012; better in every domain), against 0.0067 without it.
+  Held-out loss was still falling at the end. 1,600 steps is about the most the 2-hour limit allows:
+  the whole script took 99 minutes, and 1,800 steps would take about 112.
 - **This changes earlier conclusions.** "FFNs frozen beats all trained" and "3× longer buys only 0.010"
   were measured at the too-high learning rate.
 
@@ -381,8 +387,10 @@ This section is our interpretation. The sections above are measured.
   generalist to the best model we have.
 - **Trained Stacks is the front-runner, but narrowly.** Its lead over the trained MoE
   (0.016) is a fraction of its untrained lead. Either design could win with a different training plan.
-- **Longer training helps at the lower learning rate:** twice the steps gained 0.0067, and the loss was
-  still falling. The final recipe can afford about 1,600 to 2,000 steps within 2 hours.
+- **Longer training helps at the lower learning rate:** twice the steps gained 0.0067 without
+  distillation and 0.0115 with it, and the loss was still falling. With distillation the 2-hour limit
+  allows about 1,600 steps, which the best model already uses. Further gains must come from a better
+  use of those steps (faster teachers, the distillation weight) or from the model itself.
 - **Stacks' active parameters are 1% under the limit** (148.5M, from its commit point of 224
   tokens). A final recipe should either keep that margin checked or commit earlier (128: 129.1M).
 - **Distillation (teaching one model from the experts) avoids the compatibility problem.** It copies the
@@ -430,7 +438,7 @@ This section is our interpretation. The sections above are measured.
 | Trained Generalist (control) and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
 | Stacks trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
 | Stacks trained 3× longer | `20261120-0033_routed_heal-frozen-ffn-2400_hz`, `20261120-0205_routed_heal-all-2400_hz` |
-| Stacks at a lower learning rate | `20261120-1715_routed_heal-frozen-ffn-rows8k-lr1e-4_hz`, `20261120-1753_routed_heal-all-rows8k-lr1e-4_hz`, `20261121-0426_routed_heal-all-rows8k-ffnlr03_hz`, `20261121-0506_routed_heal-all-rows8k-ffnlr03-1600_hz`, `20261121-0619_routed_heal-all-rows8k-ffnlr03-kd05_hz` (distillation) |
+| Stacks at a lower learning rate | `20261120-1715_routed_heal-frozen-ffn-rows8k-lr1e-4_hz`, `20261120-1753_routed_heal-all-rows8k-lr1e-4_hz`, `20261121-0426_routed_heal-all-rows8k-ffnlr03_hz`, `20261121-0506_routed_heal-all-rows8k-ffnlr03-1600_hz`, `20261121-0619_routed_heal-all-rows8k-ffnlr03-kd05_hz` (distillation), `20261121-0736_routed_heal-all-rows8k-ffnlr03-kd05-1600_hz` (distillation, 1,600 steps) |
 | Stacks embeddings: where sharing costs, budget splits, trained best split | `20261120-0618_routed_embed-check_hz`, `20261120-0628_routed_embed-grid_hz`, `20261120-0750_routed_heal-frozen-ffn-rows8k_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 

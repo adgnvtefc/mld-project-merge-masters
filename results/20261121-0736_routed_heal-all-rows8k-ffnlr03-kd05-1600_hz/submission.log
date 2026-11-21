@@ -1,0 +1,7 @@
+submission  2026-11-21 09:15 UTC | /home/ubuntu/mld/hz/runs/20261121-0736_routed_heal-all-rows8k-ffnlr03-kd05-1600_hz | NVIDIA A10G | torch 2.10.0+cu128
+parameters  299,994,524 (limit 300,000,000)
+active      about 148.6M parameters per token (matrix-multiply FLOPs / 2; limit 150M)
+causal      yes
+dev         math 2.7818 | code 2.8044 | medicine 2.6864 | history 3.2792 | mean 2.8880
+valid
+RESULT {"data": "dev", "losses": {"math": 2.7817649096250534, "code": 2.8043757546693087, "medicine": 2.6864285618066788, "history": 3.2792427763342857}, "mean": 2.8879530006088316, "parameters": 299994524, "active_parameters": 148639294, "causal": true, "valid": true}

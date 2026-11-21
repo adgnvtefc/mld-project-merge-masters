@@ -35,7 +35,8 @@ domain (with 64, one misrouted window moves the mean by about 0.002); rank and e
 | `heal.py --rank 32 --top-rows 8192` | `heal-frozen-ffn-rows8k` | FFNs frozen, 800 steps, with the best embedding split from `embed-grid` |
 | `heal.py --rank 32 --top-rows 8192 --lr 1e-4 --warmup 200` | `heal-frozen-ffn-rows8k-lr1e-4`, `heal-all-rows8k-lr1e-4` | the same at a lower learning rate (FFNs frozen; all trained) |
 | `heal.py ... --kd 0.5` | `heal-all-rows8k-kd05` | distillation: loss = 0.5 next-token + 0.5 KL from each stack's own unpruned expert (teachers loaded in bf16) |
-| `heal.py ... --ffn-lr-mult 0.3 --kd 0.5` | `heal-all-rows8k-ffnlr03-kd05` | the best recipe: all trained, FFNs 0.3x, distillation 0.5 (dev 2.8994) |
+| `heal.py ... --ffn-lr-mult 0.3 --kd 0.5` | `heal-all-rows8k-ffnlr03-kd05` | all trained, FFNs 0.3x, distillation 0.5 (dev 2.8994) |
+| `heal.py ... --ffn-lr-mult 0.3 --kd 0.5 --steps 1600` | `heal-all-rows8k-ffnlr03-kd05-1600` | the best recipe: the same, 1,600 steps (99-minute script; dev 2.8880) |
 | `heal.py ... --ffn-lr-mult 0.3` | `heal-all-rows8k-ffnlr03` | all trained, the experts' FFNs at 0.3x the learning rate |
 | `heal.py --steps 2400` | `heal-frozen-ffn-2400`, `heal-all-2400` | the same two, 3x longer (about 90 minutes) |
 | `embed_check.py` | `embed-check` | no training: each untrained stack scored with different embeddings (own, input only, output only, own positions, own rows for its top-K tokens) to find where sharing costs (--no-eval) |
