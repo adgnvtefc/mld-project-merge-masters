@@ -1,11 +1,38 @@
 # Results summary
 
-> **Newer results:** this page covers our first method, mixing weights. Two later methods route each text to
-> one expert. Pruned Expert Stacks scores 3.042 with no training, 2.973 after 30 minutes of
-> training, 2.963 after 90 minutes, 2.957 with better
-> embeddings, 2.927 with a lower learning rate, 2.899 with
-> distillation from each expert, and 2.888 with distillation trained twice as long (97 minutes), our best so far. Ayush's trained Shared-Attention MoE scores 2.989. See `analysis.md`, sections 7
-> to 9.
+## Current results (November 21, 2026)
+
+Dev score, lower is better. Gap closed = share of the distance from the generalist (3.156) to the
+own-expert ceiling (2.779).
+
+| Model | Dev | Gap closed | Run |
+|---|---|---|---|
+| **Stacks + own rows + distillation, 1,600 steps (best)** | **2.888** | **71%** | `20261121-0736_routed_heal-all-rows8k-ffnlr03-kd05-1600_hz` |
+| Stacks + own rows + distillation, 800 steps | 2.899 | 68% | `20261121-0619_routed_heal-all-rows8k-ffnlr03-kd05_hz` |
+| Stacks + own rows, FFNs 0.3x, 1,600 steps, no distillation | 2.918 | 63% | `20261121-0506_routed_heal-all-rows8k-ffnlr03-1600_hz` |
+| Stacks + own rows, all trained, learning rate 1e-4 | 2.927 | 61% | `20261120-1753_routed_heal-all-rows8k-lr1e-4_hz` |
+| Shared-Attention MoE, FFNs frozen (best MoE) | 2.989 | 44% | `20261119-0423_moe_heal-shared_ay` |
+| Stacks, untrained | 3.042 | 30% | `20261119-1936_routed_design-a-det_hz` |
+| Trained Generalist (control) | 3.119 | 10% | `20261119-0450_dense_heal-ce_ay` |
+| Learned Mix (best Weight Mixing) | 3.141 | 4% | `20261119-0527_merging_learned-lambda_hz` |
+| Generalist | 3.156 | 0% | `20261118-1942_baseline_generalist_hz` |
+
+**The best model:** Pruned Expert Stacks with own rows for each expert's top 8,192 tokens and a rank-32 fix,
+all weights trained at learning rate 1e-4 (200 warmup, FFNs at 0.3x), loss = half next-token, half KL from
+each stack's own unpruned expert, 1,600 steps. Dev math 2.782, code 2.804, medicine 2.686, history 3.279.
+Valid: 299,994,524 parameters, 148.6M active, causal. The whole script (build and training) took 99 minutes
+on one A10G, inside the 2-hour limit; 1,800 steps would take about 112. One seed; the build is
+deterministic (weights fingerprint `c8125bbd2bbcc065`).
+
+```
+python training_scripts/routed/heal.py --train all --rank 32 --top-rows 8192 --commit 224 --lr 1e-4 \
+  --warmup 200 --ffn-lr-mult 0.3 --kd 0.5 --steps 1600 --val-every 400 --out OUT
+```
+
+Not done yet: the standalone final script (`training_scripts/final/`), timed on a fresh g5.xlarge, and a
+second seed to check that a rerun lands within 0.005.
+
+The rest of this page covers our first method, Weight Mixing. `analysis.md` covers everything.
 
 Last updated: November 19, 2026. Runs by Hanmo on our EC2 machine.
 
