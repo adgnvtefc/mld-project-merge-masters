@@ -49,6 +49,9 @@ def parse_args():
     parser.add_argument("--micro-batch", type=int, default=4, help="sequences per forward pass, a multiple of 4")
     parser.add_argument("--lr", type=float, default=3e-4, help="peak learning rate (before the muP factors)")
     parser.add_argument("--warmup", type=int, default=30)
+    parser.add_argument("--kd", type=float, default=0.0,
+                        help="distillation weight: loss = (1 - kd) * next-token CE + kd * KL(own unpruned expert || stack)")
+    parser.add_argument("--ffn-lr-mult", type=float, default=1.0, help="learning-rate factor for the experts' FFNs")
     parser.add_argument("--weight-decay", type=float, default=0.3816, help="the provided models' own")
     parser.add_argument("--val-every", type=int, default=100)
     parser.add_argument("--val-windows", type=int, default=32, help="pool-val windows per domain")
@@ -60,17 +63,20 @@ def parse_args():
     return args
 
 
-def param_groups(model, weight_decay):
+def param_groups(model, weight_decay, ffn_lr_mult=1.0):
     """gpt.optimizer_groups' muP rules: hidden matrices lr / width_mult and decay x width_mult; embeddings plain;
     vectors undecayed. The embedding corrections (wte_u/v, wpe_u/v) are parts of embedding tables, so they go with
     the embeddings. Frozen tensors are left out."""
     w = model.config.width_mult
-    spec = {"hidden": (1 / w, weight_decay * w), "embedding": (1.0, weight_decay), "vector": (1.0, 0.0)}
+    spec = {"hidden": (1 / w, weight_decay * w), "embedding": (1.0, weight_decay), "vector": (1.0, 0.0),
+            "ffn_hidden": (ffn_lr_mult / w, weight_decay * w), "ffn_vector": (ffn_lr_mult, 0.0)}
     groups = {k: [] for k in spec}
     for name, p in model.named_parameters():
         if not p.requires_grad:
             continue
-        if p.dim() < 2:
+        if ".mlp." in name:
+            kind = "ffn_vector" if p.dim() < 2 else "ffn_hidden"
+        elif p.dim() < 2:
             kind = "vector"
         elif name in ("wte.weight", "wpe.weight") or name.endswith(("_u", "_v", "row_emb")):
             kind = "embedding"
@@ -117,6 +123,15 @@ def main():
         for ex in model.experts:
             for block in ex.h:
                 block.mlp.requires_grad_(False)
+    teachers = []
+    if args.kd > 0:  # each domain's own unpruned expert, frozen, in bf16
+        for d in DOMAINS:
+            header, params = m.load_checkpoint(f"expert_{d}", device)
+            teacher = m.set_params(m.new_model(header, device), params).to(torch.bfloat16).eval()
+            teacher.requires_grad_(False)
+            teachers.append(teacher)
+            del params
+        log(f"distillation: weight {args.kd} on KL(own unpruned expert || stack)")
     model.train()
     trainable = [p for p in model.parameters() if p.requires_grad]
     total = sum(p.numel() for p in model.parameters())
@@ -137,7 +152,7 @@ def main():
         return out
 
     # ---- 3. Optimizer: AdamW with the muP groups, linear warmup then linear decay to zero ----------------
-    groups = param_groups(model, args.weight_decay)
+    groups = param_groups(model, args.weight_decay, args.ffn_lr_mult)
     log("optimizer groups: " + ", ".join(f"{g['name']} ({sum(p.numel() for p in g['params']):,}, lr x{g['lr_mult']:.3g})"
                                          for g in groups))
     optimizer = torch.optim.AdamW(groups, lr=args.lr, betas=(0.9, 0.95), eps=1e-8, fused=device == "cuda")
@@ -163,6 +178,14 @@ def main():
                 logits = model(x, route=route)
             ce = F.cross_entropy(logits.float().reshape(-1, logits.size(-1)), y.reshape(-1), reduction="none")
             loss = ce.mean()
+            if teachers:
+                with torch.no_grad(), torch.autocast(device, dtype=torch.bfloat16):
+                    t_logits = torch.cat([teachers[j % len(DOMAINS)](x[j:j + 1]) for j in range(len(x))])
+                t_logp = F.log_softmax(t_logits[..., :VOCAB].float(), -1)
+                s_logp = F.log_softmax(logits[..., :VOCAB].float(), -1)
+                kl = (t_logp.exp() * (t_logp - s_logp)).sum(-1).mean()
+                loss = (1 - args.kd) * loss + args.kd * kl
+                del t_logits, t_logp
             (loss / accum).backward()
             step_loss += loss.item() / accum
             rows = ce.detach().view(len(x), -1).mean(dim=1).cpu()

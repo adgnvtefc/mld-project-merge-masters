@@ -34,6 +34,8 @@ domain (with 64, one misrouted window moves the mean by about 0.002); rank and e
 | `heal.py --train all` | `heal-all` | the same with every weight trained |
 | `heal.py --rank 32 --top-rows 8192` | `heal-frozen-ffn-rows8k` | FFNs frozen, 800 steps, with the best embedding split from `embed-grid` |
 | `heal.py --rank 32 --top-rows 8192 --lr 1e-4 --warmup 200` | `heal-frozen-ffn-rows8k-lr1e-4`, `heal-all-rows8k-lr1e-4` | the same at a lower learning rate (FFNs frozen; all trained) |
+| `heal.py ... --kd 0.5` | `heal-all-rows8k-kd0.5` | distillation: loss = 0.5 next-token + 0.5 KL from each stack's own unpruned expert (teachers loaded in bf16) |
+| `heal.py ... --ffn-lr-mult 0.3` | `heal-all-rows8k-ffnlr0.3` | all trained, the experts' FFNs at 0.3x the learning rate |
 | `heal.py --steps 2400` | `heal-frozen-ffn-2400`, `heal-all-2400` | the same two, 3x longer (about 90 minutes) |
 | `embed_check.py` | `embed-check` | no training: each untrained stack scored with different embeddings (own, input only, output only, own positions, own rows for its top-K tokens) to find where sharing costs (--no-eval) |
 | `embed_grid.py` | `embed-grid` | no training: splits of each expert's budget between the low-rank fix (rank r) and own rows for its K most frequent tokens, FFN neurons filling the rest of 300M; oracle and router pool-val loss (--no-eval) |
