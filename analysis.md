@@ -24,8 +24,8 @@ Scores are next-token loss. **Lower is better.** A difference of 0.01 matters in
 - **Two routed designs now beat everything else.** Both send each text to one expert's parts, chosen
   from the text read so far.
   - **Best so far: Pruned Expert Stacks with own rows for each expert's top 8,192 tokens, trained 30
-    minutes at a lower learning rate, 2.927 on dev** (sections 9 to 11). It is 0.229 better than the
-    generalist and closes 61% of the gap. Each expert keeps its own
+    minutes at a lower learning rate (FFNs lower still), 2.924 on dev** (sections 9 to 11). It is 0.231
+    better than the generalist and closes 61% of the gap. Each expert keeps its own
     attention (sections 7 and 8).
   - **Close behind: Ayush's Shared-Attention MoE, trained the same way, 2.989.** Its experts share
     attention. It closes 44% of the gap.
@@ -352,11 +352,13 @@ a 200-step warmup (`20261120-1715`, `-1753`):
 |---|---|---|---|
 | FFNs frozen | 3e-4 | 2.957 | |
 | FFNs frozen | 1e-4 | 2.929 | −0.028 (−0.030 to −0.027) |
-| **All trained** | **1e-4** | **2.927** | **−0.030 (−0.031 to −0.029)** |
+| All trained | 1e-4 | 2.927 | −0.030 (−0.031 to −0.029) |
+| **All trained, FFNs at 0.3× the rate** | **1e-4** | **2.924** | **−0.033** |
 
 - **The early damage is gone with FFNs frozen.** Held-out loss falls at every validation.
-- **All trained now wins, narrowly** (by 0.0018, 95% range 0.0012 to 0.0025). It still rises a little
-  as the learning rate reaches its peak, so the FFNs may want an even lower rate.
+- **All trained now wins, narrowly** (by 0.0018, 95% range 0.0012 to 0.0025). It still rose a little as
+  the learning rate reached its peak; training the FFNs at 0.3× the rate removes that rise and gains
+  another 0.0027 (95% range 0.0020 to 0.0033).
 - **This changes earlier conclusions.** "FFNs frozen beats all trained" and "3× longer buys only 0.010"
   were measured at the too-high learning rate.
 
@@ -422,7 +424,7 @@ This section is our interpretation. The sections above are measured.
 | Trained Generalist (control) and host check (Ayush) | `20261119-0450_dense_heal-ce_ay`, `20261119-0259_baseline_generalist_ay` |
 | Stacks trained | `20261119-2206_routed_heal-frozen-ffn_hz`, `20261119-2241_routed_heal-all_hz` |
 | Stacks trained 3× longer | `20261120-0033_routed_heal-frozen-ffn-2400_hz`, `20261120-0205_routed_heal-all-2400_hz` |
-| Stacks at a lower learning rate | `20261120-1715_routed_heal-frozen-ffn-rows8k-lr1e-4_hz`, `20261120-1753_routed_heal-all-rows8k-lr1e-4_hz` |
+| Stacks at a lower learning rate | `20261120-1715_routed_heal-frozen-ffn-rows8k-lr1e-4_hz`, `20261120-1753_routed_heal-all-rows8k-lr1e-4_hz`, `20261121-0426_routed_heal-all-rows8k-ffnlr03_hz` |
 | Stacks embeddings: where sharing costs, budget splits, trained best split | `20261120-0618_routed_embed-check_hz`, `20261120-0628_routed_embed-grid_hz`, `20261120-0750_routed_heal-frozen-ffn-rows8k_hz` |
 | Per-window dev comparisons | `tools/analysis/dev_windows.py`; ranges from `lib/bootstrap.py` |
 
