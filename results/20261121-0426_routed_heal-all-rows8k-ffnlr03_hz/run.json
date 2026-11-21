@@ -1,0 +1,61 @@
+{
+  "run_id": "20261121-0426_routed_heal-all-rows8k-ffnlr03_hz",
+  "method": "routed",
+  "variant": "heal-all-rows8k-ffnlr03",
+  "owner": "hz",
+  "hypothesis": "With the experts' FFNs at 0.3x the learning rate, all trained no longer loses ground at the peak learning rate (+0.016 at step 200 before) and beats 2.9269 on dev.",
+  "parents": [
+    "20261120-1753_routed_heal-all-rows8k-lr1e-4_hz"
+  ],
+  "command": [
+    "/home/ubuntu/mld/venv/bin/python",
+    "training_scripts/routed/heal.py",
+    "--train",
+    "all",
+    "--rank",
+    "32",
+    "--top-rows",
+    "8192",
+    "--commit",
+    "224",
+    "--lr",
+    "1e-4",
+    "--warmup",
+    "200",
+    "--ffn-lr-mult",
+    "0.3",
+    "--out",
+    "/home/ubuntu/mld/hz/runs/20261121-0426_routed_heal-all-rows8k-ffnlr03_hz"
+  ],
+  "host": "hanmo",
+  "git_commit": "cd483a5bf1042ab4ea23ffd47097acb3e4f1bc76",
+  "git_dirty": false,
+  "status": "done",
+  "pid": 2220,
+  "started": "2026-11-21T04:26:20Z",
+  "heartbeat": "2026-11-21T05:05:44Z",
+  "ended": "2026-11-21T05:05:44Z",
+  "exit_code": 0,
+  "train_seconds": 2184,
+  "a10g_hours": 0.6068,
+  "eval": {
+    "data": "dev",
+    "losses": {
+      "math": 2.812634263187647,
+      "code": 2.835150133818388,
+      "medicine": 2.721260605379939,
+      "history": 3.327718621119857
+    },
+    "mean": 2.9241909058764577,
+    "parameters": 299994524,
+    "active_parameters": 148639294,
+    "causal": true,
+    "valid": true,
+    "window_mean_gap": 1.8067657947540283e-07,
+    "evaluated_at": "2026-11-21T05:05:42Z"
+  },
+  "progress": {
+    "step": 800,
+    "elapsed_s": 2181.6
+  }
+}
